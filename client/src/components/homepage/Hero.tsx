@@ -10,6 +10,9 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import BaseModal from '../helpers/modal/BaseModal';
 import settings from './settings.tsx'
+import testVideo from '../../assets/video/nature-video.mp4';
+
+import RenderContent from '../helpers/content/RenderContent';
 
 // https://github.com/sdras/hero-generator?tab=readme-ov-file
 
@@ -22,110 +25,58 @@ interface HeroProps {
 }
 
 
-
 const Hero: React.FC<HeroProps> = ({ handleOpen, handleClose, open, gridSpacing }) => {
     const classes = useHeroStyle();
     const [data, setData] = useState<DataArray>(settings);
 
-    const iconMapping = {
-        AddIcon: AddIcon,
-        DeleteIcon: DeleteIcon,
-        AddCircleIcon: AddCircleIcon,
-    };
+    return <Hero.VideoContent data={data} classes={classes} gridSpacing={gridSpacing} />
+};
 
-    const actionMapping = {
-        openModal: handleOpen,
-        test: () => console.log('test'),
-    }
-    
+Hero.Layout = ({ children }: { children: React.ReactNode }) => {
+    const classes = useHeroStyle();
 
-    // const handleDeleteColumn = (id: number) => {
-    //     setColumnData(prev => prev.filter((column, i) => column.id !== id));
-    // };
-    
     return (
-        <Container maxWidth={false} className={classes.container}>
+        <Container maxWidth={false} disableGutters className={classes.videoContainer}>
             <Navigation />
-
-            <Container>
-                {data?.grid?.map((item, groupIndex) => {
-                    if (item.container?.columns?.length > 0) {
-                        return (
-                            <Grid className={classes.columnParent} sx={item.container?.containerSettings.sx} container spacing={gridSpacing} key={groupIndex + 1}>
-                                {item.container.columns.map((column, index) => {
-                                    const IconComponent = iconMapping[column.columnButton.hasIcon.icon];
-                                    const iconPosition = column.columnButton.hasIcon; 
-
-                                    return (
-                                        <Grid size={column.breakPoints} item className={classes.columnChild} sx={column.columnSettings} key={index}>
-                                            {/* <Box className="columnControls"> 
-                                                <AddIcon  
-                                                    onClick={(e) => {
-                                                        setSelectedIndex(index + 1);    
-                                                        handleOpen(e);
-                                                    }} 
-                                                />
-                                                <DeleteIcon onClick={() => handleDeleteColumn(item.id)} />
-                                            </Box> */}
-                                            {column.columnImage.enabled && (
-                                                <img src={column.columnImage.url} alt="hero" style={column.columnImage.sx} />
-                                            )}
-
-                                            {column.columnTitle.enabled && (
-                                                <Typography variant={column.columnTitle.variant} sx={column.columnTitle.sx}>
-                                                    {column.columnTitle.text}
-                                                </Typography>
-                                            )}
-                                                                                
-                                            {column.columnSubtitle.enabled && (
-                                                <Typography variant={column.columnSubtitle.variant} sx={column.columnSubtitle.sx}>
-                                                    {column.columnSubtitle.text}
-                                                </Typography>
-                                            )}
-                                            
-                                            {column.columnDescription.enabled && (
-                                                <Typography variant={column.columnDescription.variant} sx={column.columnDescription.sx}>
-                                                    {column.columnDescription.text}
-                                                </Typography>
-                                                )
-                                            }   
-                                            
-                                            {column.columnButton.enabled && (
-                                                    <Button 
-                                                        onClick={column?.columnButton?.action(actionMapping['test'])}
-                                                        size={column.columnButton.size}  
-                                                        sx={{
-                                                            ...column.columnButton.sx,
-                                                            ...column.columnButton.getButtonStyles(iconPosition),
-                                                        }} 
-                                                        variant={column.columnButton.variant}
-                                                    >
-                                                        <Typography>{column.columnButton.text}</Typography>
-                                                        {column.columnButton.hasIcon.enabled && ( 
-                                                            <IconComponent />
-                                                        )}
-                                                    </Button>
-                                                )
-                                            }
-                                        </Grid>
-                                    );
-                                })}
-                            </Grid>
-                        );
-                    } 
-                })}
-
-                {/* 
-                <Button variant="contained" onClick={() => onHandleAddGridSpacing('inc')}>Increase</Button>
-                <Button variant="contained" onClick={() => onHandleAddGridSpacing('dec')}>Decrease</Button> */}
-                {/* <Typography variant="h2" color={"danger"}>{gridSpacing}</Typography> */}
-
-                <BaseModal selectedIndex={1} handleOpen={handleOpen} handleClose={handleClose} open={open} >
-                </BaseModal>
-
-            </Container>
+            {children}
         </Container>
     );
+}
+
+Hero.TextContent = ({ data, classes, gridSpacing }: { data: DataArray; classes: any; gridSpacing: number }) => {
+    return (
+        <Hero.Layout>
+            <Container>
+                <RenderContent data={data} classes={classes} gridSpacing={gridSpacing} disableGutters/>
+            </Container>
+        </Hero.Layout>
+    );
 };
+
+Hero.VideoContent = ({ data, classes, gridSpacing }: { data: DataArray; classes: any; gridSpacing: number }) => {
+    return (
+        <Hero.Layout>
+            <Navigation />
+
+            <Container disableGutters sx={{ zIndex: 1 }}>
+                <RenderContent data={data} classes={classes} gridSpacing={gridSpacing} />
+            </Container>
+
+            <video
+                controls={false}
+                autoPlay
+                loop
+                muted
+                preload="auto"
+                className={classes.video}
+            >
+                <source src={testVideo} type="video/mp4" />
+            </video>
+            <div className="overlay"></div>
+        </Hero.Layout>
+    );
+};
+
+
 
 export default Hero;

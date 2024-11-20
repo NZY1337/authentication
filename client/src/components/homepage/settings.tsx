@@ -160,7 +160,7 @@ const settings = {
                             background: ``,
                             borderRadius: 2,
                             alignSelf: 'center',
-                            p: 2,
+                            // p: 2,
                         },
                         breakPoints: {
                             md: 5, 

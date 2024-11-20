@@ -13,7 +13,7 @@ const useStyles = makeStyles(() =>
             marginBottom: 10,
             color: '#fff',
         },
-        container: {
+        textContainer: {
             position: 'relative',
             display: 'flex',
             justifyContent: 'center',
@@ -27,9 +27,32 @@ const useStyles = makeStyles(() =>
             backgroundSize: 'cover',
             backgroundPosition: 'center',
         },
-        content: {
+        videoContainer: {
             position: 'relative',
-            zIndex: 1,
+            overflow: 'hidden',
+            height: '100vh',
+            display: 'flex',
+            alignItems: 'center',
+
+            '& .overlay': {
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                backgroundColor: 'rgba(0, 0, 0, 0.5)', // Adjust the color and opacity as needed
+                zIndex: 0,
+            },
+
+            '& video': {
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100vw',
+                height: '100vh',
+                zIndex: -1,
+                objectFit: 'cover',
+            }
         },
         box: {
             display: 'flex',
