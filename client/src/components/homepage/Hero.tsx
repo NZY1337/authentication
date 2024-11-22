@@ -12,6 +12,7 @@ import BaseModal from '../helpers/modal/BaseModal';
 import settings from './settings.tsx'
 import testVideo from '../../assets/video/nature-video.mp4';
 
+import Carousel from '../helpers/carousel/Carousel';
 import RenderContent from '../helpers/content/RenderContent';
 
 // https://github.com/sdras/hero-generator?tab=readme-ov-file
@@ -24,19 +25,18 @@ interface HeroProps {
     gridSpacing: number;
 }
 
-
 const Hero: React.FC<HeroProps> = ({ handleOpen, handleClose, open, gridSpacing }) => {
     const classes = useHeroStyle();
     const [data, setData] = useState<DataArray>(settings);
 
-    return <Hero.VideoContent data={data} classes={classes} gridSpacing={gridSpacing} />
+    return <Hero.SliderContent data={data} classes={classes} gridSpacing={gridSpacing} />
 };
 
 Hero.Layout = ({ children }: { children: React.ReactNode }) => {
     const classes = useHeroStyle();
 
     return (
-        <Container maxWidth={false} disableGutters className={classes.videoContainer}>
+        <Container maxWidth={false} disableGutters className={classes.textContainer}>
             <Navigation />
             {children}
         </Container>
@@ -57,7 +57,7 @@ Hero.VideoContent = ({ data, classes, gridSpacing }: { data: DataArray; classes:
     return (
         <Hero.Layout>
             <Navigation />
-
+            
             <Container disableGutters sx={{ zIndex: 1 }}>
                 <RenderContent data={data} classes={classes} gridSpacing={gridSpacing} />
             </Container>
@@ -76,6 +76,14 @@ Hero.VideoContent = ({ data, classes, gridSpacing }: { data: DataArray; classes:
         </Hero.Layout>
     );
 };
+
+Hero.SliderContent = ({ data, classes, gridSpacing }: { data: DataArray; classes: any; gridSpacing: number }) => {
+    return (
+        <Hero.Layout>
+            <Carousel data={data} classes={classes} gridSpacing={gridSpacing} />
+        </Hero.Layout>
+    );
+}
 
 
 
