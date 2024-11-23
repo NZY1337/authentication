@@ -13,7 +13,7 @@ const useStyles = makeStyles(() =>
             marginBottom: 10,
             color: '#fff',
         },
-        textContainer: {
+        imageContainer: {
             position: 'relative',
             display: 'flex',
             justifyContent: 'center',
@@ -53,6 +53,15 @@ const useStyles = makeStyles(() =>
                 zIndex: -1,
                 objectFit: 'cover',
             }
+        },
+        sliderContainer: {
+            height: '100vh',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            // backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(https://images.pexels.com/photos/2267157/pexels-photo-2267157.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2)`,
+
         },
         box: {
             display: 'flex',

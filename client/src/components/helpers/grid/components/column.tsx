@@ -7,7 +7,7 @@ export const createColumnImage = ({ enabled = true, url, sx } = {}) => ({
     sx: { ...defaultStyles.image, ...sx}
 });
 
-export const createColumnTitle = ({ enabled = true, text, variant, sx} = {}) => ({
+export const createColumnTitle = ({ enabled = true, text, variant, sx } = {}) => ({
     enabled,
     text: text || 'Title',
     variant: variant || 'h4',
@@ -35,14 +35,7 @@ export const createColumnButton = ({
     action, 
     hasIcon, 
     sx, 
-    getButtonStyles = (hasIcon) => ({
-        display: 'flex',
-        alignItems: 'center',
-        flexDirection: hasIcon.position === 'right' ? 'row-reverse' : 'row',
-        "& svg": {
-            ...(hasIcon.position === 'right' ? { marginLeft: 1 } : { marginRight: 1 }),
-        },
-    }),
+    customStyles = {}
  } = {}) => ({
     enabled,
     text: text || 'Button',
@@ -50,5 +43,5 @@ export const createColumnButton = ({
     action: () => (e) => e ? action(e) : action(),
     hasIcon: hasIcon || { enabled: false, icon: 'AddCircleIcon', position: 'left' },
     sx: { ...defaultStyles.button, ...sx },
-    getButtonStyles: getButtonStyles || (() => ({}))
+    getButtonStyles: () => getButtonStyles(hasIcon, customStyles)
 });

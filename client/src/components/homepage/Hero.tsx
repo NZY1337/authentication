@@ -9,8 +9,8 @@ import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete'; 
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import BaseModal from '../helpers/modal/BaseModal';
-import settings from './settings.tsx'
-import testVideo from '../../assets/video/nature-video.mp4';
+import { settings1 } from './settings.tsx'
+import testVideo from '../../assets/video/nature-video-1.mp4';
 
 import Carousel from '../helpers/carousel/Carousel';
 import RenderContent from '../helpers/content/RenderContent';
@@ -27,35 +27,33 @@ interface HeroProps {
 
 const Hero: React.FC<HeroProps> = ({ handleOpen, handleClose, open, gridSpacing }) => {
     const classes = useHeroStyle();
-    const [data, setData] = useState<DataArray>(settings);
-
-    return <Hero.SliderContent data={data} classes={classes} gridSpacing={gridSpacing} />
+    return <Hero.ImageContent classes={classes} gridSpacing={gridSpacing} />
 };
 
-Hero.Layout = ({ children }: { children: React.ReactNode }) => {
+const HeroLayout = ({ children }: { children: React.ReactNode }) => {
     const classes = useHeroStyle();
 
     return (
-        <Container maxWidth={false} disableGutters className={classes.textContainer}>
+        <Container maxWidth={false} disableGutters className={classes.imageContainer}>
             <Navigation />
             {children}
         </Container>
     );
 }
 
-Hero.TextContent = ({ data, classes, gridSpacing }: { data: DataArray; classes: any; gridSpacing: number }) => {
+Hero.ImageContent = ({ data, classes, gridSpacing }: { data: DataArray; classes: any; gridSpacing: number }) => {
     return (
-        <Hero.Layout>
+        <HeroLayout>
             <Container>
-                <RenderContent data={data} classes={classes} gridSpacing={gridSpacing} disableGutters/>
+                <RenderContent data={settings1} classes={classes} gridSpacing={gridSpacing} />
             </Container>
-        </Hero.Layout>
+        </HeroLayout>
     );
 };
 
 Hero.VideoContent = ({ data, classes, gridSpacing }: { data: DataArray; classes: any; gridSpacing: number }) => {
     return (
-        <Hero.Layout>
+        <HeroLayout>
             <Navigation />
             
             <Container disableGutters sx={{ zIndex: 1 }}>
@@ -73,18 +71,17 @@ Hero.VideoContent = ({ data, classes, gridSpacing }: { data: DataArray; classes:
                 <source src={testVideo} type="video/mp4" />
             </video>
             <div className="overlay"></div>
-        </Hero.Layout>
+        </HeroLayout>
     );
 };
 
-Hero.SliderContent = ({ data, classes, gridSpacing }: { data: DataArray; classes: any; gridSpacing: number }) => {
+Hero.SliderContent = ({ classes, gridSpacing }: {  classes: any; gridSpacing: number }) => {
     return (
-        <Hero.Layout>
-            <Carousel data={data} classes={classes} gridSpacing={gridSpacing} />
-        </Hero.Layout>
+        <>
+            <Navigation />
+            <Carousel classes={classes} gridSpacing={gridSpacing} />
+        </>
     );
 }
-
-
 
 export default Hero;

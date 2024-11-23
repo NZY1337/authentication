@@ -1,14 +1,16 @@
 import React from 'react';
-import { Typography, Button, Container } from '@mui/material';
+import { Typography, Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import Grid from '@mui/material/Grid2';
 import DeleteIcon from '@mui/icons-material/Delete'; 
 import AddCircleIcon from '@mui/icons-material/AddCircle';
+import MovingIcon from '@mui/icons-material/Moving';
 
 const iconMapping = {
     AddIcon: AddIcon,
     DeleteIcon: DeleteIcon,
     AddCircleIcon: AddCircleIcon,
+    MovingIcon: MovingIcon,
 };
 
 const actionMapping = {
@@ -62,9 +64,9 @@ const HeroContent = ({ data, classes, gridSpacing }) => {
                                                 variant={column.columnButton.variant}
                                             >
                                                 <Typography>{column.columnButton.text}</Typography>
-                                                {column.columnButton.hasIcon.enabled && IconComponent && ( 
-                                                    <IconComponent />
-                                                )}
+                                                    {column.columnButton.hasIcon.enabled && IconComponent && ( 
+                                                        <IconComponent />
+                                                    )}
                                             </Button>
                                         )}
                                     </Grid>
@@ -77,7 +79,6 @@ const HeroContent = ({ data, classes, gridSpacing }) => {
             })}
         </>
     );   
-   
 }
 
 export default HeroContent;
