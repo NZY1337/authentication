@@ -147,16 +147,18 @@
     - The cookie is marked as httpOnly, which protects it from being accessed through client-side scripts.
     - By expiring the token cookie immediately, it helps ensure that any session associated with the token is effectively terminated. This action minimizes the risk of session hijacking.
 
+# test JWT expiration 
+- from authmiddleware set tokenLifespan to 60 (seconds - 1 minute)
+- const isExpiringSoon = payload.iat + tokenLifespan - currentTime < 600; // 10 minutes (600 seconds)
+- change the line abouve ... < 60 (seconds)
+- from generateToken(), set maxAge to 1 day
+
+# refresh-token endpoint
+- if the token is missing (shortest time), the endpoint will be triggered and it will regenerate a new token (from FE: axiosInstance);
 
 
-### test JWT expiration ###
-# from authmiddleware set tokenLifespan to 60 (seconds - 1 minute)
-# const isExpiringSoon = payload.iat + tokenLifespan - currentTime < 600; // 10 minutes (600 seconds)
-# change the line abouve ... < 60 (seconds)
-# from generateToken(), set maxAge to 1 day
+<!-- > CONVERSION OF a date without current timeZone (but we're using RO timezone); 
 
-
-<!-- > CONVERSION OF a date without current timeZone (but we're using RO timezone);
 
 ---------------------------
 ----- COUNTDOWN TIMER -----
@@ -208,3 +210,5 @@ function updateTimer() {
 // Update the timer every second
 const timerInterval = setInterval(updateTimer, 1000);
 updateTimer(); // Initial call to display the timer immediately
+
+

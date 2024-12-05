@@ -93,6 +93,7 @@ export const signIn = async (req: Request, res: Response) => {
 export const validateUserEmail = async (req: Request, res: Response) => {
   const { verificationToken, email } = req.body;
 
+  console.log(req.body);
   let user = await prismaClient.user.findFirstOrThrow({
     where: { email },
   });

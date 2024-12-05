@@ -13,8 +13,7 @@ const authMiddleware = async (
   next: NextFunction
 ) => {
   const token = req.cookies.token; // Access token from cookies
-  const refreshToken = req.cookies.refreshToken; // Refresh token from cookies
-
+    
   if (!token) {
     next(new UnauthorizedException("Unauthorized", ErrorCode.UNAUTHORIZED));
   }
@@ -36,40 +35,15 @@ const authMiddleware = async (
     });
 
     if (!user) {
-      return next(
-        new UnauthorizedException("Unauthorized", ErrorCode.UNAUTHORIZED)
-      );
+        console.log('User Unauthorized')
+        // return next();
+          return next(new UnauthorizedException("Unauthorized", ErrorCode.UNAUTHORIZED));
     }
 
     req.user = { ...user, isExpiringSoon } as User;
     next();
   } catch (error) {
-    if (refreshToken) {
-      try {
-        const refreshPayload = jwt.verify(refreshToken, JWT_SECRET) as any;
-        const user: User | null = await prismaClient.user.findFirst({
-          where: {
-            id: refreshPayload?.userId,
-          },
-        });
-
-        if (!user?.id) {
-          return next(
-            new UnauthorizedException("Unauthorized", ErrorCode.UNAUTHORIZED)
-          );
-        }
-
-        const { token, options } = generateToken(user.id);
-        res.cookie("token", token, options);
-
-        req.user = user;
-        next();
-      } catch (refreshError) {
-        next(new UnauthorizedException("Unauthorized", ErrorCode.UNAUTHORIZED));
-      }
-    } else {
-      next(new UnauthorizedException("Unauthorized", ErrorCode.UNAUTHORIZED));
-    }
+    next(new UnauthorizedException("Unauthorized", ErrorCode.UNAUTHORIZED));
   }
 };
 

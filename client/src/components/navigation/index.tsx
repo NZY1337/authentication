@@ -1,7 +1,7 @@
 import React from 'react';
 import { AppBar, Toolbar, IconButton, Typography, Box, Container, MenuList, MenuItem, Button, Link } from '@mui/material';
 import { Link as ReactRouterLink } from 'react-router-dom';
-import { useUser } from '../../context/UserContext';
+import { useAppContext } from '../../context/AppContext';
 import useNavigationStyle from './style';
 import MenuDrawer from './drawer';
 import { NavLink } from 'react-router-dom';
@@ -10,7 +10,7 @@ import { NavLink } from 'react-router-dom';
 
 
 const Navigation: React.FC = () => {
-  const { loginUser, user, logoutUser } = useUser();
+  const { loginUser, user, logoutUser } = useAppContext();
   const classes = useNavigationStyle();
   
   return (
@@ -20,8 +20,8 @@ const Navigation: React.FC = () => {
         
         <Toolbar className={classes.toolbar}>
             <Box className="nav-logo">
-                <Typography variant="h6" sx={{color: 'orange', fontWeight: 'bold', display: { xs: "none", md: "flex" } }}>
-                    Swift Fuel
+                <Typography variant="h4" sx={{color: 'orange', fontWeight: 'bold', display: { xs: "none", md: "flex" } }}>
+                    Pet Vet
                 </Typography>
             </Box> 
                                                             
@@ -29,42 +29,28 @@ const Navigation: React.FC = () => {
                 <MenuList sx={{display: "flex"}}>
                     <MenuItem disableRipple>
                         <Link component={ReactRouterLink} to="/">
-                            Energy  
+                            Home  
                         </Link>
                     </MenuItem>
                     
-                    <MenuItem disableRipple>
-                        <Link component={ReactRouterLink} to="/test1">
-                            Supply
-                        </Link>
-                    </MenuItem>
-
-                    <MenuItem disableRipple>
-                        <Link component={ReactRouterLink} to="/test2">
-                            Partners
-                        </Link>
-                    </MenuItem>
-                    
-                    {!user && (
-                        <MenuItem  disableRipple>
-                            <Button variant='contained' color="primary" onClick={() => loginUser({ password: 'secret', email: 'mandreicosmin@yahoo.com' })}>
-                                Log In
-                            </Button>
-                        </MenuItem>
-                    )}
-
-                    {user && (
+                    {user ? (
                         <MenuItem disableRipple className={classes.hiUser}>
                             <Link component="span">
                                 Hi {user.name}
                             </Link>
                         </MenuItem>
-                    )}
+                    ) :
+                        <MenuItem disableRipple>
+                            <Link component={ReactRouterLink} to="/authentication">
+                                Login/Register
+                            </Link>
+                        </MenuItem>
+                    }
                     
                     {user && 
                         <MenuItem disableRipple>
                             <Button  variant='contained' color="error" onClick={logoutUser}>
-                                LogOut
+                                Log Out
                             </Button>
                         </MenuItem>
                     }

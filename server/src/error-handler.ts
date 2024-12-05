@@ -14,29 +14,15 @@ export const errorHandler = (method: Function) => {
     } catch (error: any) {
       let exception: HttpException;
 
-      if (
-        error instanceof Prisma.PrismaClientKnownRequestError &&
-        error.code === "P2025"
-      ) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") {
         const modelName = error?.meta?.modelName || "Resource"; // Product, User, Comment, etc...
-        exception = new NotFoundException(
-          `${modelName} not found`,
-          ErrorCode.NOT_FOUND
-        );
+        exception = new NotFoundException(`${modelName} not found`, ErrorCode.NOT_FOUND);
       } else if (error instanceof HttpException) {
         exception = error;
       } else if (error instanceof ZodError) {
-        exception = new BadRequestException(
-          "Unprocessed Entity",
-          ErrorCode.UNPROCESSABLE_ENTITY,
-          error
-        );
+        exception = new BadRequestException("Unprocessed Entity", ErrorCode.UNPROCESSABLE_ENTITY, error);
       } else {
-        exception = new InternalException(
-          "Something went wrong!",
-          error,
-          ErrorCode.INTERNAL_EXCEPTION
-        );
+        exception = new InternalException("Something went wrong!", error, ErrorCode.INTERNAL_EXCEPTION);
       }
 
       next(exception);
