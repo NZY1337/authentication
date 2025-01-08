@@ -1,45 +1,41 @@
-import { useState, MouseEvent } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
 import Hero from './components/homepage/Hero';
-import Authentication from './components/Authentication/Authentication';
+import Login from './components/Auth/Login/Login';
+import Register from './components/Auth/Register/Register';
+import AccountConfirmation from './components/Auth/AccountValidation/AccountValidation';
+import ResetPassword from './components/Auth/ResetPassword/ResetPassword';
 import CssBaseline from '@mui/material/CssBaseline';
+import GenericDialog from './components/Dialog/GenericDialog';
+import Button from '@mui/material/Button';
+import { useAppContext } from './context/AppContext';
+import DashboardLayoutBranding from './components/Dashboard/Dashboard';
 
 function App() {
-    const [open, setOpen] = useState(false);
-    const [gridSpacing, setGridSpacing] = useState<number>(2);
-    // const [gridData, setGridData] = useState<DataArray>([]);
+    const { handleClose, open } = useAppContext();
 
-    const handleClose = () => setOpen(false);
-    
-    const handleOpen = (e: MouseEvent) => {
-        e.stopPropagation();
-        console.log('open modal')
-        setOpen(true)
-    }
-    
-    const onHandleAddGridSpacing = (value: 'inc' | 'dec') => {
-        setGridSpacing(spacing => {
-            if (value === 'dec' && spacing > 2) {
-                return spacing - 1;
-            } else if (value === 'inc') {
-                return spacing + 1;
-            }
-            return spacing;
-        });
-    }
-                                                                                        
     return (
         <>
             <CssBaseline />
+            <GenericDialog open={open} handleClose={handleClose} 
+                dialogTitle="Your session has expired" 
+                dialogSubtitle={'Please return to login page to continue'}
+                dialogActions={false}>
+                <Button variant="contained" onClick={handleClose}>
+                    Close
+                </Button>
+            </GenericDialog>
             <Router>
-            <Routes>
-                <Route path="/" element={<Hero handleOpen={handleOpen} handleClose={handleClose} open={open} onHandleAddGridSpacing={onHandleAddGridSpacing} gridSpacing={gridSpacing} />} />
-                <Route path="/authentication" element={<Authentication />} />
-            </Routes>
-        </Router>
+                <Routes>
+                    <Route path="/" element={<Hero />} />
+                    <Route path="/user/verify-email" element={<AccountConfirmation />} />
+                    <Route path="/user/forgot-password" element={<ResetPassword />} />
+                    <Route path="/user/register" element={<Register />} />
+                    <Route path="/user/login" element={<Login />} />
+                    <Route path="/dashboard" element={<DashboardLayoutBranding />} />
+                </Routes>
+            </Router>
         </>
-        
 )};
 
 export default App;

@@ -18,7 +18,7 @@ export const inputsCustomizations: Components<Theme> = {
       disableRipple: true,
     },
     styleOverrides: {
-      root: ({ theme }) => ({
+      root: ({ theme }: { theme: Theme }) => ({
         boxSizing: 'border-box',
         transition: 'all 100ms ease-in',
         '&:focus-visible': {
@@ -30,7 +30,7 @@ export const inputsCustomizations: Components<Theme> = {
   },
   MuiButton: {
     styleOverrides: {
-      root: ({ theme }) => ({
+      root: ({ theme }: { theme: Theme }) => ({
         boxShadow: 'none',
         borderRadius: (theme.vars || theme).shape.borderRadius,
         textTransform: 'none',
@@ -224,7 +224,7 @@ export const inputsCustomizations: Components<Theme> = {
   },
   MuiIconButton: {
     styleOverrides: {
-      root: ({ theme }) => ({
+      root: ({ theme }: { theme: Theme }) => ({
         boxShadow: 'none',
         borderRadius: (theme.vars || theme).shape.borderRadius,
         textTransform: 'none',
@@ -296,7 +296,7 @@ export const inputsCustomizations: Components<Theme> = {
   },
   MuiToggleButton: {
     styleOverrides: {
-      root: ({ theme }) => ({
+      root: ({ theme }: { theme: Theme }) => ({
         padding: '12px 16px',
         textTransform: 'none',
         borderRadius: '10px',
@@ -321,7 +321,7 @@ export const inputsCustomizations: Components<Theme> = {
       indeterminateIcon: <RemoveRoundedIcon sx={{ height: 14, width: 14 }} />,
     },
     styleOverrides: {
-      root: ({ theme }) => ({
+      root: ({ theme }: { theme: Theme }) => ({
         margin: 10,
         height: 16,
         width: 16,
@@ -387,7 +387,7 @@ export const inputsCustomizations: Components<Theme> = {
       input: {
         padding: 0,
       },
-      root: ({ theme }) => ({
+      root: ({ theme }: { theme: Theme }) => ({
         padding: '8px 12px',
         color: (theme.vars || theme).palette.text.primary,
         borderRadius: (theme.vars || theme).shape.borderRadius,
@@ -432,7 +432,7 @@ export const inputsCustomizations: Components<Theme> = {
   },
   MuiInputAdornment: {
     styleOverrides: {
-      root: ({ theme }) => ({
+      root: ({ theme }: { theme: Theme }) => ({
         color: (theme.vars || theme).palette.grey[500],
         ...theme.applyStyles('dark', {
           color: (theme.vars || theme).palette.grey[400],
@@ -442,7 +442,7 @@ export const inputsCustomizations: Components<Theme> = {
   },
   MuiFormLabel: {
     styleOverrides: {
-      root: ({ theme }) => ({
+      root: ({ theme }: { theme: Theme }) => ({
         typography: theme.typography.caption,
         marginBottom: 8,
       }),
@@ -450,7 +450,7 @@ export const inputsCustomizations: Components<Theme> = {
   },
   MuiFormHelperText: {
     styleOverrides: {
-        root: ({ theme }) => ({
+        root: ({ theme }: { theme: Theme }) => ({
           color: 'white',
           marginLeft: 0,
           ...theme.applyStyles('dark', {
@@ -458,5 +458,6 @@ export const inputsCustomizations: Components<Theme> = {
           }),
         }),
       },
-  }
+  },
 };
+

@@ -1,27 +1,22 @@
-import * as React from 'react';
 import { useColorScheme } from '@mui/material/styles';
-import MenuItem from '@mui/material/MenuItem';
-import Select, { SelectProps } from '@mui/material/Select';
+import Icon from '@mui/material/Icon';
+import LightModeIcon from '@mui/icons-material/LightMode';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
 
-export default function ColorModeSelect(props: SelectProps) {
+export default function ColorModeToggle() {
   const { mode, setMode } = useColorScheme();
+
   if (!mode) {
     return null;
   }
+
+  const toggleMode = () => {
+    setMode(mode === 'light' ? 'dark' : 'light');
+  };
+
   return (
-    <Select
-      value={mode}
-      onChange={(event) =>
-        setMode(event.target.value as 'system' | 'light' | 'dark')
-      }
-      SelectDisplayProps={{
-        'data-screenshot': 'toggle-mode',
-      }}
-      {...props}
-    >
-      <MenuItem value="system">System</MenuItem>
-      <MenuItem value="light">Light</MenuItem>
-      <MenuItem value="dark">Dark</MenuItem>
-    </Select>
+    <Icon  onClick={toggleMode} color="inherit">
+      {mode === 'light' ? <LightModeIcon sx={{ color: 'orange' }} />: <DarkModeIcon sx={{ color: 'black' }} />}
+    </Icon>
   );
 }

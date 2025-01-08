@@ -1,9 +1,8 @@
-import { createTheme, alpha, Shadows } from '@mui/material/styles';
+import { createTheme, alpha } from '@mui/material/styles';
 import gray from '@mui/material/colors/grey';
 import green from '@mui/material/colors/green';
 import red from '@mui/material/colors/red';
 import orange from '@mui/material/colors/orange';
-
 
 const defaultTheme = createTheme();
 
@@ -19,7 +18,6 @@ export const brand = {
   800: 'hsl(210, 100%, 16%)',
   900: 'hsl(210, 100%, 21%)',
 };
-
 
 export const colorSchemes = {
   light: {
@@ -124,7 +122,7 @@ export const colorSchemes = {
 };
 
 export const typography = {
-  fontFamily: 'Inter, sans-serif',
+  //   fontFamily: 'Inter, sans-serif',
   h1: {
     fontSize: defaultTheme.typography.pxToRem(48),
     fontWeight: 600,

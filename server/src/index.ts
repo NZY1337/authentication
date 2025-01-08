@@ -23,32 +23,6 @@ export const prismaClient = new PrismaClient({
   log: ["query"],
 }).$extends({
   result: {
-    address: {
-      formattedAddress: {
-        needs: {
-          addressOne: true,
-          addressTwo: true,
-          city: true,
-          country: true,
-          pincode: true,
-        },
-        compute: (address) => {
-          return `${address?.addressOne}, ${address?.addressTwo}, ${address.city}, ${address.country}-${address.pincode}`;
-        },
-      },
-    },
-    // user: {
-    //   withoutPassword: {
-    //     needs: {
-    //       password: true,
-    //       name: true,
-    //     },
-    //     compute: (user) => {
-    //       const { password, ...userWithoutPassword } = user;
-    //       return userWithoutPassword;
-    //     },
-    //   },
-    // },
   },
 });
 

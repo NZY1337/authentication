@@ -5,7 +5,7 @@ import { JWT_SECRET } from "../secrets";
 import * as jwt from "jsonwebtoken";
 import { prismaClient } from "..";
 import { User } from "@prisma/client";
-import { generateToken } from "../utils";
+import { calculateSessionTime } from "../utils";
 
 const authMiddleware = async (
   req: Request,
@@ -20,14 +20,8 @@ const authMiddleware = async (
 
   try {
     const payload = jwt.verify(token, JWT_SECRET) as any;
-
-    const tokenLifespan = 60; // 1 minute in seconds
-    // const tokenLifespan = 86400; // 1 day in seconds
-    const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
-
-    // Check if the token is expiring soon based on the 'iat' claim
-    const isExpiringSoon = payload.iat + tokenLifespan - currentTime; // 10 minutes (600 seconds)
-
+    const { remainingTime } = calculateSessionTime(token);
+    
     const user: User | null = await prismaClient.user.findFirst({
       where: {
         id: payload?.userId,
@@ -36,11 +30,10 @@ const authMiddleware = async (
 
     if (!user) {
         console.log('User Unauthorized')
-        // return next();
-          return next(new UnauthorizedException("Unauthorized", ErrorCode.UNAUTHORIZED));
+        return next(new UnauthorizedException("Unauthorized", ErrorCode.UNAUTHORIZED));
     }
 
-    req.user = { ...user, isExpiringSoon } as User;
+    req.user = { ...user, remainingTime } as User;
     next();
   } catch (error) {
     next(new UnauthorizedException("Unauthorized", ErrorCode.UNAUTHORIZED));

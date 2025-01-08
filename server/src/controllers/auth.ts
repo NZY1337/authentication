@@ -4,15 +4,62 @@ import { hashSync, compareSync } from "bcrypt";
 import { BadRequestException } from "../exceptions/bad-request";
 import { ErrorCode } from "../exceptions/root";
 import { NotFoundException } from "../exceptions/not-found";
-import { generateToken, createHash, sendEmailNotification } from "../utils";
-import { SignupSchemaValidator } from "../validation/users";
+import { generateToken, createHash, sendEmailNotification, calculateSessionTime } from "../utils";
+import { SignupSchemaValidator } from "../validation/users";  
 import crypto from "crypto";
 import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../secrets";
 import { User } from "@prisma/client";
 import { UnauthorizedException } from "../exceptions/unauthorized";
 
-const origin = "http://localhost:3000";
+const origin = "http://localhost:5173";
+
+export const signIn = async (req: Request, res: Response) => {
+    const { email, password } = req.body;
+  
+    let user = await prismaClient.user.findFirst({
+      where: { email },
+    });
+  
+    if (!user)
+      throw new NotFoundException("User does not exist", ErrorCode.NOT_FOUND);
+  
+    if (!compareSync(password, user.password))
+      throw new BadRequestException(
+        "Password is incorrect",
+        ErrorCode.INCORRECT_PASSWORD,
+        null
+      );
+  
+    if (!user.isVerified) {
+      throw new UnauthorizedException(
+        "Please verify your email",
+        ErrorCode.UNAUTHORIZED
+      );
+    }
+    
+    const { token, refreshToken, options, refreshOptions } = generateToken(
+      user.id
+    );
+
+    const { remainingTime } = calculateSessionTime(token);
+
+    res.cookie("token", token, options);
+    res.cookie("refreshToken", refreshToken, refreshOptions);
+
+    const userWithoutSensitiveData = {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        defaultShippingAddress: user.defaultShippingAddress,
+        defaultBillingAddress: user.defaultBillingAddress,
+        createdAt: user.createdAt,
+        remainingTime
+    };
+
+    res.status(200).json({ user: userWithoutSensitiveData });
+};
 
 export const signUp = async (req: Request, res: Response) => {
   SignupSchemaValidator.parse(req.body);
@@ -38,11 +85,13 @@ export const signUp = async (req: Request, res: Response) => {
     },
   });
 
-  const { token, refreshToken, options, refreshOptions } = generateToken(
-    user.id
-  );
-  res.cookie("token", token, options);
-  res.cookie("refreshToken", refreshToken, refreshOptions);
+  /*  not needed anymore - we don't want to give the user access to some protected routes if the account is not
+    const { token, refreshToken, options, refreshOptions } = generateToken(
+        user.id
+    );
+    res.cookie("token", token, options);
+    res.cookie("refreshToken", refreshToken, refreshOptions);
+  */
 
   await sendEmailNotification({
     name: user.name,
@@ -57,43 +106,9 @@ export const signUp = async (req: Request, res: Response) => {
     .json({ message: "Please check your email to verify account!" });
 };
 
-export const signIn = async (req: Request, res: Response) => {
-  const { email, password } = req.body;
-
-  let user = await prismaClient.user.findFirst({
-    where: { email },
-  });
-
-  if (!user)
-    throw new NotFoundException("User does not exist", ErrorCode.NOT_FOUND);
-
-  if (!compareSync(password, user.password))
-    throw new BadRequestException(
-      "Password is incorrect",
-      ErrorCode.INCORRECT_PASSWORD,
-      null
-    );
-
-  if (!user.isVerified) {
-    throw new UnauthorizedException(
-      "Please verify your email",
-      ErrorCode.UNAUTHORIZED
-    );
-  }
-
-  const { token, refreshToken, options, refreshOptions } = generateToken(
-    user.id
-  );
-  res.cookie("token", token, options);
-  res.cookie("refreshToken", refreshToken, refreshOptions);
-
-  res.status(200).json({ user });
-};
-
 export const validateUserEmail = async (req: Request, res: Response) => {
   const { verificationToken, email } = req.body;
 
-  console.log(req.body);
   let user = await prismaClient.user.findFirstOrThrow({
     where: { email },
   });
@@ -120,7 +135,8 @@ export const validateUserEmail = async (req: Request, res: Response) => {
 
 export const forgotPassword = async (req: Request, res: Response) => {
   const { email } = req.body;
-  const user = await prismaClient.user.findFirstOrThrow({
+  // we can use findFirstOrThrow - but we don't want to use this - if no user - it will throw an error
+  const user = await prismaClient.user.findFirst({
     where: { email },
   });
 
@@ -184,7 +200,7 @@ export const resetPassword = async (req: Request, res: Response) => {
     }
   }
 
-  res.status(200).json("reset password, please log in back again");
+  res.status(200).json({message: "Password reset, please log in back again"});
 };
 
 export const getUser = async (req: Request, res: Response) => {
@@ -202,7 +218,7 @@ export const logout = async (req: Request, res: Response) => {
     expires: new Date(Date.now()),
   });
 
-  res.status(200).json({ msg: "user logged out!" });
+  res.status(200).send()
 };
 
 export const refreshToken = async (req: Request, res: Response) => {

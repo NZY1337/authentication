@@ -13,33 +13,32 @@ axiosInstance.interceptors.request.use(
     return Promise.reject(new Error(error));
   }
 );
-
 axiosInstance.interceptors.response.use(
   (response) => {
     return response;
   },
   async (error) => {
     const originalRequest = error.config;
-    
+
     if (error.response.status === 401 && !originalRequest._retry) {
       // Mark the request as a retry
       originalRequest._retry = true;
 
       // Check if the request URL is not the refresh token endpoint to avoid an infinite loop
-      if (error.response?.status === 401 && originalRequest.url === "/auth/refresh-token") {
-        // Return a rejected promise silently without logging
-        throw new Error(error);
+      if (originalRequest.url === "/auth/refresh-token") {
+        return; // Do not retry for refresh endpoint
       }
-      
-      try {
-        const response = await axiosInstance.post("/auth/refresh-token");
-        console.log(response)
-        axios.defaults.headers.common["Authorization"] = `Bearer ${response.data.token}`;
 
+      try {
+        const refreshTokenResponse = await axiosInstance.post("/auth/refresh-token");
+        originalRequest.headers.Authorization = `Bearer ${refreshTokenResponse.data.token}`;
+        
         // Retry the original request with the new token
         return axiosInstance(originalRequest);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (refreshError) {
-        return Promise.reject(refreshError);
+        // console.log(refreshError);
+        // return Promise.reject(refreshError);
       }
     }
 
@@ -47,4 +46,4 @@ axiosInstance.interceptors.response.use(
   }
 );
 
-export default axiosInstance;
+export  default axiosInstance

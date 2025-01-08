@@ -1,6 +1,7 @@
 import * as React from "react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { inputsCustomizations } from "../theme/customization/inputs";
+import { navigationCustomization } from "./customization/navigation";
 import { colorSchemes, typography, shape } from "../theme/themePrimitives";
 
 interface AppThemeProps {
@@ -23,6 +24,7 @@ export default function AppThemeProvider({
           shape,
           components: {
             ...inputsCustomizations,
+            ...navigationCustomization
           },
         });
   }, []);

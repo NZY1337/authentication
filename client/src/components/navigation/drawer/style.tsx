@@ -1,11 +1,15 @@
-import { makeStyles, createStyles } from '@mui/styles';
+import { makeStyles, createStyles, } from '@mui/styles';
+import { Theme } from '@mui/material';
 
-const useStyles = makeStyles((ctx) =>
+const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         toggler: {
             '& p': {
-                color: 'orange',
+                color: theme.palette.warning.light,
                 fontWeight: 'bold',
+            },
+            '&:hover': {
+                backgroundColor: 'transparent!important'
             }
         },
         container: {
@@ -26,7 +30,8 @@ const useStyles = makeStyles((ctx) =>
                 opacity: 'inherit'
             },
             '& .MuiPaper-root': {  
-                background: 'radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(84,51,58,1) 100%)',
+                backgroundColor: theme.palette.grey[900],
+                // background: 'radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(84,51,58,1) 100%)',
                 color: 'lightgray',
             },
             '& .MuiBox-root': {

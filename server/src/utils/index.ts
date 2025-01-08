@@ -49,7 +49,7 @@ export const sendEmailNotification = async ({
     resetPassword: {
       subject: "Reset Password",
       message: `<p>Please reset your password by clicking on the following link: 
-                <a href="${origin}/user/reset-password?token=${verificationToken}&email=${emailTo}">Reset Password</a></p>`,
+                <a href="${origin}/user/forgot-password?token=${verificationToken}&email=${emailTo}">Reset Password</a></p>`,
     },
   };
 
@@ -67,13 +67,12 @@ export const sendEmailNotification = async ({
 };
 
 export const generateToken = (userId: number): TokenResponse => {
-  const token = jwt.sign({ userId }, JWT_SECRET, { expiresIn: "15m" });
+  const token = jwt.sign({ userId }, JWT_SECRET, { expiresIn: "1m" });
   const refreshToken = jwt.sign({ userId }, JWT_SECRET, { expiresIn: "7d" });
-
+    
   const options: CookieOptions = {
     httpOnly: true, // Prevent client-side access to the cookie
     secure: process.env.NODE_ENV === "production", // Use secure cookies in production
-    // maxAge: 24 * 60 * 60 * 1000, // 1 day in milliseconds
     maxAge: 1 * 60 * 1000, // 1 minute
   };
 
@@ -85,3 +84,26 @@ export const generateToken = (userId: number): TokenResponse => {
 
   return { token, refreshToken, options, refreshOptions };
 };
+
+
+export const calculateSessionTime = (token: string) => {
+  try {
+    const payload = jwt.verify(token, JWT_SECRET) as jwt.JwtPayload; // Cast to JwtPayload
+
+    if (payload.exp) {
+      const currentTime = Math.floor(Date.now() / 1000);
+      const remainingTime = payload.exp - currentTime;
+      const isExpiringSoon = remainingTime <= 60;
+
+      console.log({ remainingTime, isExpiringSoon });
+      return { remainingTime, isExpiringSoon };
+    }
+
+    return { remainingTime: 0, isExpiringSoon: true }; // Handle missing exp
+  } catch (err) {
+    console.error("Invalid or expired token:", (err as Error).message);
+    return { remainingTime: 0, isExpiringSoon: true }; // Treat as expired
+  }
+};
+
+

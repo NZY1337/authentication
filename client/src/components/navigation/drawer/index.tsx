@@ -10,8 +10,6 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
 import Typography from '@mui/material/Typography';
 import useDrawerStyle from './style';
 
@@ -24,7 +22,7 @@ export default function MenuDrawer() {
   };
 
   const DrawerList = (
-    <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
+    <Box sx={{ width: 250 }} onClick={toggleDrawer(false)}>
         <List>
             {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
                 <ListItem key={text} disablePadding>
@@ -58,7 +56,7 @@ export default function MenuDrawer() {
   return (
     <div>
         <Button className={classes.toggler} sx={{ display: { md: "none" }}} onClick={toggleDrawer(true)}>
-            <Typography variant="p" component="p" >
+            <Typography component="p" >
                 MENU
             </Typography>
         </Button>
