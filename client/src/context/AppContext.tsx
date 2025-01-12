@@ -8,7 +8,7 @@ export type UserInterface = {
     defaultBillingAddress: string | null;
     defaultShippingAddress: string | null;
     email: string;
-    id: number;
+    id: string;
     role: string;
     remainingTime: number
 }
