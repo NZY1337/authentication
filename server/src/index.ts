@@ -17,6 +17,11 @@ app.use(
 app.use(cookieParser());
 app.use(express.json());
 
+app.use((req, res, next) => {
+    res.set("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
+    next();
+  });
+
 app.use("/api", rootRouter);
 
 export const prismaClient = new PrismaClient({
