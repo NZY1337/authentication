@@ -66,7 +66,7 @@ export const sendEmailNotification = async ({
   });
 };
 
-export const generateToken = (userId: number): TokenResponse => {
+export const generateToken = (userId: string): TokenResponse => {
   const token = jwt.sign({ userId }, JWT_SECRET, { expiresIn: "1m" });
   const refreshToken = jwt.sign({ userId }, JWT_SECRET, { expiresIn: "7d" });
     
