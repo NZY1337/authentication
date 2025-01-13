@@ -31,7 +31,7 @@ axiosInstance.interceptors.response.use(
 
       try {
         const refreshTokenResponse = await axiosInstance.post("/auth/refresh-token");
-        originalRequest.headers.Authorization = `Bearer ${refreshTokenResponse.data.token}`;
+        originalRequest.headers.Authorization = `${refreshTokenResponse.data.token}`;
         
         // Retry the original request with the new token
         return axiosInstance(originalRequest);

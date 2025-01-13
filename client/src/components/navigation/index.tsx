@@ -30,12 +30,6 @@ const Navigation: React.FC = () => {
                     
                     {user ? (
                         <>
-                            {/* <MenuItem disableRipple className={classes.hiUser}>
-                                <Link component="span">
-                                    Hi {user?.name}
-                                </Link>
-                            </MenuItem> */}
-
                             <MenuItem disableRipple>
                                 <Link component={ReactRouterLink} to="/dashboard">
                                     Dashboard  

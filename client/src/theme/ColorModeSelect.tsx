@@ -16,7 +16,7 @@ export default function ColorModeToggle() {
 
   return (
     <Icon  onClick={toggleMode} color="inherit">
-      {mode === 'light' ? <LightModeIcon sx={{ color: 'orange' }} />: <DarkModeIcon sx={{ color: 'black' }} />}
+      {mode === 'light' ? <LightModeIcon sx={{ color: 'orange' }} />: <DarkModeIcon sx={{ color: 'white' }} />}
     </Icon>
   );
 }
