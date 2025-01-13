@@ -1,10 +1,24 @@
+import { useEffect } from 'react';
 import Stack from '@mui/material/Stack';
 import LoginCard from './LoginCard';
 import Content from './Content';
+import Navigation from '../../navigation';
+import { useNavigate } from 'react-router-dom';
+import { useAppContext } from '../../../context/AppContext';
 
 export default function Login() {
+    const { user } = useAppContext();
+    const navigate = useNavigate();
+    
+    useEffect(() => {   
+        if (user) {
+            navigate('/');
+        }
+    }, [navigate, user]);
+
   return (
     <>
+    <Navigation />
       <Stack direction="column" component="main"
         sx={[
           {

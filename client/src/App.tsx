@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes,} from 'react-router-dom';
 import './App.css';
 import Hero from './components/homepage/Hero';
 import Login from './components/Auth/Login/Login';
@@ -10,9 +10,12 @@ import GenericDialog from './components/Dialog/GenericDialog';
 import Button from '@mui/material/Button';
 import { useAppContext } from './context/AppContext';
 import DashboardLayoutBranding from './components/Dashboard/Dashboard';
+import ProtectedRoute from './components/Protected/ProtectedRoute';
+import NotFoundPage from './components/NotFound/NotFoundPage';
+
 
 function App() {
-    const { handleClose, open } = useAppContext();
+    const { handleClose, open,  } = useAppContext();
 
     return (
         <>
@@ -32,7 +35,10 @@ function App() {
                     <Route path="/user/forgot-password" element={<ResetPassword />} />
                     <Route path="/user/register" element={<Register />} />
                     <Route path="/user/login" element={<Login />} />
-                    <Route path="/dashboard" element={<DashboardLayoutBranding />} />
+                    <Route path="/" element={<ProtectedRoute />} >
+                        <Route path="dashboard" element={<DashboardLayoutBranding />} />
+                    </Route>
+                    <Route path="*" element={<NotFoundPage />} /> 
                 </Routes>
             </Router>
         </>

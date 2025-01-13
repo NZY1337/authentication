@@ -99,6 +99,7 @@ export function useAuth(handleOpen: () => void) {
       setRemainingTime(0)
       setUser(null);
       setError(null);
+    //   navigate("/user/login", { replace: true });
     }
 
     setLoading(false);

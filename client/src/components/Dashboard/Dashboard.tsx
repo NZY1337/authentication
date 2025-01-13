@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useDemoRouter } from '@toolpad/core/internal';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAppContext } from '../../context/AppContext';
 import { createTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -133,7 +133,6 @@ export default function DashboardLayoutAccount() {
 
   const router = useDemoRouter('/dashboard');
   
-
   return (
     <AppProvider
       session={session}
