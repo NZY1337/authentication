@@ -122,51 +122,62 @@ export const colorSchemes = {
 };
 
 export const typography = {
-  //   fontFamily: 'Inter, sans-serif',
   h1: {
     fontSize: defaultTheme.typography.pxToRem(48),
-    fontWeight: 600,
     lineHeight: 1.2,
     letterSpacing: -0.5,
+    fontFamily: 'Playfair Display, serif',
+    fontWeight: 400,
   },
   h2: {
     fontSize: defaultTheme.typography.pxToRem(36),
     fontWeight: 600,
     lineHeight: 1.2,
+    fontFamily: 'Playfair Display, serif',
   },
   h3: {
     fontSize: defaultTheme.typography.pxToRem(30),
     lineHeight: 1.2,
+    fontFamily: 'Playfair Display, serif',
   },
   h4: {
     fontSize: defaultTheme.typography.pxToRem(24),
     fontWeight: 600,
     lineHeight: 1.5,
+    fontFamily: 'Playfair Display, serif',
   },
   h5: {
     fontSize: defaultTheme.typography.pxToRem(20),
     fontWeight: 600,
+    fontFamily: 'Playfair Display, serif',
   },
   h6: {
     fontSize: defaultTheme.typography.pxToRem(18),
     fontWeight: 600,
+    fontFamily: 'Playfair Display, serif',
   },
   subtitle1: {
     fontSize: defaultTheme.typography.pxToRem(18),
+    fontFamily: 'Poppins, serif',
   },
   subtitle2: {
     fontSize: defaultTheme.typography.pxToRem(14),
     fontWeight: 500,
+    fontFamily: 'Poppins, serif',
   },
   body1: {
     fontSize: defaultTheme.typography.pxToRem(14),
+    fontFamily: 'Poppins, serif',
   },
   body2: {
     fontSize: defaultTheme.typography.pxToRem(14),
+    fontFamily: 'Poppins, serif',
     fontWeight: 400,
+    
   },
   caption: {
     fontSize: defaultTheme.typography.pxToRem(12),
+    fontFamily: 'Poppins, serif',
     fontWeight: 400,
   },
 };

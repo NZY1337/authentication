@@ -14,20 +14,11 @@ export const navigationCustomization: Components<Theme> = {
                 backgroundColor: 'transparent',
                 boxShadow: 'none',  
             }),
-            '& .MuiToolbar-root': {
-                display: 'flex', 
-                justifyContent: 'space-between',
-            },
-            '& .MuiButtonBase-root': {
-                color:'red',
-                // backgroundColor:'white',
-            },
             '& .nav-logo': {
-            ...theme.applyStyles('dark', {
-                    color: theme.palette.warning.light,
+                ...theme.applyStyles('dark', {
                 }),
                 ...theme.applyStyles('light', {
-                    color: theme.palette.grey[100],
+                    // color: theme.palette.grey[100],
                 }),
             }
         }),
@@ -36,15 +27,13 @@ export const navigationCustomization: Components<Theme> = {
   MuiMenuItem: {
     styleOverrides: {
       root: ({ theme }: { theme: Theme }) => ({
-        // Target Typography inside MenuItem
         '& .MuiTypography-root': {
             ...theme.applyStyles('dark', {
-                color: theme.palette.warning.light,
+                color: theme.palette.grey[100],
             }),
             ...theme.applyStyles('light', {
                 color: theme.palette.grey[100],
             }),
-            fontWeight: 'bold',
             textDecoration: 'none',
             '&:hover': {
                 color: theme.palette.grey[300],
@@ -56,6 +45,5 @@ export const navigationCustomization: Components<Theme> = {
       }),
     },
   },
-  
 };
 
