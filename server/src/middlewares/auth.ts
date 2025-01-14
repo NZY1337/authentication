@@ -7,10 +7,6 @@ import { prismaClient } from "..";
 import { User } from "@prisma/client";
 import { calculateSessionTime } from "../utils";
 
-export interface UserWithRemainingTime extends User {
-    remainingTime: number;
-}
-
 const authMiddleware = async (
   req: Request,
   res: Response,
@@ -36,7 +32,8 @@ const authMiddleware = async (
         return next(new UnauthorizedException("Unauthorized", ErrorCode.UNAUTHORIZED));
     }
 
-    req.user = { ...user, remainingTime } as UserWithRemainingTime;
+    req.user = { ...user, remainingTime } as User & { remainingTime: number };
+    
     next();
   } catch (error) {
     next(new UnauthorizedException("Unauthorized", ErrorCode.UNAUTHORIZED));

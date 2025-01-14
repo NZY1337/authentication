@@ -95,7 +95,6 @@ export const calculateSessionTime = (token: string) => {
       const remainingTime = payload.exp - currentTime;
       const isExpiringSoon = remainingTime <= 60;
 
-      console.log({ remainingTime, isExpiringSoon });
       return { remainingTime, isExpiringSoon };
     }
 

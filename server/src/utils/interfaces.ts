@@ -1,3 +1,7 @@
+import { User } from "@prisma/client";
+
+export interface UserWithoutSensitiveData extends Omit<User, "password" | "passwordToken" | "passwordTokenExpirationDate" | "verificationToken"> {}
+
 export interface CookieOptions {
   httpOnly: boolean;
   secure: boolean;
@@ -24,3 +28,4 @@ export interface SendVerificationEmailInterface {
   origin: string;
   type: "verification" | "resetPassword";
 }
+

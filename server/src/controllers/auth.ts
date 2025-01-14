@@ -15,6 +15,8 @@ import _ from "lodash";
 
 const origin = "http://localhost:5173";
 
+import { UserWithoutSensitiveData } from "../utils/interfaces";
+
 export const signIn = async (req: Request, res: Response) => {
     const { email, password } = req.body;
   
@@ -22,8 +24,7 @@ export const signIn = async (req: Request, res: Response) => {
       where: { email },
     });
   
-    if (!user)
-      throw new NotFoundException("User does not exist", ErrorCode.NOT_FOUND);
+    if (!user) throw new NotFoundException("User does not exist", ErrorCode.NOT_FOUND);
   
     if (!compareSync(password, user.password))
       throw new BadRequestException(
@@ -48,7 +49,8 @@ export const signIn = async (req: Request, res: Response) => {
     res.cookie("token", token, options);
     res.cookie("refreshToken", refreshToken, refreshOptions);
 
-    const userWithoutSensitiveData = _.omit({...user, remainingTime}, ["password", "passwordToken", "passwordTokenExpirationDate", "verificationToken"])
+    const userWithoutSensitiveData: UserWithoutSensitiveData & { remainingTime: number }  = 
+        _.omit({...user, remainingTime}, ["password", "passwordToken", "passwordTokenExpirationDate", "verificationToken"])
 
     res.status(200).json({ user: userWithoutSensitiveData });
 };
@@ -202,7 +204,7 @@ export const getUser = async (req: Request, res: Response) => {
       throw new UnauthorizedException("Unauthorized", ErrorCode.UNAUTHORIZED);
     }
     
-    const userWithoutSensitiveData = _.omit(user, ["password", "passwordToken", "passwordTokenExpirationDate", "verificationToken"])
+    const userWithoutSensitiveData: UserWithoutSensitiveData = _.omit(user, ["password", "passwordToken", "passwordTokenExpirationDate", "verificationToken"])
 
     res.status(200).json({ user: userWithoutSensitiveData }); // passed from MIDDLEWARE
 };
