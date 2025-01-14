@@ -25,22 +25,32 @@ export function useValidateInputs({ errors, formValues }: UseValidateInputsProps
     let isValid = true;
 
     if (formValues.name !== undefined && formValues.name.trim() === "") {
-      console.log('name?')
       newErrors.name = "Name is required.";
       isValid = false;
     }
 
     if (formValues.email !== undefined && !/\S+@\S+\.\S+/.test(formValues?.email)) {
-        console.log('email?')
       newErrors.email = "Please enter a valid email address.";
       isValid = false;
     }
 
     if (formValues.password !== undefined && formValues?.password?.length < 6) {
-      console.log('password')
       newErrors.password = "Password must be at least 6 characters long.";
       isValid = false;
     }
+
+    // how to check if value has one letter uppercase 
+    if (formValues.password !== undefined && !/[A-Z]/.test(formValues.password)) {
+        // newErrors.password = "Password must contain at least one uppercase letter.";
+        // isValid = false;
+        console.log('password should have one uppercase')
+    }    
+    
+    
+
+    if (formValues.password ) {
+        alert('uppercase')
+      }
 
     if (formValues.repeatPassword !== undefined && formValues.password !== formValues.repeatPassword) {
       console.log('repeatPassword')

@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Route, Routes,} from 'react-router-dom';
 import './App.css';
-import Hero from './components/homepage/Hero';
+import Hero from './components/Homepage/Hero';
 import Login from './components/Auth/Login/Login';
 import Register from './components/Auth/Register/Register';
 import AccountConfirmation from './components/Auth/AccountValidation/AccountValidation';

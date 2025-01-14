@@ -11,7 +11,7 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import ForgotPassword from '../ForgotPassword/ForgotPassword';
-import { GoogleIcon, SitemarkIcon } from './CustomIcons';
+import { GoogleIcon } from './CustomIcons';
 import Link from '@mui/material/Link';
 import { useAppContext } from '../../../context/AppContext';
 import { CircularProgress } from '@mui/material';
@@ -80,9 +80,6 @@ export default function LogInCard() {
 
   return (
     <Card variant="outlined">
-      <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-        <SitemarkIcon />
-      </Box>
       <Typography component="h1" variant="h4" sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}>
         Log In
       </Typography>

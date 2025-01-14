@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import Stack from '@mui/material/Stack';
 import LoginCard from './LoginCard';
 import Content from './Content';
-import Navigation from '../../navigation';
+import Navigation from '../../Navigation';
 import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../../../context/AppContext';
 
@@ -18,7 +18,7 @@ export default function Login() {
 
   return (
     <>
-    <Navigation />
+      <Navigation />
       <Stack direction="column" component="main"
         sx={[
           {
