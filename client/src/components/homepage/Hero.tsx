@@ -19,45 +19,26 @@ const Hero = () => {
         display: 'flex',
         justifyContent: 'center',
         flexDirection: 'column',
-        // alignItems: 'flex-start',
         color: '#fff',
         textAlign: 'center',
         p: 3,
     }}>
         <Navigation />
         <Container>
-            <Box sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                textAlign: 'left',
-            }}>
-                <Typography 
-                    variant="h1" 
-                    component="h1"
-                    sx={{
-                        mb: 3,
-                        borderRadius: '8px',
-                        fontWeight: 'bold',
-                    }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', textAlign: 'left' }}>
+                <Typography variant="h1" sx={{ mb: 3,borderRadius: '8px',fontWeight: 'bold' }}>
                     Designing a Home. <br /> Creating a Living.
                 </Typography>
 
-                <Typography variant="subtitle1" component="body" width={"50%"}>
+                <Typography variant="subtitle1" width={"50%"}>
                     We are generic frontenders who do generic things for generic people who do generic things.
                 </Typography>
 
-                <Box 
-                    sx={{
-                        mt: 3,
-                        display: 'flex',
-                        justifyContent: 'flex-start',
-                        gap: 2
-                    }}>
-                        <Button variant='contained'>Get Started Now</Button>
-                        <Button sx={{color: 'orange'}} variant='text'>Request a Demo <ArrowRight /></Button>
+                <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-start', gap: 2 }}>
+                    <Button variant='contained'>Get Started Now</Button>
+                    <Button sx={{color: 'orange'}} variant='text'>Request a Demo <ArrowRight /></Button>
                 </Box>
             </Box>
-            
         </Container>
     </Container>
   );
