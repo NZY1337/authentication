@@ -41,7 +41,7 @@ export function useAuth(handleOpen: () => void) {
     } else if (resData) {
       setUser(resData.user);
       setRemainingTime(resData.user.remainingTime);   
-      navigate("/");
+      navigate("/dashboard");
     }
 
     setLoading(false);

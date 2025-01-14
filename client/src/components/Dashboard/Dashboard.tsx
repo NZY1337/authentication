@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useDemoRouter } from '@toolpad/core/internal';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../../context/AppContext';
 import { createTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -19,6 +19,8 @@ import {
   type Session,
   type Navigation,
 } from '@toolpad/core/AppProvider';
+
+import Logo from '../Logo/Logo';
 
 
 const NAVIGATION: Navigation = [
@@ -53,6 +55,58 @@ const demoTheme = createTheme({
       xl: 1536,
     },
   },
+  typography: {
+    h1: {
+      lineHeight: 1.2,
+      letterSpacing: -0.5,
+      fontFamily: 'Playfair Display, serif',
+      fontWeight: 400,
+    },
+    h2: {
+      fontWeight: 600,
+      lineHeight: 1.2,
+      fontFamily: 'Playfair Display, serif',
+    },
+    h3: {
+      lineHeight: 1.2,
+      fontFamily: 'Playfair Display, serif',
+    },
+    h4: {
+      fontWeight: 600,
+      lineHeight: 1.5,
+      fontFamily: 'Playfair Display, serif',
+    },
+    h5: {
+      fontWeight: 600,
+      fontFamily: 'Playfair Display, serif',
+    },
+    h6: {
+      fontWeight: 600,
+      fontFamily: 'Playfair Display, serif',
+    },
+    subtitle1: {
+      fontFamily: 'Poppins, serif',
+    },
+    subtitle2: {
+      fontWeight: 500,
+      fontFamily: 'Poppins, serif',
+    },
+    body1: {
+      fontFamily: 'Poppins, serif',
+    },
+    body2: {
+      fontFamily: 'Poppins, serif',
+      fontWeight: 400,
+      
+    },
+    caption: {
+      fontFamily: 'Poppins, serif',
+      fontWeight: 400,
+    },
+    button: {
+      fontFamily: 'Poppins, serif',
+    }
+  }
 });
 
 function SidebarFooter({ mini }: SidebarFooterProps) {
@@ -84,17 +138,11 @@ function DemoPageContent({ pathname }: { pathname: string }) {
 
 function CustomAppTitle() {
     const navigate = useNavigate();
-
     const handleClick = () => navigate('/');
 
     return (
       <Stack direction="row" alignItems="center" spacing={2}>
-        <CloudCircleIcon fontSize="large" color="primary" onClick={handleClick} />
-        <Typography variant="h6">My App</Typography>
-        <Chip size="small" label="BETA" color="info" />
-        <Tooltip title="Connected to production">
-          <CheckCircleIcon color="success" fontSize="small" />
-        </Tooltip>
+        <Typography variant="body1" sx={{cursor: 'pointer', color: 'primary.main'}} onClick={handleClick}>Home</Typography>
       </Stack>
     );
   }

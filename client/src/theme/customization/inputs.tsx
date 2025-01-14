@@ -184,7 +184,7 @@ export const inputsCustomizations: Components<Theme> = {
                 backgroundColor: gray[200],
               },
               ...theme.applyStyles('dark', {
-                color: gray[50],
+                color: 'orange',
                 '&:hover': {
                   backgroundColor: gray[700],
                 },
@@ -348,20 +348,30 @@ export const inputsCustomizations: Components<Theme> = {
   },
   MuiInputBase: {
     styleOverrides: {
-      root: {
-        border: 'none',
-      },
-      input: {
-        '&::placeholder': {
-          opacity: 0.7,
-          color: gray[500],
-        },
-        '&::-webkit-autofill': {
-            // boxShadow: '0 0 0px 1000px white inset',
-            // WebkitBoxShadow: '0 0 0px 1000px white inset',
-            // transition: 'background-color 5000s ease-in-out 0s',
-          },
-      },
+        root: ({ theme }: { theme: Theme }) => ({
+            input: {
+                '&::placeholder': {
+                  opacity: 0.7,
+                  color: gray[500],
+                },
+                ...theme.applyStyles('dark', {
+                    "&:-webkit-autofill": {
+                        WebkitBoxShadow: "0 0 0 100px #212121 inset !important",
+                        WebkitTextFillColor: "inherit !important",
+                    },
+                }),
+                ...theme.applyStyles('light', {
+                    "&:-webkit-autofill": {
+                        WebkitBoxShadow: "0 0 0 100px hsl(0, 0%, 99%) inset !important",
+                        WebkitTextFillColor: "inherit !important",
+                    },
+                }),
+            },
+            color: theme.palette.grey[500],
+            ...theme.applyStyles('dark', {
+              color: theme.palette.grey[400],
+            }),
+        }),
     },
   },
   MuiOutlinedInput: {

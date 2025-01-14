@@ -180,6 +180,9 @@ export const typography = {
     fontFamily: 'Poppins, serif',
     fontWeight: 400,
   },
+  button: {
+    fontFamily: 'Poppins, serif',
+  }
 };
 
 export const shape = {

@@ -7,8 +7,7 @@ import MenuDrawer from './drawer';
 import RenderLinks from './RenderLinks';
 import { styled } from '@mui/material/styles';
 import Logo from '../Logo/Logo';
-
-// import ColorModeSelect from '../../theme/ColorModeSelect';
+import ColorModeSelect from '../../theme/ColorModeSelect';
 
 const AppBarContainer = styled(AppBar)(({ theme }) => ({
     '.MuiToolbar-root': {
@@ -29,6 +28,7 @@ const AppBarContainer = styled(AppBar)(({ theme }) => ({
 const Navigation: React.FC = () => {
     return (
         <AppBarContainer>
+            {/* <ColorModeSelect /> */}
             <Container>
                 <MenuDrawer />
                 

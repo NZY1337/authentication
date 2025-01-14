@@ -1,10 +1,8 @@
-import Typography  from "@mui/material/Typography"
+import image1 from "../../assets/artura3.png";
 
 const Logo = () => {
     return (
-        <Typography variant="body1" fontSize={22.5} fontWeight={800}>
-            Artura A.I.
-        </Typography>
+        <img alt="artura logo" src={image1} style={{ width:'125px', height:'auto', objectFit:'cover' }}/>
     )
 }
 

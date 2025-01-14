@@ -30,11 +30,11 @@ const GenericDialog = ({ open, dialogTitle, dialogSubtitle, loading, children, h
                     }
                 },
             }}>
-                <DialogTitle sx={{pb: 1, display: 'flex', alignItems: 'center'}}>
+                <DialogTitle variant="subtitle1" sx={{pb: 1, display: 'flex', alignItems: 'center'}}>
                     {dialogTitle} {loading && <CircularProgress sx={{ ml: 1}} size={20} color="primary" />}
                 </DialogTitle>
                 
-                <DialogTitle sx={{pt:0, color: 'text.secondary', fontWeight:'light', fontSize: '14px' }}>{dialogSubtitle}</DialogTitle>
+                <DialogTitle variant="subtitle2" sx={{ pt:0, color: 'text.secondary', fontWeight:'light'}}>{dialogSubtitle}</DialogTitle>
 
                 {children && 
                     <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: '100%' }}>

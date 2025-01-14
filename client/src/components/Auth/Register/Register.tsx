@@ -18,7 +18,7 @@ export default function Register() {
     
   return (
     <>
-        <Navigation />
+      <Navigation />
       <Stack direction="column" component="main"
         sx={[
           {
