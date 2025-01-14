@@ -26,6 +26,7 @@ export function useAuth(handleOpen: () => void) {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [remainingTime, setRemainingTime] = useState<number>(0);
+  
 
   const loginUser = async (data: UserLoginInterface, navigate: NavigateFunction) => {
     setLoading(true);
@@ -109,6 +110,9 @@ export function useAuth(handleOpen: () => void) {
     getUser();
   }, []);
 
+  console.log('user: ', user);
+
+
   useEffect(() => {
     let interval: NodeJS.Timeout;
     if (user) {
@@ -132,7 +136,7 @@ export function useAuth(handleOpen: () => void) {
     }
      
     return () => clearInterval(interval);
-  }, [logoutUser, remainingTime, user?.remainingTime, user, handleOpen]);
+  }, [logoutUser, remainingTime, user?.remainingTime, user]);
 
   return { user, error, loading, loginUser, getUser, setUser, setError, registerUser, logoutUser, setRemainingTime };
 }

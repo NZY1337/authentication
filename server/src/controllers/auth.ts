@@ -11,6 +11,7 @@ import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../secrets";
 import { User } from "@prisma/client";
 import { UnauthorizedException } from "../exceptions/unauthorized";
+import _ from "lodash";
 
 const origin = "http://localhost:5173";
 
@@ -47,16 +48,7 @@ export const signIn = async (req: Request, res: Response) => {
     res.cookie("token", token, options);
     res.cookie("refreshToken", refreshToken, refreshOptions);
 
-    const userWithoutSensitiveData = {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        defaultShippingAddress: user.defaultShippingAddress,
-        defaultBillingAddress: user.defaultBillingAddress,
-        createdAt: user.createdAt,
-        remainingTime
-    };
+    const userWithoutSensitiveData = _.omit({...user, remainingTime}, ["password", "passwordToken", "passwordTokenExpirationDate", "verificationToken"])
 
     res.status(200).json({ user: userWithoutSensitiveData });
 };
@@ -85,14 +77,14 @@ export const signUp = async (req: Request, res: Response) => {
     },
   });
 
-  /*  not needed anymore - we don't want to give the user access to some protected routes if the account is not
+  /* not needed anymore - we don't want to give the user access to some protected routes if the account is not verified yet
     const { token, refreshToken, options, refreshOptions } = generateToken(
         user.id
     );
     res.cookie("token", token, options);
     res.cookie("refreshToken", refreshToken, refreshOptions);
   */
-
+  
   await sendEmailNotification({
     name: user.name,
     emailTo: user.email,
@@ -204,7 +196,15 @@ export const resetPassword = async (req: Request, res: Response) => {
 };
 
 export const getUser = async (req: Request, res: Response) => {
-  res.status(200).json({ user: req.user }); // passed from MIDDLEWARE
+    const user = req.user;
+
+    if (!user) {
+      throw new UnauthorizedException("Unauthorized", ErrorCode.UNAUTHORIZED);
+    }
+    
+    const userWithoutSensitiveData = _.omit(user, ["password", "passwordToken", "passwordTokenExpirationDate", "verificationToken"])
+
+    res.status(200).json({ user: userWithoutSensitiveData }); // passed from MIDDLEWARE
 };
 
 export const logout = async (req: Request, res: Response) => {

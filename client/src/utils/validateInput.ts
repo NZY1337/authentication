@@ -46,12 +46,6 @@ export function useValidateInputs({ errors, formValues }: UseValidateInputsProps
         console.log('password should have one uppercase')
     }    
     
-    
-
-    if (formValues.password ) {
-        alert('uppercase')
-      }
-
     if (formValues.repeatPassword !== undefined && formValues.password !== formValues.repeatPassword) {
       console.log('repeatPassword')
       newErrors.repeatPassword = "Passwords do not match.";
