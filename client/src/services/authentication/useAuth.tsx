@@ -96,10 +96,9 @@ export function useAuth(handleOpen: () => void) {
     if (error) {
       setError("Failed to log out.");
     } else {
-      setRemainingTime(0)
+      setRemainingTime(0);
       setUser(null);
       setError(null);
-    //   navigate("/user/login", { replace: true });
     }
 
     setLoading(false);
@@ -132,7 +131,7 @@ export function useAuth(handleOpen: () => void) {
     }
      
     return () => clearInterval(interval);
-  }, [logoutUser, remainingTime, user?.remainingTime, user, handleOpen]);
+  }, [logoutUser, remainingTime, user?.remainingTime, user]);
 
   return { user, error, loading, loginUser, getUser, setUser, setError, registerUser, logoutUser, setRemainingTime };
 }

@@ -11,7 +11,7 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import ForgotPassword from '../ForgotPassword/ForgotPassword';
-import { GoogleIcon } from './CustomIcons';
+import { GoogleIcon } from '../CustomIcons/CustomIcons';
 import { useAppContext } from '../../../context/AppContext';
 import { CircularProgress } from '@mui/material';
 import Link from '@mui/material/Link';
@@ -49,7 +49,7 @@ export default function RegisterCard() {
   });
 
   const errors = { name: '', email: '', password: '', repeatPassword: ''};
-  const { validateInputs, formErrors } = useValidateInputs({errors, formValues});
+  const { validateInputs, formErrors } = useValidateInputs({ errors, formValues });
 
   const handleClickOpen = () => {
     setOpen(true);

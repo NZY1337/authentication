@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 import Stack from '@mui/material/Stack';
 import LoginCard from './LoginCard';
-import Content from './Content';
 import Navigation from '../../Navigation';
 import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../../../context/AppContext';
+import Content from '../LoginRegisterContent/Content';
 
 export default function Login() {
     const { user } = useAppContext();
@@ -31,7 +31,7 @@ export default function Login() {
               backgroundRepeat: 'no-repeat',
               ...theme.applyStyles('dark', {
                 backgroundImage:
-                  'radial-gradient(at 50% 50%, hsla(210, 100%, 16%, 0.5), hsl(220, 30%, 5%))',
+                  'radial-gradient(at 50% 50%, hsla(210, 100%, 16%, 0.5), #1B1F1C)',
               }),
           }),
         ]}

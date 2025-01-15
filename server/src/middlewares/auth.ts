@@ -29,11 +29,11 @@ const authMiddleware = async (
     });
 
     if (!user) {
-        console.log('User Unauthorized')
         return next(new UnauthorizedException("Unauthorized", ErrorCode.UNAUTHORIZED));
     }
 
-    req.user = { ...user, remainingTime } as User;
+    req.user = { ...user, remainingTime } as User & { remainingTime: number };
+    
     next();
   } catch (error) {
     next(new UnauthorizedException("Unauthorized", ErrorCode.UNAUTHORIZED));

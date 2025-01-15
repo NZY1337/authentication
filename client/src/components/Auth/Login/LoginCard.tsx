@@ -11,7 +11,7 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import ForgotPassword from '../ForgotPassword/ForgotPassword';
-import { GoogleIcon } from './CustomIcons';
+import { GoogleIcon } from '../CustomIcons/CustomIcons';
 import Link from '@mui/material/Link';
 import { useAppContext } from '../../../context/AppContext';
 import { CircularProgress } from '@mui/material';
@@ -112,7 +112,7 @@ export default function LogInCard() {
               <TextField
                 fullWidth
                 name="password"
-                placeholder="••••••"
+                placeholder="••••••••"
                 type="password"
                 id="password"
                 autoComplete="new-password"

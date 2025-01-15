@@ -1,6 +1,5 @@
 import { useState } from "react";
 
-// Define types for better type safety
 interface FormValues {
   name?: string;
   email?: string;
@@ -9,7 +8,7 @@ interface FormValues {
 }
 
 interface Errors {
-  [key: string]: string; // Key-value mapping for field names and their error messages
+  [key: string]: string; 
 }
 
 interface UseValidateInputsProps {
@@ -17,8 +16,16 @@ interface UseValidateInputsProps {
   formValues: FormValues;
 }
 
-export function useValidateInputs({ errors, formValues }: UseValidateInputsProps) {
+const containsSymbols = (password: string) => {
+    const symbolRegex = /[!@#$%^&*(),.?":{}|<>]/;
+    return symbolRegex.test(password);
+}
+
+const symbols = `[!@#$%^&*(),.?":{}|<>]`
+
+export function useValidateInputs({errors, formValues }: UseValidateInputsProps) {
   const [formErrors, setFormErrors] = useState<Errors>(errors);
+  const isOnRegisterPage = formValues.repeatPassword !== undefined;
 
   const validateInputs = (): boolean => {
     const newErrors: Errors = {}; 
@@ -39,19 +46,18 @@ export function useValidateInputs({ errors, formValues }: UseValidateInputsProps
       isValid = false;
     }
 
-    // how to check if value has one letter uppercase 
-    if (formValues.password !== undefined && !/[A-Z]/.test(formValues.password)) {
-        // newErrors.password = "Password must contain at least one uppercase letter.";
-        // isValid = false;
-        console.log('password should have one uppercase')
+    // for register only
+    if (formValues.password !== undefined && !/[A-Z]/.test(formValues.password) && isOnRegisterPage) {
+        newErrors.password = "Password must contain at least one uppercase letter.";
+        isValid = false;
     }    
-    
-    
 
-    if (formValues.password ) {
-        alert('uppercase')
-      }
-
+    // for register only
+    if (formValues.password !== undefined && !containsSymbols(formValues.password) && isOnRegisterPage) {
+        newErrors.password = "The password must include at least one of the following symbols: " + symbols;
+        isValid = false;
+    }   
+    
     if (formValues.repeatPassword !== undefined && formValues.password !== formValues.repeatPassword) {
       console.log('repeatPassword')
       newErrors.repeatPassword = "Passwords do not match.";

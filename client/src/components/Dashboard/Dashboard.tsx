@@ -6,22 +6,15 @@ import { createTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import BarChartIcon from '@mui/icons-material/BarChart';
-import CloudCircleIcon from '@mui/icons-material/CloudCircle';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import Stack from '@mui/material/Stack';
-import Chip from '@mui/material/Chip';
-import Tooltip from '@mui/material/Tooltip';
 import { DashboardLayout, SidebarFooterProps } from '@toolpad/core/DashboardLayout';
 import {
   AppProvider,
   type Session,
   type Navigation,
 } from '@toolpad/core/AppProvider';
-
-import Logo from '../Logo/Logo';
-
 
 const NAVIGATION: Navigation = [
     {
