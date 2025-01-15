@@ -96,10 +96,9 @@ export function useAuth(handleOpen: () => void) {
     if (error) {
       setError("Failed to log out.");
     } else {
-      setRemainingTime(0)
+      setRemainingTime(0);
       setUser(null);
       setError(null);
-    //   navigate("/user/login", { replace: true });
     }
 
     setLoading(false);
@@ -108,9 +107,6 @@ export function useAuth(handleOpen: () => void) {
   useEffect(() => {
     getUser();
   }, []);
-
-  console.log('user: ', user);
-
 
   useEffect(() => {
     let interval: NodeJS.Timeout;

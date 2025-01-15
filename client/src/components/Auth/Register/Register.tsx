@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 import Stack from '@mui/material/Stack';
 import RegisterCard from './RegisterCard';
-import Content from './Content';
 import Navigation from '../../Navigation';
 import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../../../context/AppContext';
+import Content from '../LoginRegisterContent/Content';
 
 export default function Register() {
     const { user } = useAppContext();

@@ -31,14 +31,13 @@ export const signIn = async (req: Request, res: Response) => {
         "Password is incorrect",
         ErrorCode.INCORRECT_PASSWORD,
         null
-      );
+    );
   
-    if (!user.isVerified) {
+    if (!user.isVerified) 
       throw new UnauthorizedException(
         "Please verify your email",
         ErrorCode.UNAUTHORIZED
-      );
-    }
+    );
     
     const { token, refreshToken, options, refreshOptions } = generateToken(
       user.id
