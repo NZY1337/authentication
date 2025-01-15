@@ -33,7 +33,7 @@ describe('useAuth hook', () => {
     });
 
     expect(result.current.user).toEqual(mockUser);
-    expect(mockNavigate).toHaveBeenCalledWith('/');
+    expect(mockNavigate).toHaveBeenCalledWith('/dashboard');
   });
 
   it('should handle login error', async () => {

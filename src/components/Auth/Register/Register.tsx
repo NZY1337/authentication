@@ -1,10 +1,24 @@
+import { useEffect } from 'react';
 import Stack from '@mui/material/Stack';
 import RegisterCard from './RegisterCard';
-import Content from './Content';
+import Navigation from '../../Navigation';
+import { useNavigate } from 'react-router-dom';
+import { useAppContext } from '../../../context/AppContext';
+import Content from '../LoginRegisterContent/Content';
 
 export default function Register() {
+    const { user } = useAppContext();
+    const navigate = useNavigate();
+
+    useEffect(() => {   
+        if (user) {
+            navigate('/');
+        }
+    }, [navigate, user]);
+    
   return (
     <>
+      <Navigation />
       <Stack direction="column" component="main"
         sx={[
           {
@@ -17,7 +31,7 @@ export default function Register() {
               backgroundRepeat: 'no-repeat',
               ...theme.applyStyles('dark', {
                 backgroundImage:
-                  'radial-gradient(at 50% 50%, hsla(210, 100%, 16%, 0.5), hsl(220, 30%, 5%))',
+                  'radial-gradient(at 50% 50%, hsla(210, 100%, 16%, 0.5), #1B1F1C)',
               }),
           }),
         ]}

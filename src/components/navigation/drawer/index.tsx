@@ -2,20 +2,52 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import Button from '@mui/material/Button';
-import List from '@mui/material/List';
-import Divider from '@mui/material/Divider';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
-import Typography from '@mui/material/Typography';
-import useDrawerStyle from './style';
+import RenderLinks from '../RenderLinks';
+import { styled } from '@mui/material/styles';
+import Close from '@mui/icons-material/Close';
+import Menu from '@mui/icons-material/Menu';
+import { IconButton } from '@mui/material';
+
+const MobileDrawer = styled(Drawer)(({ theme }) => ({
+    '.MuiList-root': {
+        display: 'flex',
+        flexDirection: 'column',
+    },
+    '.MuiBox-root': {
+        position: 'relative',
+        marginTop: '.5rem',
+
+        '.MuiList-root': {
+            marginTop: '1rem',
+        },
+    },
+    '.MuiMenuItem-root': { 
+        minHeight: '48px',
+        borderBottom: '1px solid rgba(255, 255, 255, .1)',
+        webkitBackgroundClip: 'padding-box',
+        backgroundClip: 'padding-box',
+    },
+    '.MuiButton-root': { 
+        
+        color: theme.palette.warning.light,
+        backgroundColor: 'unset',
+        position: 'absolute',
+        top: 0,
+        right:0,
+        '&:hover': {
+            boxShadow: 'none',
+            color: theme.palette.warning.dark,
+        }
+    },
+    // change everything inside drawer as needed
+    ...theme.applyStyles('dark', {
+    }),
+    ...theme.applyStyles('light', {
+    }),
+}));
 
 export default function MenuDrawer() {
   const [open, setOpen] = React.useState(false);
-  const classes = useDrawerStyle();
 
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen);
@@ -23,50 +55,22 @@ export default function MenuDrawer() {
 
   const DrawerList = (
     <Box sx={{ width: 250 }} onClick={toggleDrawer(false)}>
-        <List>
-            {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                <ListItem key={text} disablePadding>
-                    <ListItemButton>
-                        <ListItemIcon>
-                            {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                        </ListItemIcon>
-                    <ListItemText primary={text} />
-                    </ListItemButton>
-                </ListItem>
-            ))}
-        </List>
-        <Divider />
-        <List sx={{flexGrow: 1}}>
-            {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                <ListItem key={text} disablePadding>
-                    <ListItemButton>
-                    <ListItemIcon>
-                        {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                    </ListItemIcon>
-                    <ListItemText primary={text} />
-                    </ListItemButton>
-                </ListItem>
-            ))}
-        </List>
+        <RenderLinks />
 
-        <Button className="drawer-action-button" variant='contained' color="warning">Close</Button>
+        <Button color="warning"><Close /></Button>
     </Box>
   );
 
   return (
     <div>
-        <Button className={classes.toggler} sx={{ display: { md: "none" }}} onClick={toggleDrawer(true)}>
-            <Typography component="p" >
-                MENU
-            </Typography>
-        </Button>
-        {/* <IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2, '&:focus': { outline: 'none' } }}>
-            <MenuIcon />
-        </IconButton> */}
+        <IconButton sx={{ display: { md: "none" }}} onClick={toggleDrawer(true)} >
+            <Menu />
+        </IconButton>
+        
 
-        <Drawer className={classes.container} open={open} onClose={toggleDrawer(false)}>
+        <MobileDrawer open={open} onClose={toggleDrawer(false)}>
             {DrawerList}
-        </Drawer>
+        </MobileDrawer>
     </div>
   );
 }

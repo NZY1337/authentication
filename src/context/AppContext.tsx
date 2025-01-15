@@ -3,14 +3,17 @@ import { NavigateFunction } from 'react-router-dom';
 import { useAuth } from '../services/authentication/useAuth';
 
 export type UserInterface = {
-    name: string;
     createdAt: string;
+    updatedAt: string;
     defaultBillingAddress: string | null;
     defaultShippingAddress: string | null;
     email: string;
-    id: number;
+    name: string;
+    id: string;
+    isVerified: boolean;
     role: string;
-    remainingTime: number
+    remainingTime: number;
+    verified: boolean
 }
 
 export type UserLoginInterface = Pick<UserInterface, 'email'> & {

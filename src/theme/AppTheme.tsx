@@ -8,6 +8,8 @@ interface AppThemeProps {
   children: React.ReactNode;
 }
 
+// https://mui.com/material-ui/customization/default-theme/
+
 export default function AppThemeProvider({
   children,
 }: Readonly<AppThemeProps>) {
