@@ -14,23 +14,15 @@ const AccountValidation = () => {
   
   return (
     <>
-      <Stack
-        direction="column"
-        component="main"
+      <Stack direction="column" component="main"
         sx={[
           {
             justifyContent: 'center',
             minHeight: '100vh',
-          },
-          (theme) => ({
-            backgroundImage:
-              'radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))',
             backgroundRepeat: 'no-repeat',
-            ...theme.applyStyles('dark', {
-              backgroundImage:
-                'radial-gradient(at 50% 50%, hsla(210, 100%, 16%, 0.5), hsl(220, 30%, 5%))',
-            }),
-          }),
+            backgroundImage:
+            'radial-gradient(at 50% 50%, hsla(210, 100%, 16%, 0.5), hsl(220, 30%, 5%))',
+          },
         ]}
       >
         <Stack direction={{ xs: 'column-reverse', md: 'row' }}
@@ -50,9 +42,9 @@ const AccountValidation = () => {
             }}
           >
             {loading && 
-            <Stack sx={{ justifyContent: 'center', alignItems: 'center' }}>
-                <CircularProgress />
-            </Stack> 
+                <Stack sx={{ justifyContent: 'center', alignItems: 'center' }}>
+                    <CircularProgress />
+                </Stack> 
             }
 
             {error && 
@@ -68,7 +60,7 @@ const AccountValidation = () => {
             }
 
             <Button component={RouterLink} to="/" variant="contained" color="primary"> 
-              Return to Homepage
+                Return to Homepage
             </Button>
           </Stack>
         </Stack>

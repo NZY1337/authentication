@@ -28,7 +28,6 @@ const MobileDrawer = styled(Drawer)(({ theme }) => ({
         backgroundClip: 'padding-box',
     },
     '.MuiButton-root': { 
-        
         color: theme.palette.warning.light,
         backgroundColor: 'unset',
         position: 'absolute',
@@ -39,11 +38,6 @@ const MobileDrawer = styled(Drawer)(({ theme }) => ({
             color: theme.palette.warning.dark,
         }
     },
-    // change everything inside drawer as needed
-    ...theme.applyStyles('dark', {
-    }),
-    ...theme.applyStyles('light', {
-    }),
 }));
 
 export default function MenuDrawer() {

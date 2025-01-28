@@ -27,6 +27,8 @@ export function useAuth(handleOpen: () => void) {
   const [loading, setLoading] = useState<boolean>(false);
   const [remainingTime, setRemainingTime] = useState<number>(0);
 
+  console.log(error)
+
   const loginUser = async (data: UserLoginInterface, navigate: NavigateFunction) => {
     setLoading(true);
 

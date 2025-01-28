@@ -20,15 +20,10 @@ const Card = styled(MuiCard)(({ theme }) => ({
   width: '100%',
   padding: theme.spacing(4),
   gap: theme.spacing(2),
-  boxShadow:
-    'hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px',
+  boxShadow: 'hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px',
   [theme.breakpoints.up('sm')]: {
     width: '450px',
   },
-  ...theme.applyStyles('dark', {
-    boxShadow:
-      'hsla(220, 30%, 5%, 0.5) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.08) 0px 15px 35px -5px',
-  }),
 }));
 
 export default function SignInCard() {
@@ -51,6 +46,7 @@ export default function SignInCard() {
   const { validateInputs, formErrors } = useValidateInputs({ errors, formValues }); // formValues needs to be an object
 
   const { message, error, loading, resetPassword } = useResetPassword();
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -96,19 +92,19 @@ export default function SignInCard() {
             <FormControl>
                 <FormLabel htmlFor="repeatPassword">Repeat New Password</FormLabel>
                 <TextField
-                fullWidth
-                name="repeatPassword"
-                placeholder="••••••"
-                type="password"
-                id="repeatPassword"
-                autoComplete="repeat-new-password"
-                variant="outlined"
-                value={formValues.repeatPassword}
-                onChange={handleInputChange}
-                error={Boolean(formErrors.repeatPassword)}
-                helperText={formErrors.repeatPassword}
-                />
-            </FormControl>
+                    fullWidth
+                    name="repeatPassword"
+                    placeholder="••••••"
+                    type="password"
+                    id="repeatPassword"
+                    autoComplete="repeat-new-password"
+                    variant="outlined"
+                    value={formValues.repeatPassword}
+                    onChange={handleInputChange}
+                    error={Boolean(formErrors.repeatPassword)}
+                    helperText={formErrors.repeatPassword}
+                    />
+                </FormControl>
             
             {message && <RouterLink to="/" color="primary"> 
               {message}
@@ -116,7 +112,7 @@ export default function SignInCard() {
             {loading && <CircularProgress size={20} color="primary" />}
                         
             {error && <Typography component='p' color="secondary">{error}</Typography>}
-          </Box>
+        </Box>
         <Button type="submit" fullWidth variant="contained">
           Reset Passowrd 
         </Button>

@@ -6,3 +6,7 @@
 
 # text effects like wordpress
 https://www.npmjs.com/package/react-typed 
+
+
+# WSWYG
+https://tiptap.dev/
