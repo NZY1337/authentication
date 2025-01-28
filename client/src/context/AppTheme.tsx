@@ -1,8 +1,8 @@
 import * as React from "react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { inputsCustomizations } from "../theme/customization/inputs";
-import { navigationCustomization } from "./customization/navigation";
-import { colorSchemes, typography, shape } from "../theme/themePrimitives";
+import { navigationCustomization } from "../theme/customization/navigation";
+import { typography, palette} from "../theme/themePrimitives";
 
 interface AppThemeProps {
   children: React.ReactNode;
@@ -21,13 +21,15 @@ export default function AppThemeProvider({
             colorSchemeSelector: "data-mui-color-scheme",
             cssVarPrefix: "template",
           },
-          colorSchemes, // Recently added in v6 for building light & dark mode app, see https://mui.com/material-ui/customization/palette/#color-schemes
+          // colorSchemes, // Recently added in v6 for building light & dark mode app, see https://mui.com/material-ui/customization/palette/#color-schemes,
+          // defaultColorScheme: 'dark',
           typography,
-          shape,
+          palette,
           components: {
             ...inputsCustomizations,
             ...navigationCustomization
           },
+          
         });
   }, []);
  

@@ -5,7 +5,7 @@ const useQueryParams = () => {
 
   // Wrapper to get a parameter with an optional default value
   const getParam = (key: string, defaultValue: string | null = null) => {
-    return searchParams.get(key) || defaultValue;
+    return searchParams.get(key) ?? defaultValue;
   };
 
   // Wrapper to set multiple parameters

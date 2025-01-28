@@ -5,21 +5,13 @@ const ResetPassword = () => {
     return (
         <>
           <Stack direction="column" component="main"
-            sx={[
-              {
+            sx={{
                 justifyContent: 'center',
                 minHeight: '100vh',
-              },
-              (theme) => ({
-                  backgroundImage:
-                    'radial-gradient(ellipse at 50% 50%, hsl(210, 100%, 97%), hsl(0, 0%, 100%))',
-                  backgroundRepeat: 'no-repeat',
-                  ...theme.applyStyles('dark', {
-                    backgroundImage:
-                      'radial-gradient(at 50% 50%, hsla(210, 100%, 16%, 0.5), #1B1F1C)',
-                  }),
-              }),
-            ]}
+                backgroundRepeat: 'no-repeat',
+                backgroundImage:
+                    'radial-gradient(at 50% 50%, hsla(210, 100%, 16%, 0.5), #1B1F1C)',
+              }}
           >
             <Stack
               direction={{ xs: 'column-reverse', md: 'row' }}

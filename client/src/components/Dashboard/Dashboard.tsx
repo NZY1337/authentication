@@ -164,7 +164,6 @@ export default function DashboardLayoutAccount() {
       signIn: () => {
         navigate('/user/login');
       },
-
       signOut: () => {
         setSession(null);
         logoutUser()
@@ -182,7 +181,7 @@ export default function DashboardLayoutAccount() {
       router={router}
       theme={demoTheme}
       branding={{
-      // logo: <img src="https://mui.com/static/logo.png" alt="MUI logo" />,
+    //   logo: <img src="https://mui.com/static/logo.png" alt="MUI logo" />,
       title: 'Auth Dashboard',
       }}
     >
