@@ -1,4 +1,4 @@
-import React, { createContext, useContext, ReactNode, useCallback } from 'react';
+import React, { createContext, useContext, ReactNode, useCallback, SetStateAction } from 'react';
 import { NavigateFunction } from 'react-router-dom';
 import { useAuth } from '../services/authentication/useAuth';
 
@@ -36,6 +36,7 @@ const AppContext = createContext<{
   getUser: () => void,
   handleOpen: () => void,
   handleClose: () => void
+  setError: (error: SetStateAction<string | null>) => void
 }>({
   error: null,
   user: null,
@@ -46,7 +47,8 @@ const AppContext = createContext<{
   getUser: () => {},
   registerUser: () => {},
   handleOpen: () => {},
-  handleClose: () => {}
+  handleClose: () => {},
+  setError: () => {}
 });
 
 interface AppProviderProps {
@@ -64,7 +66,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children } : AppProvid
     setOpen(false);
   },[]);
 
-  const { user, error, loading, loginUser, registerUser, getUser, logoutUser } = useAuth(handleOpen);
+  const { user, error, loading, loginUser, registerUser, getUser, logoutUser, setError } = useAuth(handleOpen);
 
   const value = React.useMemo(() => ({ 
     user, 
@@ -76,8 +78,9 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children } : AppProvid
     getUser, 
     registerUser,
     handleOpen,
-    handleClose
-    }),[user, error, loading, open, loginUser, logoutUser, getUser, registerUser, handleOpen, handleClose]
+    handleClose,
+    setError
+    }),[user, error, loading, open, loginUser, logoutUser, getUser, registerUser, handleOpen, handleClose, setError]
 );
 
   return (

@@ -6,21 +6,6 @@ export const navigationCustomization: Components<Theme> = {
         root: ({ theme }: { theme: Theme }) => ({
             boxShadow: 'none',  
             backgroundColor: 'transparent',
-            ...theme.applyStyles('dark', {
-                backgroundColor: 'transparent',
-                backgroundImage: 'none',  
-            }),
-            ...theme.applyStyles('light', {
-                backgroundColor: 'transparent',
-                boxShadow: 'none',  
-            }),
-            '& .nav-logo': {
-                ...theme.applyStyles('dark', {
-                }),
-                ...theme.applyStyles('light', {
-                    // color: theme.palette.grey[100],
-                }),
-            }
         }),
       },
   },
@@ -28,15 +13,10 @@ export const navigationCustomization: Components<Theme> = {
     styleOverrides: {
       root: ({ theme }: { theme: Theme }) => ({
         '& .MuiTypography-root': {
-            ...theme.applyStyles('dark', {
-                color: theme.palette.grey[100],
-            }),
-            ...theme.applyStyles('light', {
-                color: theme.palette.grey[100],
-            }),
+            color: theme.palette.grey[100],
             textDecoration: 'none',
             '&:hover': {
-                color: theme.palette.grey[300],
+                color: theme.palette.grey[500],
             },
         },
         '&:hover': {   

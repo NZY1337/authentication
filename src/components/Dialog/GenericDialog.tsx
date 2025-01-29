@@ -45,7 +45,7 @@ const GenericDialog = ({ open, dialogTitle, dialogSubtitle, loading, children, h
                 {dialogActions && 
                     <DialogActions sx={{ pb: 3, px: 3 }}>
                         <Button onClick={handleClose}>Cancel</Button>
-                        <Button variant="contained" type="submit" disabled={loading}>
+                        <Button data-testid="generic-dialog-submit-button" variant="contained" type="submit" disabled={loading}>
                             Send
                         </Button>
                     </DialogActions>
