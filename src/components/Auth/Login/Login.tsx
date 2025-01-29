@@ -82,9 +82,9 @@ const Login = () => {
                     <FormControl>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                             <FormLabel htmlFor="password">Password</FormLabel>
-                        <Typography onClick={handleClickOpen} sx={{ cursor: 'pointer', textDecoration:'underline', alignSelf: 'baseline', color: 'grey.400' }}>
-                            Forgot your password?
-                        </Typography>
+                            <Typography onClick={handleClickOpen} sx={{ cursor: 'pointer', textDecoration:'underline', alignSelf: 'baseline', color: 'grey.400' }}>
+                                Forgot your password?
+                            </Typography>
                         </Box>
                     
                         <TextField

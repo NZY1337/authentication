@@ -2,14 +2,12 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
-import Divider from '@mui/material/Divider';
 import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import ForgotPassword from '../ForgotPassword/ForgotPassword';
-import { GoogleIcon } from '../CustomIcons/CustomIcons';
 import { useAppContext } from '../../../context/AppContext';
 import { CircularProgress } from '@mui/material';
 import useValidateInputs from '../../../utils/validateInput';
@@ -64,32 +62,32 @@ export default function Register() {
                 <FormControl>
                     <FormLabel htmlFor="name">Full name</FormLabel>
                     <TextField
-                    autoComplete="name"
-                    name="name"
-                    fullWidth
-                    id="name"
-                    placeholder="Jon Snow"
-                    value={formValues.name}
-                    onChange={handleInputChange}
-                    error={Boolean(formErrors.name)}
-                    helperText={formErrors.name}
+                        autoComplete="name"
+                        name="name"
+                        fullWidth
+                        id="name"
+                        placeholder="Jon Snow"
+                        value={formValues.name}
+                        onChange={handleInputChange}
+                        error={Boolean(formErrors.name)}
+                        helperText={formErrors.name}
                     />
                 </FormControl>
 
                 <FormControl>
-                <FormLabel htmlFor="email">Email</FormLabel>
-                <TextField
-                    fullWidth
-                    id="email"
-                    placeholder="your@email.com"
-                    name="email"
-                    autoComplete="email"
-                    variant="outlined"
-                    value={formValues.email}
-                    onChange={handleInputChange}
-                    error={Boolean(formErrors.email)}
-                    helperText={formErrors.email}
-                />
+                    <FormLabel htmlFor="email">Email</FormLabel>
+                    <TextField
+                        fullWidth
+                        id="email"
+                        placeholder="your@email.com"
+                        name="email"
+                        autoComplete="email"
+                        variant="outlined"
+                        value={formValues.email}
+                        onChange={handleInputChange}
+                        error={Boolean(formErrors.email)}
+                        helperText={formErrors.email}
+                    />
                 </FormControl>
 
                 <FormControl>
@@ -97,19 +95,19 @@ export default function Register() {
                         <FormLabel htmlFor="password">Password</FormLabel>
                     </Box>
                 
-                <TextField
-                    fullWidth
-                    name="password"
-                    placeholder="••••••"
-                    type="password"
-                    id="password"
-                    autoComplete="new-password"
-                    variant="outlined"
-                    value={formValues.password}
-                    onChange={handleInputChange}
-                    error={Boolean(formErrors.password)}
-                    helperText={formErrors.password}
-                />
+                    <TextField
+                        fullWidth
+                        name="password"
+                        placeholder="••••••"
+                        type="password"
+                        id="password"
+                        autoComplete="new-password"
+                        variant="outlined"
+                        value={formValues.password}
+                        onChange={handleInputChange}
+                        error={Boolean(formErrors.password)}
+                        helperText={formErrors.password}
+                    />
                 </FormControl>
 
                 <FormControl>
