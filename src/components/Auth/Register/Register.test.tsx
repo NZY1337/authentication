@@ -18,13 +18,14 @@ describe("Register Component", () => {
     const mockUseAppContext = useAppContext as jest.Mock;
     const mockUseValidateInputs = useValidateInputs as jest.Mock;
     const mockRegisterUser = jest.fn(); 
+    const mockSetError = jest.fn();
 
     beforeEach(() => {
         mockUseAppContext.mockReturnValue({
             registerUser: mockRegisterUser,
             error: '',
             loading: false,
-            setError: jest.fn(),
+            setError: mockSetError,
         });
 
         mockUseValidateInputs.mockReturnValue({
@@ -95,7 +96,7 @@ describe("Register Component", () => {
   });
 
   test("call registerUser if form is valid", async () => {
-    const { getByLabelText, getByRole, getByText } = renderComponent();
+    const { getByLabelText, getByRole } = renderComponent();
 
     mockUseValidateInputs.mockReturnValue({
         validateInputs: jest.fn(() => true),
@@ -114,8 +115,6 @@ describe("Register Component", () => {
     
     fireEvent.submit(getByRole("button", { name: /register/i }));
 
-    expect(getByText(/passwords do not match/i)).toBeInTheDocument();
-
     await waitFor(() => {
       expect(mockRegisterUser).toHaveBeenCalledWith({
         name: "John Doe",
@@ -125,23 +124,23 @@ describe("Register Component", () => {
     });
   });
 
+  test("shows loading indicator when loading is true", () => {
+    mockUseAppContext.mockReturnValue({ loading: true });
+    const { getByRole } = renderComponent();
+    expect(getByRole("progressbar")).toBeInTheDocument();
+  });
 
-//   test("shows loading indicator when loading is true", () => {
-//     useAppContext.mockReturnValue({ error: "", loading: true, setError: mockSetError, registerUser: mockRegisterUser });
-//     renderComponent();
-//     expect(screen.getByRole("progressbar")).toBeInTheDocument();
-//   });
+  test("displays error message when error occurs", () => {
+    const { getByText } = renderComponent();
+    mockUseAppContext.mockReturnValue({ error: "User already exist", loading: false, setError: mockSetError, registerUser: mockRegisterUser });
+    renderComponent();
+    expect(getByText(/User already exist/i)).toBeInTheDocument();
+  });
 
-//   test("displays error message when error occurs", () => {
-//     useAppContext.mockReturnValue({ error: "Registration failed", loading: false, setError: mockSetError, registerUser: mockRegisterUser });
-//     renderComponent();
-//     expect(screen.getByText(/registration failed/i)).toBeInTheDocument();
-//   });
-
-//   test("navigates to login page on click", () => {
-//     renderComponent();
-//     fireEvent.click(screen.getByText(/log in/i));
-//     expect(mockSetError).toHaveBeenCalledWith("");
-//   });
+  test("clears error message when navigating to login", () => {
+    const { getByText } = renderComponent();
+    fireEvent.click(getByText(/log in/i));
+    expect(mockSetError).toHaveBeenCalledWith("");
+  });
 });
 

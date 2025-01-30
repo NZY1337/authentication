@@ -137,9 +137,9 @@ export default function Register() {
             <Button type="submit" fullWidth variant="contained">
                 Register
             </Button>
-            <RouterLink to="/user/login" onClick={() => setError('')} style={{ textAlign: 'center', textDecoration: 'none' }} >
+            <RouterLink data-testid="login-link" to="/user/login" onClick={() => setError('')} style={{ textAlign: 'center', textDecoration: 'none' }} >
                 Have an account?{' '}
-                <Typography component={'span'}>Log in</Typography>
+                <Typography  component={'span'}>Log in</Typography>
             </RouterLink>
         </Box>
         
