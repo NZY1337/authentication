@@ -14,15 +14,13 @@ interface ForgotPasswordProps {
 
 export default function ForgotPassword({ open, handleClose }: ForgotPasswordProps) {
   const [email, setEmail] = useState<string>('');
-  const [timer, setTimer] = useState<number>(5);
+  const [timer, setTimer] = useState<number>(2);
   const { forgotPassword, loading, message, setMessage } = useForgotPassword();
   const { validateInputs, formErrors, setFormErrors } = useValidateInputs({ errors: { email: '' }, formValues: { email } }); // formValues needs to be an object
 
   const onHandleForgotPassword = async () => {
-    console.log(validateInputs())
-    if (validateInputs()) {
-        await forgotPassword(email)
-    }
+    if (!validateInputs()) return;
+    await forgotPassword(email);
   }
 
   const handleInputChange = (e:ChangeEvent<HTMLInputElement>) => {
@@ -30,14 +28,14 @@ export default function ForgotPassword({ open, handleClose }: ForgotPasswordProp
   }
 
   useEffect(() => {
-    let int: NodeJS.Timeout;
+    let int: NodeJS.Timeout | null = null;
     
     if (message) {
+        setTimer(2)
         int = setInterval(() => {
             setTimer((timer) => {
               if (timer === 0) {
-                clearInterval(int);
-                handleClose();
+                clearInterval(int!);
                 setMessage('');
                 return timer;
               }
@@ -47,15 +45,15 @@ export default function ForgotPassword({ open, handleClose }: ForgotPasswordProp
     }
   
     return () => {
-      setTimer(5)
-      clearInterval(int); // Clear interval on unmount
+      setTimer(2)
+      if (int) clearInterval(int);
       setEmail('');
       setFormErrors({email: ''});
     };
   }, [handleClose, message, open, setFormErrors, setMessage]);
 
  const dialogSubtitle = () => {
-    if (message && timer) return `${message} - Closing in ${timer}`;
+    if (message && timer) return `${message}`;
     return 'Enter your account\'s email address, and we\'ll send you a link to reset your password.'
  }
 
@@ -74,6 +72,7 @@ export default function ForgotPassword({ open, handleClose }: ForgotPasswordProp
                     type="string"
                     id="forgot-email"
                     variant="outlined"
+                    placeholder='Enter your email'
                     value={email}
                     onChange={handleInputChange}        
                     error={Boolean(formErrors.email)}

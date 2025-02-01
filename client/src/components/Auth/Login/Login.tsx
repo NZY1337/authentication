@@ -2,14 +2,12 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
-import Divider from '@mui/material/Divider';
 import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import ForgotPassword from '../ForgotPassword/ForgotPassword';
-import { GoogleIcon } from '../CustomIcons/CustomIcons';
 import { useAppContext } from '../../../context/AppContext';
 import { CircularProgress } from '@mui/material';
 import useValidateInputs from '../../../utils/validateInput';
@@ -17,7 +15,7 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import LoginRegisterContainer from '../LoginRegisterContainer/LoginRegisterContainer';
 
 
-export default function Login() {
+const Login = () => {
   const [open, setOpen] = React.useState(false);
   const formRef = React.useRef<HTMLFormElement>(null);
   const { loginUser, error, loading, setError } = useAppContext()
@@ -41,7 +39,6 @@ export default function Login() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log(validateInputs())
 
     if (validateInputs()) {
       const data = new FormData(formRef.current!);
@@ -85,9 +82,9 @@ export default function Login() {
                     <FormControl>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                             <FormLabel htmlFor="password">Password</FormLabel>
-                        <Typography onClick={handleClickOpen} sx={{ cursor: 'pointer', textDecoration:'underline', alignSelf: 'baseline', color: 'grey.400' }}>
-                            Forgot your password?
-                        </Typography>
+                            <Typography onClick={handleClickOpen} sx={{ cursor: 'pointer', textDecoration:'underline', alignSelf: 'baseline', color: 'grey.400' }}>
+                                Forgot your password?
+                            </Typography>
                         </Box>
                     
                         <TextField
@@ -111,7 +108,9 @@ export default function Login() {
                 </Box>
 
                 <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
+
                 <ForgotPassword open={open} handleClose={handleClose} />
+
                 <Button type="submit" fullWidth variant="contained">
                     Log In 
                 </Button>
@@ -124,3 +123,5 @@ export default function Login() {
     </LoginRegisterContainer>
   );
 }
+
+export default Login;
