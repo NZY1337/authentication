@@ -1,37 +1,39 @@
-import * as React from 'react';
+import React, { useState, useRef } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import MuiCard from '@mui/material/Card';
 import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import { styled } from '@mui/material/styles';
 import { CircularProgress } from '@mui/material';
+import IconButton from '@mui/material/IconButton'
+import InputAdornment from '@mui/material/InputAdornment'
+import CardModel from '../../Ux/Card/Card';
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { Link as RouterLink} from 'react-router-dom';
+
+import useValidateInputs from '../../../utils/validateInput';
 import useQueryParams from '../../../helpers/hooks/useLocation';
 import { useResetPassword } from '../../../services/authentication/useResetPassword';
-import { Link as RouterLink} from 'react-router-dom';
-import useValidateInputs from '../../../utils/validateInput';
-
-const Card = styled(MuiCard)(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'column',
-  alignSelf: 'center',
-  width: '100%',
-  padding: theme.spacing(4),
-  gap: theme.spacing(2),
-  boxShadow: 'hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px',
-  [theme.breakpoints.up('sm')]: {
-    width: '450px',
-  },
-}));
 
 export default function SignInCard() {
-  const formRef = React.useRef<HTMLFormElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
   const { getParam } = useQueryParams();
 
   const email = getParam('email')!;
   const token = getParam('token')!;
+
+  const [showPassword, setShowPassword] = useState({
+      password: false,
+      repeatPassword: false,  
+  });
+
+  const handleTogglePassword = (field: "password" | "repeatPassword") => {
+    setShowPassword((prev) => ({
+      ...prev,
+      [field]: !prev[field],
+    }));
+  };
 
   const [formValues, setFormValues] = React.useState({
     password: '',
@@ -55,9 +57,7 @@ export default function SignInCard() {
     }
   };
 
-  const handleInputChange = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = event.target;
     setFormValues((prev) => ({
       ...prev,
@@ -66,44 +66,66 @@ export default function SignInCard() {
   };
 
   return (
-    <Card variant="outlined">
+    <CardModel variant="outlined">
       <Typography component="h1" variant="h4" sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}>
         Reset Password
       </Typography>
       <Box component="form" ref={formRef} onSubmit={handleSubmit} noValidate sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             <FormControl>
-             <FormLabel htmlFor="password">New Password</FormLabel>
-              <TextField
-                fullWidth
-                name="password"
-                placeholder="••••••"
-                type="password"
-                id="password"
-                autoComplete="password"
-                variant="outlined"
-                value={formValues.password}
-                onChange={handleInputChange}
-                error={Boolean(formErrors.password)}
-                helperText={formErrors.password}
-              />
-            </FormControl>
-
-            <FormControl>
-                <FormLabel htmlFor="repeatPassword">Repeat New Password</FormLabel>
+                <FormLabel htmlFor="password">New Password</FormLabel>
                 <TextField
                     fullWidth
-                    name="repeatPassword"
+                    name="password"
                     placeholder="••••••"
-                    type="password"
-                    id="repeatPassword"
-                    autoComplete="repeat-new-password"
+                    type={`${showPassword.password ? 'text' : 'password'}`}
+                    id="password"
+                    autoComplete="password"
                     variant="outlined"
-                    value={formValues.repeatPassword}
+                    value={formValues.password}
                     onChange={handleInputChange}
-                    error={Boolean(formErrors.repeatPassword)}
-                    helperText={formErrors.repeatPassword}
-                    />
+                    error={Boolean(formErrors.password)}
+                    helperText={formErrors.password}
+                    slotProps={{
+                        input: {
+                            endAdornment: (
+                              <InputAdornment position="end">
+                                <IconButton onClick={() => handleTogglePassword('password')} edge="end">
+                                  {showPassword.password ? <VisibilityOff fontSize='small'  /> : <Visibility fontSize='small'  />}
+                                </IconButton>
+                              </InputAdornment>
+                            ),
+                          },
+                    }}
+                />
+            </FormControl>
+
+                <FormControl>
+                    <FormLabel htmlFor="repeatPassword">Repeat New Password</FormLabel>
+                        <TextField
+                            fullWidth
+                            name="repeatPassword"
+                            placeholder="••••••"
+                            type={`${showPassword.repeatPassword ? 'text' : 'password'}`}
+                            id="repeatPassword"
+                            autoComplete="repeat-new-password"
+                            variant="outlined"
+                            value={formValues.repeatPassword}
+                            onChange={handleInputChange}
+                            error={Boolean(formErrors.repeatPassword)}
+                            helperText={formErrors.repeatPassword}
+                            slotProps={{
+                                input: {
+                                    endAdornment: (
+                                      <InputAdornment position="end">
+                                        <IconButton onClick={() => handleTogglePassword('repeatPassword')} edge="end" >
+                                          {showPassword.password ? <VisibilityOff fontSize='small'  /> : <Visibility fontSize='small'  />}
+                                        </IconButton>
+                                      </InputAdornment>
+                                    ),
+                                  },
+                            }}
+                        />
                 </FormControl>
             
             {message && <RouterLink to="/" color="primary"> 
@@ -117,6 +139,6 @@ export default function SignInCard() {
           Reset Password 
         </Button>
       </Box>
-    </Card>
+    </CardModel>
   );
 }

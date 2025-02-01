@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useRef } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
@@ -7,17 +7,33 @@ import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton'
+import InputAdornment from '@mui/material/InputAdornment'
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import ForgotPassword from '../ForgotPassword/ForgotPassword';
-import { useAppContext } from '../../../context/AppContext';
 import { CircularProgress } from '@mui/material';
-import useValidateInputs from '../../../utils/validateInput';
 import { Link as RouterLink } from 'react-router-dom';
 import LoginRegisterContainer from '../LoginRegisterContainer/LoginRegisterContainer';
 
+import useValidateInputs from '../../../utils/validateInput';
+import { useAppContext } from '../../../context/AppContext';
+
+
 export default function Register() {
-  const [open, setOpen] = React.useState(false);
-  const formRef = React.useRef<HTMLFormElement>(null);
+  const [open, setOpen] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
   const { error, loading, setError, registerUser } = useAppContext()
+  const [showPassword, setShowPassword] = useState({
+    password: false,
+    repeatPassword: false,  
+  });
+
+  const handleTogglePassword = (field: "password" | "repeatPassword") => {
+    setShowPassword((prev) => ({
+      ...prev,
+      [field]: !prev[field],
+    }));
+  };
 
   const [formValues, setFormValues] = React.useState({
     name: '',
@@ -99,7 +115,7 @@ export default function Register() {
                         fullWidth
                         name="password"
                         placeholder="••••••"
-                        type="password"
+                        type={`${showPassword.password ? 'text' : 'password'}`}
                         id="password"
                         autoComplete="new-password"
                         variant="outlined"
@@ -107,23 +123,45 @@ export default function Register() {
                         onChange={handleInputChange}
                         error={Boolean(formErrors.password)}
                         helperText={formErrors.password}
+                        slotProps={{
+                            input: {
+                                endAdornment: (
+                                  <InputAdornment position="end">
+                                    <IconButton onClick={() => handleTogglePassword('password')} edge="end">
+                                      {showPassword.password ? <VisibilityOff fontSize='small'  /> : <Visibility fontSize='small'  />}
+                                    </IconButton>
+                                  </InputAdornment>
+                                ),
+                              },
+                        }}
                     />
                 </FormControl>
 
                 <FormControl>
                     <FormLabel htmlFor="repeatPassword">Repeat Password</FormLabel>
                     <TextField
-                    fullWidth
-                    name="repeatPassword"
-                    placeholder="••••••"
-                    type="password"
-                    id="repeatPassword"
-                    autoComplete="repeat-password"
-                    variant="outlined"
-                    value={formValues.repeatPassword}
-                    onChange={handleInputChange}
-                    error={Boolean(formErrors.repeatPassword)}
-                    helperText={formErrors.repeatPassword}
+                        fullWidth
+                        name="repeatPassword"
+                        placeholder="••••••"
+                        type={`${showPassword.repeatPassword ? 'text' : 'password'}`}
+                        id="repeatPassword"
+                        autoComplete="repeat-password"
+                        variant="outlined"
+                        value={formValues.repeatPassword}
+                        onChange={handleInputChange}
+                        error={Boolean(formErrors.repeatPassword)}
+                        helperText={formErrors.repeatPassword}
+                        slotProps={{
+                            input: {
+                                endAdornment: (
+                                <InputAdornment position="end">
+                                    <IconButton onClick={() => handleTogglePassword('repeatPassword')} edge="end">
+                                    {showPassword.repeatPassword ? <VisibilityOff fontSize='small' /> : <Visibility fontSize='small' />}
+                                    </IconButton>
+                                </InputAdornment>
+                                ),
+                            },
+                        }}
                     />
                 </FormControl>
                 
