@@ -114,7 +114,7 @@ export default function SignInCard() {
             {error && <Typography component='p' color="secondary">{error}</Typography>}
         </Box>
         <Button type="submit" fullWidth variant="contained">
-          Reset Passowrd 
+          Reset Password 
         </Button>
       </Box>
     </Card>

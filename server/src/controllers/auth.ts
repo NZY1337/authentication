@@ -177,11 +177,7 @@ export const resetPassword = async (req: Request, res: Response) => {
   if (user) {
     const currentDate = new Date();
 
-    if (
-      user.passwordToken === createHash(token) &&
-      user.passwordTokenExpirationDate &&
-      user?.passwordTokenExpirationDate > currentDate
-    ) {
+    if (user.passwordToken === createHash(token) && user.passwordTokenExpirationDate && user?.passwordTokenExpirationDate > currentDate) {
       await prismaClient.user.update({
         where: { email },
         data: {
@@ -190,10 +186,12 @@ export const resetPassword = async (req: Request, res: Response) => {
           password: hashSync(password, 10),
         },
       });
+
+      res.status(200).json({ message: "Password reset, please log in back again" });
+    } else {
+      res.status(200).json({message: "Link Expired"});
     }
   }
-
-  res.status(200).json({message: "Password reset, please log in back again"});
 };
 
 export const getUser = async (req: Request, res: Response) => {

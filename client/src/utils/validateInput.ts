@@ -21,8 +21,6 @@ const containsSymbols = (password: string) => {
     return symbolRegex.test(password);
 }
 
-const symbols = `[!@#$%^&*(),.?":{}|<>]`
-
 export function useValidateInputs({errors, formValues }: UseValidateInputsProps) {
   const [formErrors, setFormErrors] = useState<Errors>(errors);
   const isOnRegisterPage = formValues.repeatPassword !== undefined;
@@ -54,7 +52,7 @@ export function useValidateInputs({errors, formValues }: UseValidateInputsProps)
 
     // for register only
     if (formValues.password !== undefined && !containsSymbols(formValues.password) && isOnRegisterPage) {
-        newErrors.password = "The password must include at least one of the following symbols: " + symbols;
+        newErrors.password = 'The password must include at least one of the following symbols: [!@#$%^&*(),.?":{}|<>]';
         isValid = false;
     }   
     
