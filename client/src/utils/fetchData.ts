@@ -7,7 +7,7 @@ interface FetchDataInterface<RequestType> {
   data?: RequestType;
   params?: AxiosRequestConfig["params"];
 }
-
+ 
 async function fetchData<RequestType, ResponseType>({
   url,
   method = "GET",

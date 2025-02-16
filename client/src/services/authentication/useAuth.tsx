@@ -21,13 +21,30 @@ interface GetUserResponse {
   user: UserInterface;
 }
 
-export function useAuth(handleOpen: () => void) {
+export function useAuth() {
   const [user, setUser] = useState<UserInterface | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [remainingTime, setRemainingTime] = useState<number>(0);
+  const [open, setOpen] = useState<boolean>(false);
+    
+  const handleOpen = useCallback(() => {
+    setOpen(true);
+  },[]);
+  
+  const handleClose = useCallback(() => {
+    setOpen(false);
+  },[]);
 
-  console.log(error)
+  const extendSession = async () => {
+    await fetchData<null, null>({
+        url: "/auth/refresh-token",
+        method: "POST",
+    });
+
+    await getUser();    
+    handleClose();
+  } 
 
   const loginUser = async (data: UserLoginInterface, navigate: NavigateFunction) => {
     setLoading(true);
@@ -101,14 +118,16 @@ export function useAuth(handleOpen: () => void) {
       setRemainingTime(0);
       setUser(null);
       setError(null);
+      handleClose();
     }
 
-    setLoading(false);
-  }, [setUser, setError, setLoading]);
-
+    setLoading(false);                    
+  }, [handleClose]);
+                                    
   useEffect(() => {
     getUser();
   }, []);
+
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -120,10 +139,11 @@ export function useAuth(handleOpen: () => void) {
                   clearInterval(interval);
                   console.log('Session expired');
                   logoutUser();
-                  handleOpen();  
+                  handleClose();
                   return 0;
-                } else if (newExpiringInterval <= 10) {
-                  console.log('session expires in: ', newExpiringInterval);
+                } else if (newExpiringInterval <= 50) {
+                    console.log('session expires in: ', newExpiringInterval);
+                    handleOpen();
                 } else {
                     console.log('session is about to expire in: ', newExpiringInterval);
                 }
@@ -133,7 +153,7 @@ export function useAuth(handleOpen: () => void) {
     }
      
     return () => clearInterval(interval);
-  }, [logoutUser, remainingTime, user?.remainingTime, user]);
+  }, [logoutUser, remainingTime, user?.remainingTime, user, handleOpen]);
 
-  return { user, error, loading, loginUser, getUser, setUser, setError, registerUser, logoutUser, setRemainingTime };
+  return { user, error, loading, open, handleClose, extendSession, loginUser, getUser, setUser, setError, registerUser, logoutUser, setRemainingTime };
 }

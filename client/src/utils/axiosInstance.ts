@@ -22,19 +22,18 @@ axiosInstance.interceptors.response.use(
 
     if (error.response.status === 401 && !originalRequest._retry) {
       // Mark the request as a retry
-      originalRequest._retry = true;
+    //   originalRequest._retry = true;
 
       // Check if the request URL is not the refresh token endpoint to avoid an infinite loop
       if (originalRequest.url === "/auth/refresh-token") {
-        return; // Do not retry for refresh endpoint
+        // return; // Do not retry for refresh endpoint
       }
 
       try {
-        const refreshTokenResponse = await axiosInstance.post("/auth/refresh-token");
-        originalRequest.headers.Authorization = `${refreshTokenResponse.data.token}`;
-        
+        // const refreshTokenResponse = await axiosInstance.post("/auth/refresh-token");
+        // originalRequest.headers.Authorization = `${refreshTokenResponse.data.token}`;
         // Retry the original request with the new token
-        return axiosInstance(originalRequest);
+        // return axiosInstance(originalRequest);
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (refreshError) {
         // console.log(refreshError);

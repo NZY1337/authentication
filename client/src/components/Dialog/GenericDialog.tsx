@@ -5,21 +5,33 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import CircularProgress from '@mui/material/CircularProgress';
+import { useNavigate } from 'react-router-dom';
+import { useAppContext } from '../../context/AppContext';
 
 interface GenericDialogProps {
-    open: boolean;
     dialogTitle: string;
     dialogSubtitle: string;
     loading?: boolean;
     children?: React.ReactNode;
     onSubmit?: () => Promise<void>;
-    dialogActions?: boolean;
-    handleClose: () => void;
+    dialogActions?: "extend-session" | "forgot-password";
   }
 
-const GenericDialog = ({ open, dialogTitle, dialogSubtitle, loading, children, handleClose, onSubmit, dialogActions = true }: GenericDialogProps) => {
+const GenericDialog = ({dialogTitle, dialogSubtitle, loading, children, onSubmit, dialogActions = 'extend-session' }: GenericDialogProps) => {
+    const { open, extendSession, logoutUser } = useAppContext();
+    const navigate = useNavigate(); // Get navigate function
+    
+    // const handlePreventCloseOutside = (e: Event, reason: string) => {
+    //     console.log(reason);
+    // }
+    
+    const handleLogout = async () => {
+        logoutUser();
+        navigate("/");
+    }
+    
     return (
-        <Dialog open={open} onClose={handleClose}
+        <Dialog open={open}
             PaperProps={{ sx: { backgroundImage: 'none', minWidth: '600px' },
                 component: 'form',
                 onSubmit: async (event: React.FormEvent<HTMLFormElement>) => {
@@ -42,14 +54,23 @@ const GenericDialog = ({ open, dialogTitle, dialogSubtitle, loading, children, h
                     </DialogContent>
                 }
 
-                {dialogActions && 
-                    <DialogActions sx={{ pb: 3, px: 3 }}>
-                        <Button onClick={handleClose}>Cancel</Button>
+                <DialogActions sx={{ pb: 3, px: 3 }}>
+                    {dialogActions === "extend-session" && 
+                        <>
+                        <Button onClick={extendSession} data-testid="generic-dialog-submit-button" variant="contained" type="submit" disabled={loading}>
+                            Extend Session
+                        </Button>
+
+                        <Button onClick={handleLogout}>Logout</Button>
+                        </>
+                    }
+
+                    {dialogActions === "forgot-password" && 
                         <Button data-testid="generic-dialog-submit-button" variant="contained" type="submit" disabled={loading}>
                             Send
                         </Button>
-                    </DialogActions>
-                }
+                    }
+                </DialogActions>
         </Dialog>
     );
 }
