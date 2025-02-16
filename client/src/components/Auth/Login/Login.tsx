@@ -101,7 +101,7 @@ const Login = () => {
                             helperText={formErrors.password}
                         />
                     </FormControl>
-
+                                
                     {loading && <CircularProgress size={20} color="primary" />}
                                 
                     {error && <Typography component='p' fontSize={"small"} sx={{color: 'error.main'}}>{error}</Typography>}
@@ -109,7 +109,7 @@ const Login = () => {
 
                 <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
 
-                <ForgotPassword open={open} handleClose={handleClose} />
+                {/* <ForgotPassword open={open} handleClose={handleClose} /> */}
 
                 <Button type="submit" fullWidth variant="contained">
                     Log In 

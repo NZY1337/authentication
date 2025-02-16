@@ -29,58 +29,45 @@ const AppContext = createContext<{
   error: string | null, 
   user: UserInterface | null, 
   loading: boolean,
-  open: boolean,
+  open: boolean,    
   loginUser: (data: UserLoginInterface, navigate: NavigateFunction) => void, 
   registerUser: (data: UserRegisterInterface) => void,
   logoutUser: () => void, 
   getUser: () => void,
-  handleOpen: () => void,
-  handleClose: () => void
   setError: (error: SetStateAction<string | null>) => void
+  extendSession: () => void, 
 }>({
   error: null,
   user: null,
   loading: true,
   open: false,
+  extendSession: () => {},
   loginUser: () => {},
   logoutUser: () => {},
   getUser: () => {},
   registerUser: () => {},
-  handleOpen: () => {},
-  handleClose: () => {},
-  setError: () => {}
+  setError: () => {},
 });
 
 interface AppProviderProps {
-  children: ReactNode;
-}
+  children: ReactNode;      
+}                       
 
 export const AppProvider: React.FC<AppProviderProps> = ({ children } : AppProviderProps) => {
-  const [open, setOpen] = React.useState(false);
-
-  const handleOpen = useCallback(() => {
-    setOpen(true);
-  },[]);
-
-  const handleClose = useCallback(() => {
-    setOpen(false);
-  },[]);
-
-  const { user, error, loading, loginUser, registerUser, getUser, logoutUser, setError } = useAuth(handleOpen);
+  const { user, error, loading, open, extendSession, loginUser, registerUser, getUser, logoutUser, setError } = useAuth();
 
   const value = React.useMemo(() => ({ 
-    user, 
-    error,
-    loading,
-    open,
-    loginUser, 
-    logoutUser, 
-    getUser, 
-    registerUser,
-    handleOpen,
-    handleClose,
-    setError
-    }),[user, error, loading, open, loginUser, logoutUser, getUser, registerUser, handleOpen, handleClose, setError]
+    user,                                   
+    error,          
+    loading,        
+    open,           
+    loginUser,      
+    logoutUser,     
+    getUser,       
+    registerUser,   
+    setError,
+    extendSession,
+    }),[user, error, loading, open, loginUser, logoutUser, getUser, registerUser, setError, extendSession]
 );
 
   return (

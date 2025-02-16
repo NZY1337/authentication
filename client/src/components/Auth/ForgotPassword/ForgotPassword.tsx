@@ -62,6 +62,7 @@ export default function ForgotPassword({ open, handleClose }: ForgotPasswordProp
         open={open} 
         handleClose={handleClose}
         dialogTitle="Reset password"
+        dialogActions="forgot-password"
         dialogSubtitle={dialogSubtitle()}
         loading={loading}
         onSubmit={onHandleForgotPassword}>

@@ -8,11 +8,11 @@ const mockFetchData = fetchData as jest.Mock;
 const mockNavigate = jest.fn();
 const mockHandleOpen = jest.fn();
 
-const mockUser = {
+const mockUser = {              
   id: '123',
-  name: 'Test User',
-  email: 'test@example.com',
-  remainingTime: 9,
+  name: 'Test User',            
+  email: 'test@example.com',    
+  remainingTime: 9,             
 };
 
 describe('useAuth hook', () => {
