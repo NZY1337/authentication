@@ -18,7 +18,7 @@ interface GenericDialogProps {
   }
 
 const GenericDialog = ({dialogTitle, dialogSubtitle, loading, children, onSubmit, dialogActions = 'extend-session' }: GenericDialogProps) => {
-    const { open, extendSession, logoutUser } = useAppContext();
+    const { open, extendSession, logoutUser, error } = useAppContext();
     const navigate = useNavigate(); // Get navigate function
     
     // const handlePreventCloseOutside = (e: Event, reason: string) => {
@@ -43,10 +43,15 @@ const GenericDialog = ({dialogTitle, dialogSubtitle, loading, children, onSubmit
                 },
             }}>
                 <DialogTitle variant="subtitle1" sx={{pb: 1, display: 'flex', alignItems: 'center'}}>
-                    {dialogTitle} {loading && <CircularProgress sx={{ ml: 1}} size={20} color="primary" />}
+                    {/* {dialogTitle} {loading && <CircularProgress sx={{ ml: 1}} size={20} color="primary" />} */}
+                    {error ? 'Session has expired' : dialogTitle}
+
                 </DialogTitle>
                 
-                <DialogTitle variant="subtitle2" sx={{ pt:0, color: 'text.secondary', fontWeight:'light'}}>{dialogSubtitle}</DialogTitle>
+                
+                <DialogTitle variant="subtitle2" sx={{ pt:0, color: 'text.secondary', fontWeight:'light'}}>
+                    {error ? 'Please log in again to continue.' : dialogSubtitle}
+                </DialogTitle>
 
                 {children && 
                     <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: '100%' }}>
@@ -57,11 +62,11 @@ const GenericDialog = ({dialogTitle, dialogSubtitle, loading, children, onSubmit
                 <DialogActions sx={{ pb: 3, px: 3 }}>
                     {dialogActions === "extend-session" && 
                         <>
-                        <Button onClick={extendSession} data-testid="generic-dialog-submit-button" variant="contained" type="submit" disabled={loading}>
+                        {!error && <Button onClick={extendSession} data-testid="generic-dialog-submit-button" variant="contained" type="submit" disabled={loading}>
                             Extend Session
-                        </Button>
+                        </Button>}
 
-                        <Button onClick={handleLogout}>Logout</Button>
+                        <Button onClick={handleLogout}>{error ? 'Ok' : 'Log out'}</Button>
                         </>
                     }
 

@@ -80,6 +80,7 @@ export const generateToken = (userId: string): TokenResponse => {
     httpOnly: true, // Prevent client-side access to the cookie
     secure: process.env.NODE_ENV === "production", // Use secure cookies in production
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    // maxAge: 5 * 10000
   };
 
   return { token, refreshToken, options, refreshOptions };
@@ -89,7 +90,7 @@ export const generateToken = (userId: string): TokenResponse => {
 export const calculateSessionTime = (token: string) => {
   try {
     const payload = jwt.verify(token, JWT_SECRET) as jwt.JwtPayload; // Cast to JwtPayload
-
+    console.log(payload);
     if (payload.exp) {
       const currentTime = Math.floor(Date.now() / 1000);
       const remainingTime = payload.exp - currentTime;
