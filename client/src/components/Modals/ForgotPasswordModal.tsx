@@ -18,8 +18,7 @@ interface ForgotPasswordModalProps {
 
 const ForgotPasswordModal = ({loading, children, open, message, onSubmit, handleClose }: ForgotPasswordModalProps) => {
     return (
-        <Dialog 
-            open={open}
+        <Dialog open={open}
             onClose={handleClose}
             PaperProps={{ sx: { backgroundImage: 'none', minWidth: '600px' },
                 component: 'form',
@@ -40,11 +39,9 @@ const ForgotPasswordModal = ({loading, children, open, message, onSubmit, handle
                     {message && <Typography variant="body2" color='primary.main' mt={1}>{message}</Typography>}
                 </DialogTitle>
 
-                {children && 
-                    <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: '100%' }}>
-                        {children}
-                    </DialogContent>
-                }
+                <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: '100%' }}>
+                    {children}
+                </DialogContent>
 
                 <DialogActions sx={{ pb: 3, px: 3 }}>
                     <Button data-testid="generic-dialog-submit-button" variant="contained" type="submit" disabled={loading}>

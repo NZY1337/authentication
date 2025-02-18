@@ -1,5 +1,5 @@
 import * as jwt from "jsonwebtoken";
-import { JWT_SECRET } from "../secrets";
+import { JWT_SECRET, SMTP_PASSWORD } from "../secrets";
 import nodemailer from "nodemailer";
 import crypto from "crypto";
 import { BadRequestException } from "../exceptions/bad-request";
@@ -15,7 +15,7 @@ const nodemailerConfig = {
   port: 465,
   auth: {
     user: "mandreicosmin1990@gmail.com",
-    pass: "swmfzoebthxaprap",
+    pass: SMTP_PASSWORD,
   },
 };
 
@@ -67,13 +67,14 @@ export const sendEmailNotification = async ({
 };
 
 export const generateToken = (userId: string): TokenResponse => {
-  const token = jwt.sign({ userId }, JWT_SECRET, { expiresIn: "1m" });
+  const token = jwt.sign({ userId }, JWT_SECRET, { expiresIn: "1d" });
   const refreshToken = jwt.sign({ userId }, JWT_SECRET, { expiresIn: "7d" });
     
   const options: CookieOptions = {
     httpOnly: true, // Prevent client-side access to the cookie
     secure: process.env.NODE_ENV === "production", // Use secure cookies in production
-    maxAge: 1 * 60 * 1000, // 1 minute
+    maxAge: 1 * 24 * 60 * 60 * 1000, // 1 day
+    // maxAge: 1 * 60 * 1000, // 1 minute
   };
 
   const refreshOptions: CookieOptions = {

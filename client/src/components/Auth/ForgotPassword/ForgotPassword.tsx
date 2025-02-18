@@ -5,7 +5,6 @@ import { useForgotPassword } from '../../../services/authentication/useForgotPas
 import useValidateInputs from '../../../utils/validateInput';
 import ForgotPasswordModal from '../../Modals/ForgotPasswordModal';
 
-
 interface ForgotPasswordProps {
   open: boolean;
   handleClose: () => void;

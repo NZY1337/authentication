@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
@@ -13,6 +13,7 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { CircularProgress } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import LoginRegisterContainer from '../LoginRegisterContainer/LoginRegisterContainer';
+
 import useValidateInputs from '../../../utils/validateInput';
 import { useAppContext } from '../../../context/AppContext';
 
@@ -32,7 +33,7 @@ export default function Register() {
     }));
   };
 
-  const [formValues, setFormValues] = React.useState({
+  const [formValues, setFormValues] = useState({
     name: '',
     email: '',
     password: '',

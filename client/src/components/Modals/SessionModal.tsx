@@ -1,4 +1,6 @@
 import React from 'react';
+import Divider  from '@mui/material/Divider';
+
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -9,11 +11,10 @@ import { useAppContext } from '../../context/AppContext';
 
 interface SessionModalProps {
     loading?: boolean;
-    children?: React.ReactNode;
     onSubmit?: () => Promise<void>;
 }
 
-const SessionModal = ({ loading, children }: SessionModalProps) => {
+const SessionModal = ({ loading }: SessionModalProps) => {
     const { open, error, remainingTime, extendSession, logoutUser,  } = useAppContext();
     const navigate = useNavigate(); // Get navigate function
     
@@ -39,11 +40,9 @@ const SessionModal = ({ loading, children }: SessionModalProps) => {
                     {error ? 'Please log in again to continue.' : 'Would you like to extend it?'}
                 </DialogTitle>
 
-                {children && 
-                    <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: '100%' }}>
-                        {children}
-                    </DialogContent>
-                }
+                <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: '100%' }}>
+                    <Divider />
+                </DialogContent>
 
                 <DialogActions sx={{ pb: 3, px: 3 }}>
                     {!error && <Button onClick={extendSession} data-testid="generic-dialog-submit-button" variant="contained" type="submit" disabled={loading}>
