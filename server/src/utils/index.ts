@@ -80,7 +80,7 @@ export const generateToken = (userId: string): TokenResponse => {
     httpOnly: true, // Prevent client-side access to the cookie
     secure: process.env.NODE_ENV === "production", // Use secure cookies in production
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-    // maxAge: 5 * 10000
+    // maxAge: 5 * 1000
   };
 
   return { token, refreshToken, options, refreshOptions };

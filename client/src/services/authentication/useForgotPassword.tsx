@@ -13,6 +13,15 @@ interface FetchDataResponse {
 export function useForgotPassword() {
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState<string | null>(null);
+    const [open, setOpen] = useState(false);
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+    
+    const handleClose = () => {
+        setOpen(false);
+    };
   
     const forgotPassword = async (email: string) => {
         setLoading(true);
@@ -26,6 +35,6 @@ export function useForgotPassword() {
         setLoading(false);
     };
   
-    return { loading, message, forgotPassword, setMessage };
+    return { loading, message, open, setOpen, handleClickOpen, handleClose, forgotPassword, setMessage };
   }
   

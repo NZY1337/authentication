@@ -135,17 +135,15 @@ export function useAuth() {
         interval = setInterval(() => {
             setRemainingTime((prevremainingTime: number) => {
                 const newExpiringInterval = prevremainingTime - 1;
-                if (newExpiringInterval <= 0) {
+                if (newExpiringInterval === 0) {
                   clearInterval(interval);
                   console.log('Session expired');
                   logoutUser();
                   handleClose();
                   return 0;
-                } else if (newExpiringInterval <= 50) {
+                } else if (newExpiringInterval <= 55) {
                     console.log('session expires in: ', newExpiringInterval);
                     handleOpen();
-                } else {
-                    console.log('session is about to expire in: ', newExpiringInterval);
                 }
                 return newExpiringInterval;
             });
@@ -155,5 +153,5 @@ export function useAuth() {
     return () => clearInterval(interval);
   }, [logoutUser, remainingTime, user?.remainingTime, user, handleOpen, handleClose]);
 
-  return { user, error, loading, open, handleClose, extendSession, loginUser, getUser, setUser, setError, registerUser, logoutUser, setRemainingTime };
+  return { user, error, loading, open, remainingTime, handleClose, extendSession, loginUser, getUser, setUser, setError, registerUser, logoutUser, setRemainingTime };
 }

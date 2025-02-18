@@ -1,4 +1,4 @@
-import React, { createContext, useContext, ReactNode, useCallback, SetStateAction } from 'react';
+import React, { createContext, useContext, ReactNode, SetStateAction } from 'react';
 import { NavigateFunction } from 'react-router-dom';
 import { useAuth } from '../services/authentication/useAuth';
 
@@ -30,6 +30,7 @@ const AppContext = createContext<{
   user: UserInterface | null, 
   loading: boolean,
   open: boolean,    
+  remainingTime: number,
   loginUser: (data: UserLoginInterface, navigate: NavigateFunction) => void, 
   registerUser: (data: UserRegisterInterface) => void,
   logoutUser: () => void, 
@@ -41,6 +42,7 @@ const AppContext = createContext<{
   user: null,
   loading: true,
   open: false,
+  remainingTime: 0,
   extendSession: () => {},
   loginUser: () => {},
   logoutUser: () => {},
@@ -54,20 +56,21 @@ interface AppProviderProps {
 }                       
 
 export const AppProvider: React.FC<AppProviderProps> = ({ children } : AppProviderProps) => {
-  const { user, error, loading, open, extendSession, loginUser, registerUser, getUser, logoutUser, setError } = useAuth();
+  const { user, error, loading, open, remainingTime, extendSession, loginUser, registerUser, getUser, logoutUser, setError } = useAuth();
 
   const value = React.useMemo(() => ({ 
     user,                                   
     error,          
     loading,        
-    open,           
+    open,     
+    remainingTime,      
     loginUser,      
     logoutUser,     
     getUser,       
     registerUser,   
     setError,
     extendSession,
-    }),[user, error, loading, open, loginUser, logoutUser, getUser, registerUser, setError, extendSession]
+    }),[user, error, loading, open, remainingTime, loginUser, logoutUser, getUser, registerUser, setError, extendSession]
 );
 
   return (
