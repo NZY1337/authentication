@@ -45,3 +45,6 @@ const dialogSubtitle = () => {
     return 'Enter your account\'s email address, and we\'ll send you a link to reset your password.'
 } 
 -->
+
+# google Auth
+https://www.youtube.com/watch?v=GuHN_ZqHExs&ab_channel=AustinDavis
