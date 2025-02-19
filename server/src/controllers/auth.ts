@@ -156,7 +156,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
     });
   }
 
-  res.status(200).json({ message: "Reset Password link sent!" });
+  res.status(200).json({ message: "Please verify your email in order to reset your password!" });
 };
 
 export const resetPassword = async (req: Request, res: Response) => {

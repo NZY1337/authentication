@@ -37,11 +37,12 @@ export function useAuth() {
   },[]);
 
   const extendSession = async () => {
-    await fetchData<null, null>({
+    const { error } = await fetchData<null, null>({
         url: "/auth/refresh-token",
         method: "POST",
     });
 
+    if (error) return setError(error);
     await getUser();    
     handleClose();
   } 
@@ -128,24 +129,21 @@ export function useAuth() {
     getUser();
   }, []);
 
-
   useEffect(() => {
     let interval: NodeJS.Timeout;
-    if (user) {
+    if (user && remainingTime <= 60) {
         interval = setInterval(() => {
             setRemainingTime((prevremainingTime: number) => {
                 const newExpiringInterval = prevremainingTime - 1;
-                if (newExpiringInterval <= 0) {
+                if (newExpiringInterval === 0) {
                   clearInterval(interval);
                   console.log('Session expired');
                   logoutUser();
                   handleClose();
                   return 0;
-                } else if (newExpiringInterval <= 50) {
+                } else if (newExpiringInterval <= 55) {
                     console.log('session expires in: ', newExpiringInterval);
                     handleOpen();
-                } else {
-                    console.log('session is about to expire in: ', newExpiringInterval);
                 }
                 return newExpiringInterval;
             });
@@ -153,7 +151,7 @@ export function useAuth() {
     }
      
     return () => clearInterval(interval);
-  }, [logoutUser, remainingTime, user?.remainingTime, user, handleOpen]);
+  }, [logoutUser, remainingTime, user?.remainingTime, user, handleOpen, handleClose]);
 
-  return { user, error, loading, open, handleClose, extendSession, loginUser, getUser, setUser, setError, registerUser, logoutUser, setRemainingTime };
+  return { user, error, loading, open, remainingTime, handleClose, extendSession, loginUser, getUser, setUser, setError, registerUser, logoutUser, setRemainingTime };
 }

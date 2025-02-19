@@ -6,23 +6,16 @@ import Register from './components/Auth/Register/Register';
 import AccountConfirmation from './components/Auth/AccountValidation/AccountValidation';
 import ResetPassword from './components/Auth/ResetPassword/ResetPassword';
 import CssBaseline from '@mui/material/CssBaseline';
-import GenericDialog from './components/Dialog/GenericDialog';
-import Divider  from '@mui/material/Divider';
+import SessionModal from './components/Modals/SessionModal';
 import DashboardLayoutBranding from './components/Dashboard/Dashboard';
 import ProtectedRoute from './components/Protected/ProtectedRoute';
 import NotFoundPage from './components/NotFound/NotFoundPage';
-
 
 function App() {
     return (
         <Router>
             <CssBaseline />
-            <GenericDialog
-                dialogTitle="Your session is about to expire in 40 seconds." 
-                dialogSubtitle={'Would you like to extend it?'}
-                dialogActions="extend-session">
-                <Divider />
-            </GenericDialog>
+            <SessionModal />
             <Routes>
                 <Route path="/" element={<Hero />} />
                 <Route path="/user/verify-email" element={<AccountConfirmation />} />

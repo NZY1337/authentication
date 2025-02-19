@@ -1,5 +1,5 @@
 import * as jwt from "jsonwebtoken";
-import { JWT_SECRET } from "../secrets";
+import { JWT_SECRET, SMTP_PASSWORD } from "../secrets";
 import nodemailer from "nodemailer";
 import crypto from "crypto";
 import { BadRequestException } from "../exceptions/bad-request";
@@ -15,7 +15,7 @@ const nodemailerConfig = {
   port: 465,
   auth: {
     user: "mandreicosmin1990@gmail.com",
-    pass: "swmfzoebthxaprap",
+    pass: SMTP_PASSWORD,
   },
 };
 
@@ -66,20 +66,27 @@ export const sendEmailNotification = async ({
   });
 };
 
+/*
+    for ux testing - auth modal 
+    token - expires in 1 min & refreshToken: expires in 7d
+    token: maxAge 1 min      & refreshToken: maxAge 7d
+*/
 export const generateToken = (userId: string): TokenResponse => {
-  const token = jwt.sign({ userId }, JWT_SECRET, { expiresIn: "1m" });
+  const token = jwt.sign({ userId }, JWT_SECRET, { expiresIn: "1d" });
   const refreshToken = jwt.sign({ userId }, JWT_SECRET, { expiresIn: "7d" });
     
   const options: CookieOptions = {
     httpOnly: true, // Prevent client-side access to the cookie
     secure: process.env.NODE_ENV === "production", // Use secure cookies in production
-    maxAge: 1 * 60 * 1000, // 1 minute
+    maxAge: 1 * 24 * 60 * 60 * 1000, // 1 day
+    // maxAge: 1 * 60 * 1000, // 1 minute
   };
 
   const refreshOptions: CookieOptions = {
     httpOnly: true, // Prevent client-side access to the cookie
     secure: process.env.NODE_ENV === "production", // Use secure cookies in production
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    // maxAge: 5 * 1000 // 5s
   };
 
   return { token, refreshToken, options, refreshOptions };
@@ -89,7 +96,7 @@ export const generateToken = (userId: string): TokenResponse => {
 export const calculateSessionTime = (token: string) => {
   try {
     const payload = jwt.verify(token, JWT_SECRET) as jwt.JwtPayload; // Cast to JwtPayload
-
+    console.log(payload);
     if (payload.exp) {
       const currentTime = Math.floor(Date.now() / 1000);
       const remainingTime = payload.exp - currentTime;

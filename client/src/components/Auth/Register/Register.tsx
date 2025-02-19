@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
@@ -10,7 +10,6 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton'
 import InputAdornment from '@mui/material/InputAdornment'
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import ForgotPassword from '../ForgotPassword/ForgotPassword';
 import { CircularProgress } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import LoginRegisterContainer from '../LoginRegisterContainer/LoginRegisterContainer';
@@ -20,7 +19,6 @@ import { useAppContext } from '../../../context/AppContext';
 
 
 export default function Register() {
-  const [open, setOpen] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
   const { error, loading, setError, registerUser } = useAppContext()
   const [showPassword, setShowPassword] = useState({
@@ -35,7 +33,7 @@ export default function Register() {
     }));
   };
 
-  const [formValues, setFormValues] = React.useState({
+  const [formValues, setFormValues] = useState({
     name: '',
     email: '',
     password: '',
@@ -44,10 +42,6 @@ export default function Register() {
 
   const errors = { name: '', email: '', password: '', repeatPassword: ''};
   const { validateInputs, formErrors, } = useValidateInputs({ errors, formValues });
-
-  const handleClose = () => {
-    setOpen(false);
-  };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -168,10 +162,10 @@ export default function Register() {
                 {loading && <CircularProgress size={20} color="primary" />}
                             
                 {error && <Typography component='p' fontSize={"small"} sx={{color: 'error.main'}}>{error}</Typography>}
-
             </Box>
+
             <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
-            <ForgotPassword open={open} handleClose={handleClose} />
+            
             <Button type="submit" fullWidth variant="contained">
                 Register
             </Button>

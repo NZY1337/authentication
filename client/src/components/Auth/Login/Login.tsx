@@ -11,15 +11,16 @@ import ForgotPassword from '../ForgotPassword/ForgotPassword';
 import { useAppContext } from '../../../context/AppContext';
 import { CircularProgress } from '@mui/material';
 import useValidateInputs from '../../../utils/validateInput';
+import { useForgotPassword } from '../../../services/authentication/useForgotPassword';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import LoginRegisterContainer from '../LoginRegisterContainer/LoginRegisterContainer';
 
 
 const Login = () => {
-  const [open, setOpen] = React.useState(false);
   const formRef = React.useRef<HTMLFormElement>(null);
   const { loginUser, error, loading, setError } = useAppContext()
   const navigate = useNavigate();
+  const { open, handleClickOpen, handleClose } = useForgotPassword();
 
   const [formValues, setFormValues] = React.useState({
     email: '',
@@ -28,14 +29,6 @@ const Login = () => {
 
   const errors = { email: '', password: ''};
   const { validateInputs, formErrors} = useValidateInputs({ errors, formValues });
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -76,7 +69,7 @@ const Login = () => {
                             onChange={handleInputChange}
                             error={Boolean(formErrors.email)}
                             helperText={formErrors.email}
-                        />
+                        />                              
                     </FormControl>
 
                     <FormControl>
@@ -86,7 +79,7 @@ const Login = () => {
                                 Forgot your password?
                             </Typography>
                         </Box>
-                    
+                        
                         <TextField
                             fullWidth
                             name="password"
@@ -99,7 +92,7 @@ const Login = () => {
                             onChange={handleInputChange}
                             error={Boolean(formErrors.password)}
                             helperText={formErrors.password}
-                        />
+                        />  
                     </FormControl>
                                 
                     {loading && <CircularProgress size={20} color="primary" />}
@@ -109,14 +102,14 @@ const Login = () => {
 
                 <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
 
-                {/* <ForgotPassword open={open} handleClose={handleClose} /> */}
+                <ForgotPassword open={open} handleClose={handleClose} />
 
                 <Button type="submit" fullWidth variant="contained">
                     Log In 
                 </Button>
+                
                 <RouterLink onClick={() => setError('')} to="/user/register" style={{ textAlign: 'center', textDecoration: 'none' }} >
                     Don&apos;t have an account?{' '}
-
                     <Typography component={'span'}>Register</Typography>
                 </RouterLink>
             </Box>

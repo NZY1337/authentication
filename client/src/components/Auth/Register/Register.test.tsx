@@ -54,7 +54,7 @@ describe("Register Component", () => {
     expect(getByLabelText(/^password$/i, { exact: true })).toBeInTheDocument();
     expect(getByLabelText(/^repeat password$/i, { exact: true })).toBeInTheDocument();
   });
-
+  
   test("displays validation errors on empty submit", async () => {
     const { getByText, getByRole } = renderComponent();
     fireEvent.submit(getByRole("button", { name: /register/i }));

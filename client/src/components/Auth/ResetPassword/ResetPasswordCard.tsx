@@ -100,39 +100,41 @@ export default function SignInCard() {
                 />
             </FormControl>
 
-                <FormControl>
-                    <FormLabel htmlFor="repeatPassword">Repeat New Password</FormLabel>
-                        <TextField
-                            fullWidth
-                            name="repeatPassword"
-                            placeholder="••••••"
-                            type={`${showPassword.repeatPassword ? 'text' : 'password'}`}
-                            id="repeatPassword"
-                            autoComplete="repeat-new-password"
-                            variant="outlined"
-                            value={formValues.repeatPassword}
-                            onChange={handleInputChange}
-                            error={Boolean(formErrors.repeatPassword)}
-                            helperText={formErrors.repeatPassword}
-                            slotProps={{
-                                input: {
-                                    endAdornment: (
-                                      <InputAdornment position="end">
-                                        <IconButton onClick={() => handleTogglePassword('repeatPassword')} edge="end" >
-                                          {showPassword.password ? <VisibilityOff fontSize='small'  /> : <Visibility fontSize='small'  />}
-                                        </IconButton>
-                                      </InputAdornment>
-                                    ),
-                                  },
-                            }}
-                        />
-                </FormControl>
+            <FormControl>
+                <FormLabel htmlFor="repeatPassword">Repeat New Password</FormLabel>
+                    <TextField
+                        fullWidth
+                        name="repeatPassword"
+                        placeholder="••••••"
+                        type={`${showPassword.repeatPassword ? 'text' : 'password'}`}
+                        id="repeatPassword"
+                        autoComplete="repeat-new-password"
+                        variant="outlined"
+                        value={formValues.repeatPassword}
+                        onChange={handleInputChange}
+                        error={Boolean(formErrors.repeatPassword)}
+                        helperText={formErrors.repeatPassword}
+                        slotProps={{
+                            input: {
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                    <IconButton onClick={() => handleTogglePassword('repeatPassword')} edge="end" >
+                                        {showPassword.password ? <VisibilityOff fontSize='small'  /> : <Visibility fontSize='small'  />}
+                                    </IconButton>
+                                    </InputAdornment>
+                                ),
+                                },
+                        }}
+                    />
+            </FormControl>
             
-            {message && <RouterLink to="/" color="primary"> 
-              {message}
-            </RouterLink>}
+            {message && 
+                <RouterLink to="/" color="primary"> 
+                    {message}
+                </RouterLink>
+            }
+            
             {loading && <CircularProgress size={20} color="primary" />}
-                        
             {error && <Typography component='p' color="secondary">{error}</Typography>}
         </Box>
         <Button type="submit" fullWidth variant="contained">
