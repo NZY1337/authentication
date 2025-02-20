@@ -71,6 +71,7 @@ export const sendEmailNotification = async ({
     token - expires in 1 min & refreshToken: expires in 7d
     token: maxAge 1 min      & refreshToken: maxAge 7d
 */
+
 export const generateToken = (userId: string): TokenResponse => {
   const token = jwt.sign({ userId }, JWT_SECRET, { expiresIn: "1d" });
   const refreshToken = jwt.sign({ userId }, JWT_SECRET, { expiresIn: "7d" });
@@ -79,14 +80,14 @@ export const generateToken = (userId: string): TokenResponse => {
     httpOnly: true, // Prevent client-side access to the cookie
     secure: process.env.NODE_ENV === "production", // Use secure cookies in production
     maxAge: 1 * 24 * 60 * 60 * 1000, // 1 day
-    // maxAge: 1 * 60 * 1000, // 1 minute
+    // maxAge: 2 * 60 * 1000, // 2 minute
   };
 
   const refreshOptions: CookieOptions = {
     httpOnly: true, // Prevent client-side access to the cookie
     secure: process.env.NODE_ENV === "production", // Use secure cookies in production
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-    // maxAge: 5 * 1000 // 5s
+    // maxAge: 7 * 60 * 1000, // 7 minute
   };
 
   return { token, refreshToken, options, refreshOptions };
@@ -96,12 +97,11 @@ export const generateToken = (userId: string): TokenResponse => {
 export const calculateSessionTime = (token: string) => {
   try {
     const payload = jwt.verify(token, JWT_SECRET) as jwt.JwtPayload; // Cast to JwtPayload
-    console.log(payload);
     if (payload.exp) {
       const currentTime = Math.floor(Date.now() / 1000);
       const remainingTime = payload.exp - currentTime;
       const isExpiringSoon = remainingTime <= 60;
-
+        console.log(remainingTime);
       return { remainingTime, isExpiringSoon };
     }
 
