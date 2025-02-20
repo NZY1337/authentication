@@ -22,7 +22,7 @@ export function useForgotPassword() {
     const handleClose = () => {
         setOpen(false);
     };
-  
+    
     const forgotPassword = async (email: string) => {
         setLoading(true);
         const { resData } = await fetchData<ForgotPasswordRequest, FetchDataResponse>({

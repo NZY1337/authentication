@@ -6,20 +6,21 @@ interface FetchDataInterface<RequestType> {
   method?: AxiosRequestConfig["method"];
   data?: RequestType;
   params?: AxiosRequestConfig["params"];
+  headers?: AxiosRequestConfig["headers"];
 }
  
-async function fetchData<RequestType, ResponseType>({
-  url,
-  method = "GET",
-  data,
-  params,
-}: FetchDataInterface<RequestType>): Promise<{ resData: ResponseType | null; error: string | null }> {
+async function fetchData<RequestType, ResponseType>({ url, method = "GET", data, params, headers = {}}: FetchDataInterface<RequestType>): Promise<{ resData: ResponseType | null; error: string | null }> {
   try {
+    const isFormData = data instanceof FormData;
     const response = await axiosInstance({
       url,
       method,
       params,
       data,
+      headers: {
+        ...(isFormData ? { "Content-Type": "multipart/form-data" } : {}),
+        ...headers,
+      },
     });
 
     return {

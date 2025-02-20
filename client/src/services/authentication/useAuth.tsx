@@ -130,25 +130,26 @@ export function useAuth() {
   }, []);
 
   useEffect(() => {
-    let interval: NodeJS.Timeout;
-    if (user && remainingTime <= 60) {
-        interval = setInterval(() => {
-            setRemainingTime((prevremainingTime: number) => {
-                const newExpiringInterval = prevremainingTime - 1;
-                if (newExpiringInterval === 0) {
-                  clearInterval(interval);
-                  console.log('Session expired');
-                  logoutUser();
-                  handleClose();
-                  return 0;
-                } else if (newExpiringInterval <= 55) {
-                    console.log('session expires in: ', newExpiringInterval);
-                    handleOpen();
-                }
-                return newExpiringInterval;
-            });
-          }, 1000);
-    }
+    if (!user) return;
+    const interval: NodeJS.Timeout = setInterval(() => {
+        console.log(remainingTime)
+        setRemainingTime((prevremainingTime: number) => {
+            const newExpiringInterval = prevremainingTime - 1;
+            if (newExpiringInterval === 0) {
+                clearInterval(interval);
+                console.log('Session expired');
+                logoutUser();
+                handleClose();
+                return 0;
+            }
+            
+            if (newExpiringInterval <= 60) {
+                console.log('session expires in: ', newExpiringInterval);
+                handleOpen();
+            }
+            return newExpiringInterval;
+        });
+    }, 1000);
      
     return () => clearInterval(interval);
   }, [logoutUser, remainingTime, user?.remainingTime, user, handleOpen, handleClose]);

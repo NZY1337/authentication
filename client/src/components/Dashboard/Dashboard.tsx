@@ -21,13 +21,7 @@ import DashboardTitle from './DashboardTitle';
 import DashboardFooter from './DashboardFooter';
 import dashboardTheme from './themeContext';
 
-
 const NAVIGATION: Navigation = [
-    {
-        segment: 'profile',
-        title: 'Profile',
-        icon: <UserIcocon />,
-    },
     {
         segment: 'dashboard',
         title: 'Dashboard',
@@ -43,6 +37,11 @@ const NAVIGATION: Navigation = [
         title: 'Reports',
         icon: <BarChartIcon />,
       },
+      {
+        segment: 'profile',
+        title: 'Profile',
+        icon: <UserIcocon />,
+    },
 ];
 
 export default function DashboardLayoutAccount() {
@@ -89,8 +88,8 @@ export default function DashboardLayoutAccount() {
             // logo: <img src="https://mui.com/static/logo.png" alt="MUI logo" />,
             title: 'Auth Dashboard',
         }}>
-        <DashboardLayout slots={{ sidebarFooter: DashboardFooter, appTitle: DashboardTitle }}>
-            <DashboardContent pathname={router.pathname} />
+        <DashboardLayout session={session} slots={{ sidebarFooter: DashboardFooter, appTitle: DashboardTitle }}>
+            <DashboardContent pathname={router.pathname} session={session} />
         </DashboardLayout>
     </AppProvider>
   );
