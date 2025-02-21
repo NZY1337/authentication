@@ -50,7 +50,6 @@ export const signIn = async (req: Request, res: Response) => {
 
     const userWithoutSensitiveData: UserWithoutSensitiveData & { remainingTime: number }  = 
         _.omit({...user, remainingTime}, ["password", "passwordToken", "passwordTokenExpirationDate", "verificationToken"])
-
     res.status(200).json({ user: userWithoutSensitiveData });
 };
 
