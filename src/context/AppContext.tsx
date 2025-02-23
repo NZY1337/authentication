@@ -1,12 +1,14 @@
-import React, { createContext, useContext, ReactNode, useCallback, SetStateAction } from 'react';
+import React, { createContext, useContext, ReactNode, SetStateAction, useEffect } from 'react';
 import { NavigateFunction } from 'react-router-dom';
 import { useAuth } from '../services/authentication/useAuth';
+import useSession from '../services/session/useSession';
 
 export type UserInterface = {
+    avatar: string;
     createdAt: string;
     updatedAt: string;
-    defaultBillingAddress: string | null;
-    defaultShippingAddress: string | null;
+    defaultBillingAddress: number | null;
+    defaultShippingAddress: number | null;
     email: string;
     name: string;
     id: string;
@@ -29,58 +31,50 @@ const AppContext = createContext<{
   error: string | null, 
   user: UserInterface | null, 
   loading: boolean,
-  open: boolean,
+  open: boolean,    
   loginUser: (data: UserLoginInterface, navigate: NavigateFunction) => void, 
   registerUser: (data: UserRegisterInterface) => void,
   logoutUser: () => void, 
   getUser: () => void,
-  handleOpen: () => void,
-  handleClose: () => void
   setError: (error: SetStateAction<string | null>) => void
+  extendSession: () => void, 
+  setUser: (user: SetStateAction<UserInterface | null>) => void
 }>({
   error: null,
   user: null,
   loading: true,
   open: false,
+  extendSession: () => {},
   loginUser: () => {},
   logoutUser: () => {},
   getUser: () => {},
   registerUser: () => {},
-  handleOpen: () => {},
-  handleClose: () => {},
-  setError: () => {}
+  setError: () => {},
+  setUser: () => {}
 });
 
 interface AppProviderProps {
-  children: ReactNode;
-}
+  children: ReactNode;      
+}                       
+
 
 export const AppProvider: React.FC<AppProviderProps> = ({ children } : AppProviderProps) => {
-  const [open, setOpen] = React.useState(false);
-
-  const handleOpen = useCallback(() => {
-    setOpen(true);
-  },[]);
-
-  const handleClose = useCallback(() => {
-    setOpen(false);
-  },[]);
-
-  const { user, error, loading, loginUser, registerUser, getUser, logoutUser, setError } = useAuth(handleOpen);
+  const { user, error, loading, open, extendSession, loginUser, registerUser, getUser, logoutUser, setError, setUser } = useAuth();
+  const { getSessionTime } = useSession();
 
   const value = React.useMemo(() => ({ 
-    user, 
-    error,
-    loading,
-    open,
-    loginUser, 
-    logoutUser, 
-    getUser, 
-    registerUser,
-    handleOpen,
-    handleClose,
-    setError
-    }),[user, error, loading, open, loginUser, logoutUser, getUser, registerUser, handleOpen, handleClose, setError]
+    user,                                   
+    error,          
+    loading,        
+    open,     
+    loginUser,      
+    logoutUser,     
+    getUser,       
+    registerUser,   
+    setError,
+    extendSession,
+    setUser
+    }),[user, error, loading, open, loginUser, logoutUser, getUser, registerUser, setError, extendSession, setUser]
 );
 
   return (

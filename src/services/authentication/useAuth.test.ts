@@ -6,13 +6,12 @@ jest.mock('../../utils/fetchData');
 
 const mockFetchData = fetchData as jest.Mock;
 const mockNavigate = jest.fn();
-const mockHandleOpen = jest.fn();
 
-const mockUser = {
+const mockUser = {              
   id: '123',
-  name: 'Test User',
-  email: 'test@example.com',
-  remainingTime: 9,
+  name: 'Test User',            
+  email: 'test@example.com',    
+  remainingTime: 9,             
 };
 
 describe('useAuth hook', () => {
@@ -26,7 +25,7 @@ describe('useAuth hook', () => {
       error: null,
     });
     
-    const { result } = renderHook(() => useAuth(mockHandleOpen));
+    const { result } = renderHook(() => useAuth());
 
     await act(async () => {
       await result.current.loginUser({ email: 'test@example.com', password: 'password' }, mockNavigate);
@@ -39,7 +38,7 @@ describe('useAuth hook', () => {
   it('should handle login error', async () => {
     mockFetchData.mockResolvedValue({ resData: null, error: 'Login failed' });
 
-    const { result } = renderHook(() => useAuth(mockHandleOpen));
+    const { result } = renderHook(() => useAuth());
 
     await act(async () => {
       await result.current.loginUser({ email: 'test@example.com', password: 'wrongpassword' }, mockNavigate);
@@ -52,7 +51,7 @@ describe('useAuth hook', () => {
   it('should fetch the current user on mount', async () => {
     mockFetchData.mockResolvedValueOnce({ resData: { user: mockUser }, error: null });
 
-    const { result } = renderHook(() => useAuth(mockHandleOpen));
+    const { result } = renderHook(() => useAuth());
 
     await act(async () => {
       await result.current.getUser();
@@ -64,7 +63,7 @@ describe('useAuth hook', () => {
   it('should handle logout', async () => {
     mockFetchData.mockResolvedValue({ resData: null, error: null });
 
-    const { result } = renderHook(() => useAuth(mockHandleOpen));
+    const { result } = renderHook(() => useAuth());
 
     await act(async () => {
       await result.current.logoutUser();
@@ -89,7 +88,7 @@ describe('useAuth hook', () => {
         error: null,
     });
         
-    const { result } = renderHook(() => useAuth(mockHandleOpen));
+    const { result } = renderHook(() => useAuth());
   
     await act(async () => {
         const sessionExpirationTime = result?.current?.user?.remainingTime;
@@ -117,7 +116,7 @@ describe('useAuth hook', () => {
     const message = "Please check your email to verify account!"
     mockFetchData.mockResolvedValue({ resData: { message }, error: null });
 
-    const { result } = renderHook(() => useAuth(mockHandleOpen));
+    const { result } = renderHook(() => useAuth());
 
     await act(async () => {
       await result.current.registerUser({ name: 'Andrew Misseldorf', email: 'new@example.com', password: 'password' });
@@ -131,7 +130,7 @@ describe('useAuth hook', () => {
   it('should handle registration error', async () => {
     mockFetchData.mockResolvedValue({ resData: null, error: 'Registration failed' });
 
-    const { result } = renderHook(() => useAuth(mockHandleOpen));
+    const { result } = renderHook(() => useAuth());
 
     await act(async () => {
       await result.current.registerUser({ name: 'Andrew Misseldorf', email: 'new@example.com', password: 'password' });
