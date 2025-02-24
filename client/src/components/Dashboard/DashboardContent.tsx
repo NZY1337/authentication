@@ -1,11 +1,8 @@
 import Typography from '@mui/material/Typography';
 import { Container } from "@mui/material";
 import UserDashboard from './components/User/UserDashboard';
-import {
-    type Session,
-  } from '@toolpad/core/AppProvider';
 
-function DashboardContent({ pathname, session }: { pathname: string, session: Session | null }) {
+function DashboardContent({ pathname }: { pathname: string }) {
     const renderTitle = () => {
         switch (pathname) {
           case '/profile':
@@ -24,7 +21,7 @@ function DashboardContent({ pathname, session }: { pathname: string, session: Se
     const renderContent = () => {
       switch (pathname) {
         case '/profile':
-          return <UserDashboard session={session} />;
+          return <UserDashboard />;
         default:
           return null;
       }

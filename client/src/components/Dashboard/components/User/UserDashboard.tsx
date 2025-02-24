@@ -10,15 +10,14 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Divider from "@mui/material/Divider";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
-
-import { type Session } from '@toolpad/core/AppProvider';
 import fetchData from "../../../../utils/fetchData";
+import {useAppContext} from "../../../../context/AppContext";
 
-export default function ImageUploadForm({ session }: {session: Session | null}) {
+export default function ImageUploadForm() {
+  const { user, getUser } = useAppContext();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [avatar, setAvatar] = useState<string | null>(null);
-  const [avatarcaption] = useState("profile-image");   
 
   const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
@@ -26,7 +25,6 @@ export default function ImageUploadForm({ session }: {session: Session | null}) 
       const formData = new FormData();
       const file = event.target.files[0];
       formData.append("avatar", file);
-      formData.append("caption", avatarcaption)
       setAvatar(URL.createObjectURL(file));
 
       const { resData, error } = await fetchData<FormData,{ message: string }>({
@@ -34,21 +32,26 @@ export default function ImageUploadForm({ session }: {session: Session | null}) 
         url: "/users/avatar",
         method: "POST",
       });
+
       if (error) {
-        console.error(error);
+        return console.error(error);
       }
+
       if (resData) {
-        console.log(resData);
+        console.log(resData.message)
+        getUser();
       }
     }
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    console.log('handle submit');
     console.log({ name, email, avatar });
   };
 
-  const profileImage = avatar ? avatar : "https://avatars.githubusercontent.com/u"
+  console.log('component remounted')
+  const profileImage = user?.avatar || "https://avatars.githubusercontent.com/u"
 
   return (
       <Grid container spacing={3}>
@@ -56,9 +59,9 @@ export default function ImageUploadForm({ session }: {session: Session | null}) 
             <Card elevation={1} sx={{ borderRadius: 2, maxWidth: 345 }}>
                 <CardContent>
                     <Stack direction="row" spacing={2} alignItems="center">
-                    <Avatar src={profileImage} alt="User Avatar" />
+                    <Avatar src={profileImage} alt="User Avatar" sx={{ width: 100, height: 100 }} />
                     <Stack>
-                        <Typography variant="h5">{session?.user?.name}</Typography>
+                        <Typography variant="h5">{user?.name}</Typography>
                         <Typography variant="body2" color="textSecondary">Los Angeles, USA</Typography>
                         <Typography variant="body2" color="textSecondary">GTM-7</Typography>
                     </Stack>
@@ -81,8 +84,6 @@ export default function ImageUploadForm({ session }: {session: Session | null}) 
             <Button type="submit" variant="contained" fullWidth>Save</Button>
           </Stack>
         </Grid>
-
-        
       </Grid>
   );
 }

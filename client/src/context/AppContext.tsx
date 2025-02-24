@@ -1,12 +1,14 @@
-import React, { createContext, useContext, ReactNode, SetStateAction } from 'react';
+import React, { useEffect, createContext, useContext, ReactNode, SetStateAction } from 'react';
 import { NavigateFunction } from 'react-router-dom';
 import { useAuth } from '../services/authentication/useAuth';
+import useSession from '../services/session/useSession';
 
 export type UserInterface = {
+    avatar: string;
     createdAt: string;
     updatedAt: string;
-    defaultBillingAddress: string | null;
-    defaultShippingAddress: string | null;
+    defaultBillingAddress: number | null;
+    defaultShippingAddress: number | null;
     email: string;
     name: string;
     id: string;
@@ -15,6 +17,23 @@ export type UserInterface = {
     remainingTime: number;
     verified: boolean
 }
+
+export type AppContextType = {
+    error: string | null, 
+    user: UserInterface | null, 
+    loading: boolean,
+    open: boolean,    
+    loginUser: (data: UserLoginInterface, navigate: NavigateFunction) => void, 
+    registerUser: (data: UserRegisterInterface) => void,
+    logoutUser: () => void, 
+    getUser: () => void,
+    setError: (error: SetStateAction<string | null>) => void
+    extendSession: () => void, 
+    setUser: (user: SetStateAction<UserInterface | null>) => void,
+    handleOpen: () => void,
+    handleClose: () => void,
+    clearSessionTimer: () => void
+  };
 
 export type UserLoginInterface = Pick<UserInterface, 'email'> & {
     password: string;
@@ -25,30 +44,21 @@ export type UserRegisterInterface = Pick<UserInterface, 'email' | 'name'> & {
     message?: string;
 };
 
-const AppContext = createContext<{ 
-  error: string | null, 
-  user: UserInterface | null, 
-  loading: boolean,
-  open: boolean,    
-  remainingTime: number,
-  loginUser: (data: UserLoginInterface, navigate: NavigateFunction) => void, 
-  registerUser: (data: UserRegisterInterface) => void,
-  logoutUser: () => void, 
-  getUser: () => void,
-  setError: (error: SetStateAction<string | null>) => void
-  extendSession: () => void, 
-}>({
+const AppContext = createContext<AppContextType>({
   error: null,
   user: null,
   loading: true,
   open: false,
-  remainingTime: 0,
   extendSession: () => {},
   loginUser: () => {},
   logoutUser: () => {},
   getUser: () => {},
   registerUser: () => {},
   setError: () => {},
+  setUser: () => {},
+  handleClose: () => {},
+  handleOpen: () => {},
+  clearSessionTimer: () => {}
 });
 
 interface AppProviderProps {
@@ -56,21 +66,32 @@ interface AppProviderProps {
 }                       
 
 export const AppProvider: React.FC<AppProviderProps> = ({ children } : AppProviderProps) => {
-  const { user, error, loading, open, remainingTime, extendSession, loginUser, registerUser, getUser, logoutUser, setError } = useAuth();
+    const { user, error, loading, open, extendSession, loginUser, registerUser, getUser, logoutUser, setError, setUser, handleOpen, handleClose } = useAuth();
+    const { clearSessionTimer, getSessionTime } = useSession({ handleOpen, logoutUser, handleClose });
 
-  const value = React.useMemo(() => ({ 
-    user,                                   
-    error,          
-    loading,        
-    open,     
-    remainingTime,      
-    loginUser,      
-    logoutUser,     
-    getUser,       
-    registerUser,   
-    setError,
-    extendSession,
-    }),[user, error, loading, open, remainingTime, loginUser, logoutUser, getUser, registerUser, setError, extendSession]
+    useEffect(() => {
+        if (user) {
+            console.log('user detected - session started')
+            getSessionTime();
+        }
+    }, [user]);
+
+    const value = React.useMemo(() => ({ 
+        user,                                   
+        error,          
+        loading,        
+        open,     
+        loginUser,      
+        logoutUser,     
+        getUser,       
+        registerUser,   
+        setError,
+        extendSession,
+        setUser,
+        handleOpen,
+        handleClose,
+        clearSessionTimer
+    }),[user, error, loading, open, loginUser, logoutUser, getUser, registerUser, setError, extendSession, setUser, handleOpen, handleClose, clearSessionTimer]
 );
 
   return (

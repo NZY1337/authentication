@@ -32,5 +32,4 @@ export const prismaClient = new PrismaClient({
 });
 
 app.use(errorMiddleware);
-
 app.listen(PORT, () => console.log("App is working!"));
