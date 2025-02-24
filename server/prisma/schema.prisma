@@ -18,8 +18,9 @@ model User {
     name                        String
     email                       String    @unique
     password                    String
+    avatar                      String?
     role                        Role      @default(USER)
-    defaultShippingAddress      Int?
+    defaultShippingAddress      Int?            
     defaultBillingAddress       Int?
     verificationToken           String
     isVerified                  Boolean?  @default(false)

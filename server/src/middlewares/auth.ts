@@ -6,6 +6,7 @@ import * as jwt from "jsonwebtoken";
 import { prismaClient } from "..";
 import { User } from "@prisma/client";
 import { calculateSessionTime } from "../utils";
+import { getSessionTime } from "../controllers/auth";
 
 const authMiddleware = async (
   req: Request,
@@ -13,15 +14,14 @@ const authMiddleware = async (
   next: NextFunction
 ) => {
   const token = req.cookies.token; // Access token from cookies
-    
+
   if (!token) {
     next(new UnauthorizedException("Unauthorized", ErrorCode.UNAUTHORIZED));
   }
 
   try {
     const payload = jwt.verify(token, JWT_SECRET) as any;
-    const { remainingTime } = calculateSessionTime(token);
-    
+
     const user: User | null = await prismaClient.user.findFirst({
       where: {
         id: payload?.userId,
@@ -32,7 +32,8 @@ const authMiddleware = async (
         return next(new UnauthorizedException("Unauthorized", ErrorCode.UNAUTHORIZED));
     }
 
-    req.user = { ...user, remainingTime } as User & { remainingTime: number };
+    // req.user = { ...user, remainingTime } as User & { remainingTime: number };
+    req.user = user
     
     next();
   } catch (error) {

@@ -9,6 +9,7 @@ import {
   resetPassword,
   logout,
   refreshToken,
+  getSessionTime
 } from "../controllers/auth";
 import { errorHandler } from "../error-handler";
 import authMiddleware from "../middlewares/auth";
@@ -23,5 +24,6 @@ authRouter.post("/validate", errorHandler(validateUserEmail));
 authRouter.delete("/logout", errorHandler(logout));
 authRouter.get("/user", [authMiddleware], errorHandler(getUser));
 authRouter.post("/refresh-token", errorHandler(refreshToken));
+authRouter.get("/session-time", [authMiddleware], errorHandler(getSessionTime));
 
 export default authRouter;

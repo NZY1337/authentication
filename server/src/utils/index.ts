@@ -71,22 +71,23 @@ export const sendEmailNotification = async ({
     token - expires in 1 min & refreshToken: expires in 7d
     token: maxAge 1 min      & refreshToken: maxAge 7d
 */
+
 export const generateToken = (userId: string): TokenResponse => {
-  const token = jwt.sign({ userId }, JWT_SECRET, { expiresIn: "1d" });
-  const refreshToken = jwt.sign({ userId }, JWT_SECRET, { expiresIn: "7d" });
+  const token = jwt.sign({ userId }, JWT_SECRET, { expiresIn: "1m" });
+  const refreshToken = jwt.sign({ userId }, JWT_SECRET, { expiresIn: "3m" });
     
   const options: CookieOptions = {
     httpOnly: true, // Prevent client-side access to the cookie
     secure: process.env.NODE_ENV === "production", // Use secure cookies in production
-    maxAge: 1 * 24 * 60 * 60 * 1000, // 1 day
-    // maxAge: 1 * 60 * 1000, // 1 minute
+    // maxAge: 1 * 24 * 60 * 60 * 1000, // 1 day
+    maxAge: 1 * 60 * 1000, // 1 minute
   };
 
   const refreshOptions: CookieOptions = {
     httpOnly: true, // Prevent client-side access to the cookie
     secure: process.env.NODE_ENV === "production", // Use secure cookies in production
-    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-    // maxAge: 5 * 1000 // 5s
+    // maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    maxAge: 3 * 60 * 1000, // 3 minute
   };
 
   return { token, refreshToken, options, refreshOptions };
@@ -96,12 +97,11 @@ export const generateToken = (userId: string): TokenResponse => {
 export const calculateSessionTime = (token: string) => {
   try {
     const payload = jwt.verify(token, JWT_SECRET) as jwt.JwtPayload; // Cast to JwtPayload
-    console.log(payload);
     if (payload.exp) {
       const currentTime = Math.floor(Date.now() / 1000);
       const remainingTime = payload.exp - currentTime;
       const isExpiringSoon = remainingTime <= 60;
-
+      console.log(remainingTime);
       return { remainingTime, isExpiringSoon };
     }
 
@@ -112,4 +112,31 @@ export const calculateSessionTime = (token: string) => {
   }
 };
 
-
+// export const calculateRemainingSessionTime = (token: string, refreshToken: string) => {
+//     try {
+//       const tokenPayload = jwt.verify(token, JWT_SECRET) as jwt.JwtPayload;
+//       const refreshPayload = jwt.verify(refreshToken, JWT_SECRET) as jwt.JwtPayload;
+      
+//       const currentTime = Math.floor(Date.now() / 1000);
+      
+//       // Calculate remaining time for the token
+//       const tokenRemainingTime = tokenPayload.exp ? tokenPayload.exp - currentTime : 0;
+      
+//       // Calculate remaining time for the refresh token
+//       const refreshRemainingTime = refreshPayload.exp ? refreshPayload.exp - currentTime : 0;
+  
+//       const isTokenExpiringSoon = tokenRemainingTime <= 60; // Token is expiring soon
+//       const isRefreshTokenExpiringSoon = refreshRemainingTime <= 60; // Refresh token expiring soon
+  
+//       return {
+//         tokenRemainingTime,
+//         refreshRemainingTime,
+//         isTokenExpiringSoon,
+//         isRefreshTokenExpiringSoon,
+//       };
+//     } catch (err) {
+//       console.error("Invalid or expired token:", (err as Error).message);
+//       return { tokenRemainingTime: 0, refreshRemainingTime: 0, isTokenExpiringSoon: true, isRefreshTokenExpiringSoon: true };
+//     }
+// };
+  

@@ -43,15 +43,15 @@ export const signIn = async (req: Request, res: Response) => {
       user.id
     );
 
-    const { remainingTime } = calculateSessionTime(token);
-
     res.cookie("token", token, options);
     res.cookie("refreshToken", refreshToken, refreshOptions);
 
-    const userWithoutSensitiveData: UserWithoutSensitiveData & { remainingTime: number }  = 
-        _.omit({...user, remainingTime}, ["password", "passwordToken", "passwordTokenExpirationDate", "verificationToken"])
+    res.status(200).json({ user });
 
-    res.status(200).json({ user: userWithoutSensitiveData });
+    // const { remainingTime } = calculateSessionTime(token);
+    // const userWithoutSensitiveData: UserWithoutSensitiveData & { remainingTime: number }  = 
+    //     _.omit({...user, remainingTime}, ["password", "passwordToken", "passwordTokenExpirationDate", "verificationToken"])
+    // res.status(200).json({ user: userWithoutSensitiveData });
 };
 
 export const signUp = async (req: Request, res: Response) => {
@@ -222,6 +222,7 @@ export const logout = async (req: Request, res: Response) => {
 
 export const refreshToken = async (req: Request, res: Response) => {
   const refreshToken = req.cookies.refreshToken;
+  console.log('refresh ', refreshToken);
 
   if (!refreshToken) {
     throw new UnauthorizedException("Unauthorized", ErrorCode.UNAUTHORIZED);
@@ -243,3 +244,10 @@ export const refreshToken = async (req: Request, res: Response) => {
 
   res.status(200).json({ token });
 };
+
+export const getSessionTime = (req: Request, res: Response) => {
+    const token = req.cookies.token;
+    const { remainingTime, isExpiringSoon } = calculateSessionTime(token);
+    res.status(200).json({ remainingTime, isExpiringSoon });
+};
+
