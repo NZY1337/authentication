@@ -6,20 +6,13 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { useAppContext } from '../../context/AppContext';
 import GenericModal from './GenericModal';
 
-
 const SessionModal = () => {
-    const { open, handleClose, clearSessionTimer, logoutUser } = useAppContext();
-
-    const handleCloseModal = () => {
-        clearSessionTimer();
-        logoutUser();
-        handleClose();
-    }
+    const { open, handleClose } = useAppContext();
     
     return (
         <GenericModal open={open}>
             <DialogTitle variant="subtitle1" sx={{pb: 1, display: 'flex', alignItems: 'center'}}>
-                Your session is about to expire.
+                Your session has expired.
             </DialogTitle>
             
             <DialogTitle variant="subtitle2" sx={{ pt:0, color: 'text.secondary', fontWeight:'light'}}>
@@ -31,7 +24,7 @@ const SessionModal = () => {
             </DialogContent>
 
             <DialogActions sx={{ pb: 3, px: 3 }}>
-                <Button variant='contained' onClick={handleCloseModal}>
+                <Button variant='contained' onClick={handleClose}>
                     Ok
                 </Button>
             </DialogActions>

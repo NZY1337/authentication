@@ -6,7 +6,7 @@ import {
   UserInterface,
 } from "../../context/AppContext";
 import fetchData from "../../utils/fetchData";
-
+import { setupInterceptors, resetLoginTrigger } from "../../utils/axiosInstance";
 
 interface LoginResponse {
   user: UserInterface;
@@ -35,6 +35,10 @@ export function useAuth() {
   const handleClose = useCallback(() => {
     setOpen(false);
   },[]);
+
+  useEffect(() => {
+    setupInterceptors(handleOpen)
+  }, [handleOpen]);
 
   const extendSession = async () => {
     const { error } = await fetchData<null, null>({
