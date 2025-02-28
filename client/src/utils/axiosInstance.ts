@@ -5,8 +5,6 @@ interface AxiosRequestConfigWithRetry extends AxiosRequestConfig {
     _retry?: boolean;
   }
 
-let interceptorId: number | null = null
-
 const axiosInstance = axios.create({
   baseURL: "http://localhost:3010/api",
   withCredentials: true, // Ensure cookies are sent with the request
@@ -22,13 +20,7 @@ axiosInstance.interceptors.request.use(
   }
 );
 
-export const setupInterceptors = () => {
-  if (interceptorId !== null) {
-    axiosInstance.interceptors.response.eject(interceptorId);
-    interceptorId = null;
-  }
-
-  interceptorId = axiosInstance.interceptors.response.use(
+axiosInstance.interceptors.response.use(
     (response) => response,
     async (error) => {
       const originalRequest = error.config as AxiosRequestConfigWithRetry;
@@ -48,9 +40,8 @@ export const setupInterceptors = () => {
         }
       }
 
-      return Promise.reject(error);
+        return Promise.reject(error);
     }
-  );
-};
+);
 
 export default axiosInstance;

@@ -14,8 +14,7 @@ const useSession = ({ handleOpen, logoutUser, user }: useSessionType) => {
     const [polling, setPolling] = useState(5000);
 
     const getSessionTime = async () => {
-        if (document.hidden) return; // probably not needed because we check
-        // document visibility in the useEffect hook
+        if (document.hidden) return; // probably not needed because we check document visibility in the useEffect hook
 
         const { resData, error } = await fetchData<null, SessionResponse>({
             url: "/auth/session-time",
@@ -71,11 +70,8 @@ const useSession = ({ handleOpen, logoutUser, user }: useSessionType) => {
     }, [user]);
 
     useEffect(() => {
-        if (user && !document.hidden) {
-            startSessionTimer();
-        } else {
-            stopSessionTimer();
-        }
+        if (user && !document.hidden) startSessionTimer();
+        if (!user && document.hidden) stopSessionTimer();;
 
         return () => stopSessionTimer();
         

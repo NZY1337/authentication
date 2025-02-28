@@ -6,7 +6,6 @@ import {
   UserInterface,
 } from "../../context/AppContext";
 import fetchData from "../../utils/fetchData";
-import { setupInterceptors, resetLoginTrigger } from "../../utils/axiosInstance";
 
 interface LoginResponse {
   user: UserInterface;
@@ -27,6 +26,7 @@ export function useAuth() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
+  const [userLoading, setUserLoading] = useState<boolean>(true); 
 
   const handleOpen = useCallback(() => {
     setOpen(true);
@@ -35,21 +35,6 @@ export function useAuth() {
   const handleClose = useCallback(() => {
     setOpen(false);
   },[]);
-
-  useEffect(() => {
-    setupInterceptors(handleOpen)
-  }, [handleOpen]);
-
-  const extendSession = async () => {
-    const { error } = await fetchData<null, null>({
-        url: "/auth/refresh-token",
-        method: "POST",
-    });
-
-    if (error) return setError(error);
-    await getUser();    
-    handleClose();
-  } 
 
   const loginUser = async (data: UserLoginInterface, navigate: NavigateFunction) => {
     setLoading(true);
@@ -91,6 +76,7 @@ export function useAuth() {
 
   const getUser = useCallback(async () => {
     setLoading(true);
+    setUserLoading(true);
 
     const { resData, error } = await fetchData<null, GetUserResponse>({
       url: "/auth/user",
@@ -102,8 +88,10 @@ export function useAuth() {
     } else if (resData) {
         setUser(resData.user);
     }
+
     setLoading(false);
-  },[]);
+    setUserLoading(false);
+  },[setUser, setError, setLoading]);
 
   const registerUser = async (data: UserRegisterInterface) => {
     setLoading(true);
@@ -126,8 +114,8 @@ export function useAuth() {
   };
 
   useEffect(() => {
-    getUser(); // Initial check
-}, []); 
+      getUser();
+  }, []);
 
-  return { user, error, loading, open, handleClose, handleOpen, extendSession, loginUser, getUser, setUser, setError, registerUser, logoutUser };
+  return { user, error, loading, open, userLoading, handleClose, handleOpen, loginUser, getUser, setUser, setError, registerUser, logoutUser };
 }

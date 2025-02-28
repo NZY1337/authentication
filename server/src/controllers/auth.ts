@@ -47,11 +47,6 @@ export const signIn = async (req: Request, res: Response) => {
     res.cookie("refreshToken", refreshToken, refreshOptions);
 
     res.status(200).json({ user });
-
-    // const { remainingTime } = calculateSessionTime(token);
-    // const userWithoutSensitiveData: UserWithoutSensitiveData & { remainingTime: number }  = 
-    //     _.omit({...user, remainingTime}, ["password", "passwordToken", "passwordTokenExpirationDate", "verificationToken"])
-    // res.status(200).json({ user: userWithoutSensitiveData });
 };
 
 export const signUp = async (req: Request, res: Response) => {

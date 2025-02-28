@@ -74,7 +74,7 @@ export const sendEmailNotification = async ({
 
 export const generateToken = (userId: string): TokenResponse => {
   const token = jwt.sign({ userId }, JWT_SECRET, { expiresIn: "1m" });
-  const refreshToken = jwt.sign({ userId }, JWT_SECRET, { expiresIn: "3m" });
+  const refreshToken = jwt.sign({ userId }, JWT_SECRET, { expiresIn: "10m" });
     
   const options: CookieOptions = {
     httpOnly: true, // Prevent client-side access to the cookie
@@ -87,7 +87,7 @@ export const generateToken = (userId: string): TokenResponse => {
     httpOnly: true, // Prevent client-side access to the cookie
     secure: process.env.NODE_ENV === "production", // Use secure cookies in production
     // maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-    maxAge: 3 * 60 * 1000, // 1 minute
+    maxAge: 10 * 60 * 1000, // 10 minute
   };
 
   return { token, refreshToken, options, refreshOptions };
