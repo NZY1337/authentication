@@ -9,6 +9,7 @@ interface FetchDataInterface<RequestType> {
   headers?: AxiosRequestConfig["headers"];
 }
  
+// maybe update to finally with setLoading
 async function fetchData<RequestType, ResponseType>({ url, method = "GET", data, params, headers = {}}: FetchDataInterface<RequestType>): Promise<{ resData: ResponseType | null; error: string | null }> {
   try {
     const isFormData = data instanceof FormData;

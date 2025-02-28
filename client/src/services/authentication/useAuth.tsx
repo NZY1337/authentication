@@ -75,7 +75,6 @@ export function useAuth() {
 
 
   const getUser = useCallback(async () => {
-    setLoading(true);
     setUserLoading(true);
 
     const { resData, error } = await fetchData<null, GetUserResponse>({
@@ -89,9 +88,8 @@ export function useAuth() {
         setUser(resData.user);
     }
 
-    setLoading(false);
     setUserLoading(false);
-  },[setUser, setError, setLoading]);
+  },[setUser, setError]);
 
   const registerUser = async (data: UserRegisterInterface) => {
     setLoading(true);
@@ -114,7 +112,7 @@ export function useAuth() {
   };
 
   useEffect(() => {
-      getUser();
+    getUser();
   }, []);
 
   return { user, error, loading, open, userLoading, handleClose, handleOpen, loginUser, getUser, setUser, setError, registerUser, logoutUser };

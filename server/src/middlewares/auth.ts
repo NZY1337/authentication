@@ -32,7 +32,6 @@ const authMiddleware = async (
         return next(new UnauthorizedException("Unauthorized", ErrorCode.UNAUTHORIZED));
     }
 
-    // req.user = { ...user, remainingTime } as User & { remainingTime: number };
     req.user = user
     
     next();
