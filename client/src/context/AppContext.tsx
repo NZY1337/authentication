@@ -1,4 +1,5 @@
-import React, { useEffect, createContext, useContext, ReactNode, SetStateAction } from 'react';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import React, { createContext, useContext, ReactNode, SetStateAction, useEffect, useRef } from 'react';
 import { NavigateFunction } from 'react-router-dom';
 import { useAuth } from '../services/authentication/useAuth';
 import useSession from '../services/session/useSession';
@@ -19,21 +20,20 @@ export type UserInterface = {
 }
 
 export type AppContextType = {
-    error: string | null, 
-    user: UserInterface | null, 
+    error: string | null,
+    user: UserInterface | null,
     loading: boolean,
-    open: boolean,    
-    loginUser: (data: UserLoginInterface, navigate: NavigateFunction) => void, 
+    open: boolean,
+    userLoading: boolean,
+    loginUser: (data: UserLoginInterface, navigate: NavigateFunction) => void,
     registerUser: (data: UserRegisterInterface) => void,
-    logoutUser: () => void, 
+    logoutUser: () => void,
     getUser: () => void,
     setError: (error: SetStateAction<string | null>) => void
-    extendSession: () => void, 
     setUser: (user: SetStateAction<UserInterface | null>) => void,
     handleOpen: () => void,
     handleClose: () => void,
-    clearSessionTimer: () => void
-  };
+};
 
 export type UserLoginInterface = Pick<UserInterface, 'email'> & {
     password: string;
@@ -45,60 +45,51 @@ export type UserRegisterInterface = Pick<UserInterface, 'email' | 'name'> & {
 };
 
 const AppContext = createContext<AppContextType>({
-  error: null,
-  user: null,
-  loading: true,
-  open: false,
-  extendSession: () => {},
-  loginUser: () => {},
-  logoutUser: () => {},
-  getUser: () => {},
-  registerUser: () => {},
-  setError: () => {},
-  setUser: () => {},
-  handleClose: () => {},
-  handleOpen: () => {},
-  clearSessionTimer: () => {}
+    error: null,
+    user: null,
+    loading: true,
+    open: false,
+    userLoading: false,
+    loginUser: () => { },
+    logoutUser: () => { },
+    getUser: () => { },
+    registerUser: () => { },
+    setError: () => { },
+    setUser: () => { },
+    handleClose: () => { },
+    handleOpen: () => { },
 });
 
 interface AppProviderProps {
-  children: ReactNode;      
-}                       
+    children: ReactNode;
+}
 
-export const AppProvider: React.FC<AppProviderProps> = ({ children } : AppProviderProps) => {
-    const { user, error, loading, open, extendSession, loginUser, registerUser, getUser, logoutUser, setError, setUser, handleOpen, handleClose } = useAuth();
-    const { clearSessionTimer, getSessionTime } = useSession({ handleOpen, logoutUser, handleClose });
+export const AppProvider: React.FC<AppProviderProps> = ({ children }: AppProviderProps) => {
+    const { user, error, loading, open, userLoading, loginUser, registerUser, getUser, logoutUser, setError, setUser, handleOpen, handleClose } = useAuth();
+    useSession({ handleOpen, logoutUser, user });
 
-    useEffect(() => {
-        if (user) {
-            console.log('user detected - session started')
-            getSessionTime();
-        }
-    }, [user]);
-
-    const value = React.useMemo(() => ({ 
-        user,                                   
-        error,          
-        loading,        
-        open,     
-        loginUser,      
-        logoutUser,     
-        getUser,       
-        registerUser,   
+    const value = React.useMemo(() => ({
+        user,
+        error,
+        loading,
+        open,
+        userLoading,
+        loginUser,
+        logoutUser,
+        getUser,
+        registerUser,
         setError,
-        extendSession,
         setUser,
         handleOpen,
         handleClose,
-        clearSessionTimer
-    }),[user, error, loading, open, loginUser, logoutUser, getUser, registerUser, setError, extendSession, setUser, handleOpen, handleClose, clearSessionTimer]
-);
+        }), [user, error, loading, open, userLoading ,loginUser, logoutUser, getUser, registerUser, setError, setUser, handleOpen, handleClose]
+    );
 
-  return (
-    <AppContext.Provider value={value}>
-      {children}
-    </AppContext.Provider>
-  );
+    return (
+        <AppContext.Provider value={value}>
+            {children}
+        </AppContext.Provider>
+    );
 };
 
 export const useAppContext = () => useContext(AppContext);

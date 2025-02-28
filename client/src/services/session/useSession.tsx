@@ -4,90 +4,82 @@ import { AppContextType } from "../../context/AppContext";
 
 interface SessionResponse {
     remainingTime: number;
-    isExpiringSoon: boolean
+    isExpiringSoon: boolean;
 }
 
-type useSessionType = Pick<AppContextType, 'handleOpen' | 'logoutUser' | 'handleClose'>;
+type useSessionType = Pick<AppContextType, 'handleOpen' | 'logoutUser' | 'user'>;
 
-const useSession = ({ handleOpen, handleClose, logoutUser }: useSessionType) => {
-    const [remainingTime, setRemainingTime] = useState<number>(0);
+const useSession = ({ handleOpen, logoutUser, user }: useSessionType) => {
     const intervalIdRef = useRef<NodeJS.Timeout | null>(null);
-
-    console.log(remainingTime)
+    const [polling, setPolling] = useState(5000);
 
     const getSessionTime = async () => {
+        if (document.hidden) return; // probably not needed because we check document visibility in the useEffect hook
+
         const { resData, error } = await fetchData<null, SessionResponse>({
             url: "/auth/session-time",
             method: "GET",
         });
 
-        // console.log('from server: --', resData?.remainingTime)
-
-        if (error) {
-            console.error("Session fetch error:", error);
-            return;
+        if (resData && resData?.remainingTime <= 20) {
+            setPolling(3000);
+        } else {
+            setPolling(5000);
         }
 
-        if (resData?.remainingTime) {
-            const remainingSeconds = Number(resData.remainingTime);
-            const expirationTimestamp = Date.now() + remainingSeconds * 1000;
-            localStorage.setItem("sessionExpiresAt", expirationTimestamp.toString());
-        }
-    };
-
-    const updateRemainingTime = () => {
-        const storedExpiration = localStorage.getItem("sessionExpiresAt");
-        if (!storedExpiration) return;
-
-        const expirationTimestamp = Number(storedExpiration);
-        const timeleft = Math.max(0, Math.floor((expirationTimestamp - Date.now()) / 1000));
-        
-        console.log(timeleft, remainingTime);
-        
-        if (timeleft !== remainingTime) {
-            setRemainingTime(timeleft);
-        }
-
-        if (timeleft > 0 && timeleft <= 40) {
-            console.log("Session is about to expire!");
-            handleOpen();
-        }
-
-        if (timeleft === 0) {
-            clearSessionTimer();
+        console.log('from server: --', resData?.remainingTime);
+        if (error === "Unauthorized") {
+            console.log(error);
             logoutUser();
-            handleClose();
+            handleOpen();
+            stopSessionTimer();
         }
     };
 
-    const clearSessionTimer = () => {
+    const startSessionTimer = () => {
+        if (intervalIdRef.current) return; // Prevent multiple intervals
+        getSessionTime();
+
+        intervalIdRef.current = setInterval(() => {
+            getSessionTime();
+        }, polling);
+    };
+
+    const stopSessionTimer = () => {
         if (intervalIdRef.current) {
             clearInterval(intervalIdRef.current);
             intervalIdRef.current = null;
-            console.log("Session expired, timer stopped.");
+            console.log('Interval cleared');
         }
-        localStorage.removeItem("sessionExpiresAt");
-        setRemainingTime(0); 
     };
 
+    // Handle tab visibility changes
     useEffect(() => {
-        if (intervalIdRef.current) return; // Prevent multiple intervals
-
-        updateRemainingTime(); // Ensure initial sync
-
-        intervalIdRef.current = setInterval(() => {
-            updateRemainingTime();
-        }, 5000); // Check every 5 seconds
-
-        return () => {
-            if (intervalIdRef.current) {
-                clearInterval(intervalIdRef.current);
-                intervalIdRef.current = null;
+        const handleVisibilityChange = () => {
+            if (document.hidden) {
+                console.log('document hidden')
+                stopSessionTimer(); // Pause polling
+            } else if (user) {
+                startSessionTimer(); // Resume polling when visible
+                console.log('document shown')
             }
         };
-    }, []);
 
-    return { remainingTime, getSessionTime, clearSessionTimer };
+        document.addEventListener("visibilitychange", handleVisibilityChange);
+        return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
+    }, [user]);
+
+    useEffect(() => {
+        if (user && !document.hidden) startSessionTimer();
+        if (!user && document.hidden) stopSessionTimer();;
+
+        return () => stopSessionTimer();
+        
+    }, [user, polling]);
+
+    return { getSessionTime };
 };
 
 export default useSession;
+
+

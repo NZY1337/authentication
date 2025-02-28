@@ -15,7 +15,7 @@ import dashboardTheme from './themeContext';
 
 
 export default function DashboardLayoutAccount() {
-  const { user, logoutUser, clearSessionTimer } = useAppContext();
+  const { user, logoutUser  } = useAppContext();
   const navigate = useNavigate();
 
   const authentication = useMemo(() => {
@@ -25,10 +25,9 @@ export default function DashboardLayoutAccount() {
       },
       signOut: () => {
         logoutUser();
-        clearSessionTimer();
       },
     };
-  }, [clearSessionTimer, logoutUser, navigate]);
+  }, [logoutUser, navigate]);
 
   const router = useDemoRouter('/dashboard');
   
