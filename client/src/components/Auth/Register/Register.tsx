@@ -72,7 +72,6 @@ export default function Register() {
                 <FormControl>
                     <FormLabel htmlFor="name">Full name</FormLabel>
                     <TextField
-                        autoComplete="name"
                         name="name"
                         fullWidth
                         id="name"
@@ -91,7 +90,6 @@ export default function Register() {
                         id="email"
                         placeholder="your@email.com"
                         name="email"
-                        autoComplete="email"
                         variant="outlined"
                         value={formValues.email}
                         onChange={handleInputChange}
@@ -111,7 +109,6 @@ export default function Register() {
                         placeholder="••••••"
                         type={`${showPassword.password ? 'text' : 'password'}`}
                         id="password"
-                        autoComplete="new-password"
                         variant="outlined"
                         value={formValues.password}
                         onChange={handleInputChange}
@@ -139,7 +136,6 @@ export default function Register() {
                         placeholder="••••••"
                         type={`${showPassword.repeatPassword ? 'text' : 'password'}`}
                         id="repeatPassword"
-                        autoComplete="repeat-password"
                         variant="outlined"
                         value={formValues.repeatPassword}
                         onChange={handleInputChange}

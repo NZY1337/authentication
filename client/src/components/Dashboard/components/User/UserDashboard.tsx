@@ -14,7 +14,7 @@ import fetchData from "../../../../utils/fetchData";
 import {useAppContext} from "../../../../context/AppContext";
 
 export default function ImageUploadForm() {
-  const { user, getUser } = useAppContext();
+  const { user, setUser } = useAppContext();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [avatar, setAvatar] = useState<string | null>(null);
@@ -27,7 +27,7 @@ export default function ImageUploadForm() {
       formData.append("avatar", file);
       setAvatar(URL.createObjectURL(file));
 
-      const { resData, error } = await fetchData<FormData,{ message: string }>({
+      const { resData, error } = await fetchData<FormData,{ fileUrl: string }>({
         data: formData,
         url: "/users/avatar",
         method: "POST",
@@ -38,19 +38,16 @@ export default function ImageUploadForm() {
       }
 
       if (resData) {
-        console.log(resData.message)
-        getUser();
+        setUser((prevUser) => prevUser ? { ...prevUser, avatar: resData.fileUrl } : null);
       }
     }
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    console.log('handle submit');
+    event.preventDefault();             
     console.log({ name, email, avatar });
   };
 
-  console.log('component remounted')
   const profileImage = user?.avatar || "https://avatars.githubusercontent.com/u"
 
   return (

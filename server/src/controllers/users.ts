@@ -22,7 +22,6 @@ export const getUsers = async (req: Request, res: Response) => {
 
 export const uploadAvatar = async (req: Request, res: Response) => {
     const file = req.file;
-    console.log(file)
 
     if (!file) throw new NotFoundException("No file uploaded", ErrorCode.NOT_FOUND);
     // Extract file extension from mimetype (e.g., "image/png" -> "png")
@@ -47,7 +46,7 @@ export const uploadAvatar = async (req: Request, res: Response) => {
         data: { avatar: fileUrl },
     });
 
-    res.status(200).json({ message: avatarPath });
+    res.status(200).json({ fileUrl });
 };
 
 

@@ -275,6 +275,9 @@ export const typography = {
   },
   button: {
     fontFamily: 'Poppins, serif',
+  },
+  input: {
+    fontFamily: 'Poppins, serif',
   }
 };
 

@@ -10,6 +10,7 @@ import { brand } from '../themePrimitives';
 
 // colors
 import gray from '@mui/material/colors/grey';
+import { Web } from '@mui/icons-material';
 
 // ...theme.applyStyles('dark', {}),
 // ...theme.applyStyles('light', {}),
@@ -275,12 +276,11 @@ export const inputsCustomizations: Components<Theme> = {
                   opacity: 0.7,
                   color: gray[500],
                 },
-                "&:-webkit-autofill": {
+                "&:-webkit-autofill, input:-webkit-autofill": {
                     WebkitBoxShadow: "0 0 0 100px #212121 inset !important",
+                    // WebkitTextFillColor: "red !important",
                     borderRadius: 0,
-                    fontFamily: 'inherit',
-                    // fontSize: '16px'
-                    // WebkitTextFillColor: "inherit !important",
+                    
                 },
             },
             color: theme.palette.grey[400],
@@ -356,7 +356,7 @@ export const inputsCustomizations: Components<Theme> = {
   MuiTypography: {
     styleOverrides: {   
       root: ({ theme }: { theme: Theme }) => ({
-        color: '#fff',
+        color: theme.palette.grey[100],
         backgroundColor: 'unset',
       }),   
     }

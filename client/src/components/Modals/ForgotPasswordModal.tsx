@@ -14,7 +14,7 @@ interface ForgotPasswordModalProps {
     message: string | null,
     onSubmit?: () => Promise<void>;
     handleClose: () => void;
-  }
+}
 
 const ForgotPasswordModal = ({ loading, children, open, message, onSubmit, handleClose }: ForgotPasswordModalProps) => {
     return (

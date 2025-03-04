@@ -10,7 +10,7 @@ const ProtectedRoute = () => {
   if (userLoading) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
-        <CircularProgress size={200}/>
+        <CircularProgress size={200} />
       </Box>
     );
   }

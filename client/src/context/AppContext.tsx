@@ -67,7 +67,7 @@ interface AppProviderProps {
 export const AppProvider: React.FC<AppProviderProps> = ({ children }: AppProviderProps) => {
     const { user, error, loading, open, userLoading, loginUser, registerUser, getUser, logoutUser, setError, setUser, handleOpen, handleClose } = useAuth();
     useSession({ handleOpen, logoutUser, user });
-
+    
     const value = React.useMemo(() => ({
         user,
         error,
@@ -82,7 +82,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }: AppProvide
         setUser,
         handleOpen,
         handleClose,
-        }), [user, error, loading, open, userLoading ,loginUser, logoutUser, getUser, registerUser, setError, setUser, handleOpen, handleClose]
+        }), [user, error, loading, open, userLoading, loginUser, logoutUser, getUser, registerUser, setError, setUser, handleOpen, handleClose]
     );
 
     return (

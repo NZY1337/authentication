@@ -80,7 +80,6 @@ export default function SignInCard() {
                     placeholder="••••••"
                     type={`${showPassword.password ? 'text' : 'password'}`}
                     id="password"
-                    autoComplete="password"
                     variant="outlined"
                     value={formValues.password}
                     onChange={handleInputChange}
@@ -108,7 +107,6 @@ export default function SignInCard() {
                         placeholder="••••••"
                         type={`${showPassword.repeatPassword ? 'text' : 'password'}`}
                         id="repeatPassword"
-                        autoComplete="repeat-new-password"
                         variant="outlined"
                         value={formValues.repeatPassword}
                         onChange={handleInputChange}
