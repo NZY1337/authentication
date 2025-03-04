@@ -7,7 +7,7 @@ import AccountConfirmation from './components/Auth/AccountValidation/AccountVali
 import ResetPassword from './components/Auth/ResetPassword/ResetPassword';
 import CssBaseline from '@mui/material/CssBaseline';
 import SessionModal from './components/Modals/SessionModal';
-import DashboardLayoutBranding from './components/Dashboard/Dashboard';
+import Dashboard from './components/Dashboard/Dashboard';
 import ProtectedRoute from './components/Protected/ProtectedRoute';
 import NotFoundPage from './components/NotFound/NotFoundPage';
 
@@ -23,7 +23,7 @@ function App() {
                 <Route path="/user/register" element={<Register />} />
                 <Route path="/user/login" element={<Login />} />
                 <Route path="/" element={<ProtectedRoute />} >
-                    <Route path="dashboard" element={<DashboardLayoutBranding />} />
+                    <Route path="dashboard" element={<Dashboard />} />
                 </Route>
                 <Route path="*" element={<NotFoundPage />} /> 
             </Routes>

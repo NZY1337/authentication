@@ -9,9 +9,18 @@ interface SessionResponse {
 
 type useSessionType = Pick<AppContextType, 'handleOpen' | 'logoutUser' | 'user'>;
 
+//!! TODO - check for useCallback and what it does - fns are recreated everytime when components rerenders
 const useSession = ({ handleOpen, logoutUser, user }: useSessionType) => {
     const intervalIdRef = useRef<NodeJS.Timeout | null>(null);
     const [polling, setPolling] = useState(60 * 1000); // start from 1 minute | token: 15 minute
+
+    const stopSessionTimer = () => {
+        if (intervalIdRef.current) {
+            clearInterval(intervalIdRef.current);
+            intervalIdRef.current = null;
+        }
+    };
+
     const getSessionTime = async () => {
         if (document.hidden) return; // probably not needed because we check document visibility in the useEffect hook
 
@@ -21,12 +30,13 @@ const useSession = ({ handleOpen, logoutUser, user }: useSessionType) => {
         });
 
         if (resData && resData?.remainingTime <= 60) {
-            setPolling(5000); //5 seconds
+            setPolling(5000); // 5 seconds
         } else {
             setPolling(60 * 1000); //1 minute
         }
 
         console.log('from server: --', resData?.remainingTime);
+
         if (error === "Unauthorized") {
             logoutUser();
             handleOpen();
@@ -35,7 +45,7 @@ const useSession = ({ handleOpen, logoutUser, user }: useSessionType) => {
     };
 
     const startSessionTimer = () => {
-        if (intervalIdRef.current) return; // Prevent multiple intervals
+        if (intervalIdRef.current || !user) return; // Prevent multiple intervals
         getSessionTime();
 
         intervalIdRef.current = setInterval(() => {
@@ -43,33 +53,26 @@ const useSession = ({ handleOpen, logoutUser, user }: useSessionType) => {
         }, polling);
     };
 
-    const stopSessionTimer = () => {
-        if (intervalIdRef.current) {
-            clearInterval(intervalIdRef.current);
-            intervalIdRef.current = null;
-        }
-    };
-
     // Handle tab visibility changes
     useEffect(() => {
         const handleVisibilityChange = () => {
-            if (document.hidden) {
+            if (document.hidden && user) {
+                console.log('pause polling')
                 stopSessionTimer(); // Pause polling
             } else if (user) {
+                console.log('start polling')
                 startSessionTimer(); // Resume polling when visible
             }
         };
 
+        handleVisibilityChange();
+
         document.addEventListener("visibilitychange", handleVisibilityChange);
-        return () => document.removeEventListener("visibilitychange", handleVisibilityChange);
-    }, [user]);
 
-    useEffect(() => {
-        if (user && !document.hidden) startSessionTimer();
-        if (!user && document.hidden) stopSessionTimer();
-
-        return () => stopSessionTimer();
-        
+        return () => {
+            stopSessionTimer(); // Cleanup on unmount
+            document.removeEventListener("visibilitychange", handleVisibilityChange);
+        };
     }, [user, polling]);
 
     return { getSessionTime };

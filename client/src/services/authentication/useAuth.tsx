@@ -76,7 +76,6 @@ export function useAuth() {
   const getUser = useCallback(async () => {
     setLoading(true);
     setUserLoading(true);
-    console.log('get user')
     const { resData, error } = await fetchData<null, GetUserResponse>({
       url: "/auth/user",
       method: "GET",

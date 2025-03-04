@@ -13,8 +13,7 @@ import dashboardTheme from './themeContext';
 // https://mui.com/toolpad/core/react-dashboard-layout/?srsltid=AfmBOor80vsN0FvRmE_pISB6sVHhcnei4hFfLYkYDZxyqLlXsgsDKE7c :: DOCUMENTATION
 // https://mui.com/store/previews/devias-kit/ :: example
 
-
-export default function DashboardLayoutAccount() {
+export default function Dashboard() {
   const { user, logoutUser  } = useAppContext();
   const navigate = useNavigate();
 

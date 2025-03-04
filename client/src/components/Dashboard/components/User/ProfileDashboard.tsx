@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState } from "react";
 import { Grid2 as Grid  } from "@mui/material";
 import Stack from "@mui/material/Stack";
@@ -11,15 +12,18 @@ import CardContent from "@mui/material/CardContent";
 import Divider from "@mui/material/Divider";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import fetchData from "../../../../utils/fetchData";
-import {useAppContext} from "../../../../context/AppContext";
+import { useAppContext } from "../../../../context/AppContext";
 
-export default function ImageUploadForm() {
+import { UserInterface } from "../../../../context/AppContext";
+
+export default function ProfileDashboard() {
   const { user, setUser } = useAppContext();
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [avatar, setAvatar] = useState<string | null>(null);
 
-  const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onHandleImage = async (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
     if (event.target.files && event.target.files.length > 0) {
       const formData = new FormData();
@@ -43,13 +47,25 @@ export default function ImageUploadForm() {
     }
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();             
-    console.log({ name, email, avatar });
+  const onHandleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();      
+    const { resData, error } = await fetchData<{name: string}, UserInterface>({
+        data: { name },
+        url: "/users",
+        method: "PUT",
+    });
+
+    if (error) {
+        return console.log(error)
+    }
+
+    if (resData) {
+        setUser((prevUser) => prevUser ? { ...prevUser, name: resData.user.name } : null);
+    }
   };
 
   const profileImage = user?.avatar || "https://avatars.githubusercontent.com/u"
-
+  
   return (
       <Grid container spacing={3}>
         <Grid size={{ xs: 12, md: 6, lg: 3 }}>
@@ -68,15 +84,15 @@ export default function ImageUploadForm() {
                 <CardActions>
                     <Button fullWidth variant="contained" component="label" startIcon={<UploadFileIcon />}> 
                         Upload Image
-                        <input type="file" hidden accept="image/*" onChange={handleImageChange} />
+                        <input type="file" hidden accept="image/*" onChange={onHandleImage} />
                     </Button>
                 </CardActions>
             </Card>
         </Grid>
 
         <Grid size={{ xs: 12, md: 6, lg: 3 }}>
-          <Stack spacing={2} component="form" onSubmit={handleSubmit}>
-            <TextField label="Name" variant="outlined" fullWidth value={name} onChange={(e) => setName(e.target.value)} />
+          <Stack spacing={2} component="form" onSubmit={onHandleSubmit}>
+            <TextField label="Name" type="text" variant="outlined" fullWidth value={name} onChange={(e) => setName(e.target.value)} />
             <TextField label="Email" variant="outlined" fullWidth value={email} onChange={(e) => setEmail(e.target.value)} />
             <Button type="submit" variant="contained" fullWidth>Save</Button>
           </Stack>

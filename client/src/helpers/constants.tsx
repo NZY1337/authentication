@@ -9,18 +9,18 @@ const DASHBOARD_NAVIGATION: Navigation = [
         segment: 'dashboard',
         title: 'Dashboard',
         icon: <DashboardIcon />,
-      },
-      {
+    },
+    {
         segment: 'orders',
         title: 'Orders',
         icon: <ShoppingCartIcon />,
-      },
-      {
+    },
+    {
         segment: 'reports',
         title: 'Reports',
         icon: <BarChartIcon />,
-      },
-      {
+    },
+    {
         segment: 'profile',
         title: 'Profile',
         icon: <UserIcon />,
