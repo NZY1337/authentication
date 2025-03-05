@@ -68,8 +68,8 @@ export default function ProfileDashboard() {
   
   return (
       <Grid container spacing={3}>
-        <Grid size={{ xs: 12, md: 6, lg: 3 }}>
-            <Card elevation={1} sx={{ borderRadius: 2, maxWidth: 345 }}>
+        <Grid size={{ xs: 12, md: 6, lg: 4 }}>
+            <Card elevation={1} sx={{ borderRadius: 2, maxWidth: '100%' }}>
                 <CardContent>
                     <Stack direction="row" spacing={2} alignItems="center">
                     <Avatar src={profileImage} alt="User Avatar" sx={{ width: 100, height: 100 }} />
@@ -90,7 +90,7 @@ export default function ProfileDashboard() {
             </Card>
         </Grid>
 
-        <Grid size={{ xs: 12, md: 6, lg: 3 }}>
+        <Grid size={{ xs: 12, md: 6, lg: 4 }}>
           <Stack spacing={2} component="form" onSubmit={onHandleSubmit}>
             <TextField label="Name" type="text" variant="outlined" fullWidth value={name} onChange={(e) => setName(e.target.value)} />
             <TextField label="Email" variant="outlined" fullWidth value={email} onChange={(e) => setEmail(e.target.value)} />
