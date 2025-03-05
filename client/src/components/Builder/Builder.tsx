@@ -1,5 +1,4 @@
 import { Typography, Container } from '@mui/material';
-import ArrowRight from '@mui/icons-material/ArrowRight';
 import { Grid2 as Grid  } from "@mui/material";
 import FormBuilder from './FormBuilder';
 
@@ -33,13 +32,11 @@ const Builder = () => {
 
                 <Grid size={{ xs: 12, md: 6, lg: 6 }}>
                     <Typography variant="body1" textAlign={"right"}>
-                        Transform your space with AI-driven designs in any style: minimalistic, modern, baroque, & more — tailored to your vision.
+                        Transform your space with AI-driven designs in any style: minimalistic, modern, baroque & more — tailored to your vision.
                     </Typography>
                 </Grid>
             </Grid>
-
         </Container>
-
         <Container maxWidth={"xl"}>
             <FormBuilder />
         </Container>

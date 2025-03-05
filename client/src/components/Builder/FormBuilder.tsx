@@ -9,18 +9,18 @@ import {
   FormControlLabel,
   Paper,
 } from "@mui/material";
-
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { builderAiIntervention, builderHouseAngle, builderModeStyle, builderModeOptions,  builderNumberOfDesigns } from "../../helpers/constants";
 import DynamicSelect from "../UtilityComponents.tsx/DynamicSelect";
+import FileUpload from "../UtilityComponents.tsx/FileUpload";
+import { DynamicSelectProps } from "../UtilityComponents.tsx/DynamicSelect";
 
-const builderHouseAngle = ["side of house", "front of house", "back of house"];
-const builderModeOptions = ["Beautiful Redesign", "Minimalist", "Luxury"];
-const builderModeStyle = ["Modern", "Traditional", "Contemporary"];
-const builderNumberOfDesigns = [1, 2, 3, 4];
-const builderAiIntervention = [1, 2, 3, 4];
 
-const DesignForm = () => {
-  const [state, setState] = useState({
+type OnchangeType = DynamicSelectProps['onChange'];
+
+const FormBuilder = () => {
+  const [preview, setPreview] = useState<string | null>(null);
+  
+  const [stateBuilder, setStateBuilder] = useState({
     houseAngle: "side of house",
     mode: "Beautiful Redesign",
     style: "Modern",
@@ -30,9 +30,10 @@ const DesignForm = () => {
     useCustomInstructions: false,
   });
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+
+  const handleChange: OnchangeType = (event) => {
     const { name, value } = event.target;
-    setState((prevState) => ({
+    setStateBuilder((prevState) => ({
       ...prevState,
       [name]: value,
     }));
@@ -40,7 +41,7 @@ const DesignForm = () => {
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { checked } = event.target;
-    setState((prevState) => ({
+    setStateBuilder((prevState) => ({
       ...prevState,
       useCustomInstructions: checked,
     }));
@@ -48,8 +49,6 @@ const DesignForm = () => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    console.log("Form Submitted:", state);
   };
 
   return (
@@ -63,79 +62,35 @@ const DesignForm = () => {
           />
         </Paper>
       </Grid>
+
       <Grid size={{ xs: 12, md: 6, lg: 4, xl: 4 }}>
         <Paper sx={{ padding: 3, backgroundColor: "#191B19", color: "#fff", borderRadius: 2 }}>
           <Stack spacing={3} component="form" onSubmit={handleSubmit}>
             <Typography variant="h6">1. Upload Photo</Typography>
-            <Stack
-              alignItems="center"
-              justifyContent="center"
-              sx={{
-                border: "2px dashed gray",
-                padding: 4,
-                borderRadius: 2,
-                textAlign: "center",
-                cursor: "pointer",
-                "&:hover": { borderColor: "white" },
-              }}
-            >
-              <CloudUploadIcon sx={{ fontSize: 40, mb: 1 }} />
-              <Typography variant="body2">Upload an image here or CTRL + V</Typography>
-            </Stack>
 
+            <FileUpload preview={preview} setPreview={setPreview} />
+              
             <Typography variant="h6">2. Design</Typography>
 
-            <DynamicSelect label="House Angle" id="builder-house-angle" name="houseAngle" value={state.houseAngle} options={builderHouseAngle} onChange={handleChange} />
+            <DynamicSelect label="House Angle" id="builder-house-angle" name="houseAngle" value={stateBuilder.houseAngle} options={builderHouseAngle} onChange={handleChange} />
 
-            <DynamicSelect
-              label="Mode"
-              id="builder-mode"
-              name="mode"
-              value={state.mode}
-              options={builderModeOptions}
-              onChange={handleChange}
-            />
-
-            <DynamicSelect
-              label="Style"
-              id="builder-style"
-              name="style"
-              value={state.style}
-              options={builderModeStyle}
-              onChange={handleChange}
-            />
-
-            <DynamicSelect
-              label="Number of Designs"
-              id="builder-design-number"
-              name="numberOfDesigns"
-              value={state.numberOfDesigns}
-              options={builderNumberOfDesigns}
-              onChange={handleChange}
-            />
-
-            <DynamicSelect
-              label="Ai Intervention"
-              id="builder-ai-intervention"
-              name="aiIntervention"
-              value={state.aiIntervention}
-              options={builderAiIntervention}
-              onChange={handleChange}
-            />
+            <DynamicSelect label="Mode" id="builder-mode" name="mode" value={stateBuilder.mode} options={builderModeOptions} onChange={handleChange} />
+            <DynamicSelect label="Style" id="builder-style" name="style" value={stateBuilder.style} options={builderModeStyle} onChange={handleChange} />
+            <DynamicSelect label="Number of Designs" id="builder-design-number" name="numberOfDesigns" value={stateBuilder.numberOfDesigns} options={builderNumberOfDesigns} onChange={handleChange} />
+            <DynamicSelect label="Ai Intervention" id="builder-ai-intervention" name="aiIntervention" value={stateBuilder.aiIntervention} options={builderAiIntervention} onChange={handleChange} />
 
             <FormControlLabel
-              control={<Checkbox checked={state.useCustomInstructions} onChange={handleCheckboxChange} color="primary" />}
-              label="Custom AI instructions"
-            />
+              control={<Checkbox checked={stateBuilder.useCustomInstructions} onChange={handleCheckboxChange} color="primary" />}
+              label="Custom AI instructions" />
 
-            {state.useCustomInstructions && (
+            {stateBuilder.useCustomInstructions && (
               <TextField
                 multiline
                 rows={4}
                 fullWidth
                 placeholder="e.g. A clean room with beautiful lighting and green textures."
                 name="customInstructions"
-                value={state.customInstructions}
+                value={stateBuilder.customInstructions}
                 onChange={handleChange}
               />
             )}
@@ -150,4 +105,4 @@ const DesignForm = () => {
   );
 };
 
-export default DesignForm;
+export default FormBuilder;

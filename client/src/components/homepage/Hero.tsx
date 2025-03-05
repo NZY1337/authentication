@@ -25,7 +25,7 @@ const Hero = () => {
         color: '#fff',
         textAlign: 'center',
         p: 3,
-    }}>
+    }}> 
         <Navigation />
         <Container>
             <Box sx={{ display: 'flex', flexDirection: 'column', textAlign: 'left' }}>
@@ -44,7 +44,7 @@ const Hero = () => {
                 </Typography>
 
                 <Typography variant="subtitle1" width={"50%"}>
-                    Transform your space with AI-driven designs in any style — minimalistic, modern, baroque, & more — tailored to your vision.
+                    Transform your space with AI-driven designs in any style — minimalistic, modern, baroque & more — tailored to your vision.
                 </Typography>
 
                 <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-start', gap: 2 }}>

@@ -27,4 +27,10 @@ const DASHBOARD_NAVIGATION: Navigation = [
     },
 ];
 
-export {  DASHBOARD_NAVIGATION };
+const builderHouseAngle = ["side of house", "front of house", "back of house"];
+const builderModeOptions = ["Beautiful Redesign", "Minimalist", "Luxury"];
+const builderModeStyle = ["Modern", "Traditional", "Contemporary"];
+const builderNumberOfDesigns = [1, 2, 3, 4];
+const builderAiIntervention = [1, 2, 3, 4];
+
+export {  DASHBOARD_NAVIGATION, builderAiIntervention, builderModeOptions, builderHouseAngle, builderModeStyle, builderNumberOfDesigns };

@@ -1,12 +1,12 @@
 import { FormControl, FormLabel, Select, MenuItem, SelectChangeEvent } from "@mui/material";
 
-interface DynamicSelectProps {
+export interface DynamicSelectProps {
   label: string;
   id: string;
   name: string;
   value: string | number;
   options: (string | number)[];
-  onChange: (event: SelectChangeEvent<string | number>) => void;
+  onChange: (event: SelectChangeEvent<string | number> | React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
 }
 
 const DynamicSelect: React.FC<DynamicSelectProps> = ({ label, id, name, value, options, onChange }) => {
@@ -18,9 +18,7 @@ const DynamicSelect: React.FC<DynamicSelectProps> = ({ label, id, name, value, o
             name={name} 
             value={value} 
             onChange={onChange} 
-            sx={{
-                svg: { color: "grey.500" }, // Change to your desired color
-            }}
+            sx={{ svg: { color: "grey.500" }}}
         >
         {options.map((option) => (
           <MenuItem key={option} value={option}>
