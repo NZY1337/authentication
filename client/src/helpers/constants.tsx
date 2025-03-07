@@ -6,8 +6,8 @@ import UserIcon from '@mui/icons-material/Person';
 
 const DASHBOARD_NAVIGATION: Navigation = [
     {
-        segment: 'dashboard',
-        title: 'Dashboard',
+        segment: 'builder',
+        title: 'Builder',
         icon: <DashboardIcon />,
     },
     {

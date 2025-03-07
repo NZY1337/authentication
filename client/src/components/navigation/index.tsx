@@ -26,11 +26,12 @@ const AppBarContainer = styled(AppBar)(({ theme }) => ({
 
 const Navigation: React.FC = () => {
     return (
-        <AppBarContainer>
+        <AppBarContainer> no
             <Container>
                 <MenuDrawer />
                 
-                <Toolbar>
+                <Toolbar sx={{backgroundColor: '#000', height: '80px', mt: 2, borderRadius: 2 }}>
+                {/* <Toolbar> */}
                     <Logo />
                                                                     
                     <Box sx={{ display: { xs: "none", md: "flex" }}}>

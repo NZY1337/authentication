@@ -14,7 +14,7 @@ import dashboardTheme from './themeContext';
 // https://mui.com/store/previews/devias-kit/ :: example
 
 export default function Dashboard() {
-  const { user, logoutUser  } = useAppContext();
+  const { user, logoutUser } = useAppContext();
   const navigate = useNavigate();
 
   const authentication = useMemo(() => {
@@ -28,7 +28,7 @@ export default function Dashboard() {
     };
   }, [logoutUser, navigate]);
 
-  const router = useDemoRouter('/dashboard');
+  const router = useDemoRouter('/builder');
   
   return (
     <AppProvider

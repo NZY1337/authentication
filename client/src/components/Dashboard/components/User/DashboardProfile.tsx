@@ -13,10 +13,9 @@ import Divider from "@mui/material/Divider";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import fetchData from "../../../../utils/fetchData";
 import { useAppContext } from "../../../../context/AppContext";
-
 import { UserInterface } from "../../../../context/AppContext";
 
-export default function ProfileDashboard() {
+export default function DashboardProfile() {
   const { user, setUser } = useAppContext();
 
   const [name, setName] = useState("");

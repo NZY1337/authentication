@@ -56,7 +56,6 @@ const dashboardTheme = createTheme({
     body2: {
       fontFamily: 'Poppins, serif',
       fontWeight: 400,
-      
     },
     caption: {
       fontFamily: 'Poppins, serif',

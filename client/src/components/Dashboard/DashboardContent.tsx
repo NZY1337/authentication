@@ -1,14 +1,15 @@
 import Typography from '@mui/material/Typography';
 import { Container } from "@mui/material";
-import ProfileDashboard from './components/User/ProfileDashboard';
+import ProfileDashboard from './components/User/DashboardProfile';
+import DashboardBuilder from './components/Builder/DashboardBuilder';
 
 function DashboardContent({ pathname }: { pathname: string }) {
     const renderTitle = () => {
         switch (pathname) {
           case '/profile':
             return 'Profile';
-          case '/dashboard':
-            return 'Dashboard';
+          case '/builder':
+            return 'Builder';
           case '/orders':
             return 'Orders';
           case '/reports':
@@ -22,6 +23,9 @@ function DashboardContent({ pathname }: { pathname: string }) {
       switch (pathname) {
         case '/profile':
           return <ProfileDashboard />;
+
+          case '/builder':
+            return <DashboardBuilder />;
         default:
           return null;
       }

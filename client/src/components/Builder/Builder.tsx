@@ -7,9 +7,7 @@ const Builder = () => {
   return (
     <Container maxWidth={false} 
         sx={{
-        // height: '100vh',
         p: '8rem 0rem',
-        backgroundColor: '#1E1E1E',
         display: 'flex',
         justifyContent: 'center',
         flexDirection: 'column',
@@ -19,7 +17,7 @@ const Builder = () => {
         <Container>
             <Grid container justifyContent={"center"} spacing={3}>
                 <Grid size={{ xs: 12, md: 6, lg: 12 }}>
-                    <Typography variant="h1" textAlign={"center"} sx={{ mb: 3, borderRadius: '8px', fontWeight: 'bold' }}>
+                    <Typography variant="h1" textAlign={"center"} sx={{ mb: 3, borderRadius: '8px', fontWeight: 'bold', }}>
                         Create Now
                     </Typography>
                 </Grid>
