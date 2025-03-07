@@ -26,7 +26,7 @@ const AppBarContainer = styled(AppBar)(({ theme }) => ({
 
 const Navigation: React.FC = () => {
     return (
-        <AppBarContainer> no
+        <AppBarContainer>
             <Container>
                 <MenuDrawer />
                 

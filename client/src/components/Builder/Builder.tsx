@@ -1,44 +1,28 @@
-import { Typography, Container } from '@mui/material';
-import { Grid2 as Grid  } from "@mui/material";
-import FormBuilder from './FormBuilder';
-
+import AIBuilder from './AIBuilder';
+import SectionWrapper from '../UtilityComponents.tsx/SectionWrapper';
+import PulsatingIconTitleWrapper from '../UtilityComponents.tsx/PulsatingIconTitleWrapper/PulsatingIconTItleWrapper';
 
 const Builder = () => {
   return (
-    <Container maxWidth={false} 
-        sx={{
-        p: '8rem 0rem',
-        display: 'flex',
-        justifyContent: 'center',
-        flexDirection: 'column',
-        color: '#fff',
-        textAlign: 'center',
-    }}>
-        <Container>
-            <Grid container justifyContent={"center"} spacing={3}>
-                <Grid size={{ xs: 12, md: 6, lg: 12 }}>
-                    <Typography variant="h1" textAlign={"center"} sx={{ mb: 3, borderRadius: '8px', fontWeight: 'bold', }}>
-                        Create Now
-                    </Typography>
-                </Grid>
-
-                <Grid size={{ xs: 12, md: 6, lg: 6 }}>
-                    <Typography variant="body1" textAlign={"left"}>
-                        Create your dream interior space with AI-driven designs in any style: minimalistic, modern, baroque & more — tailored to your vision.
-                    </Typography>
-                </Grid>
-
-                <Grid size={{ xs: 12, md: 6, lg: 6 }}>
-                    <Typography variant="body1" textAlign={"right"}>
-                        Transform your space with AI-driven designs in any style: minimalistic, modern, baroque & more — tailored to your vision.
-                    </Typography>
-                </Grid>
-            </Grid>
-        </Container>
-        <Container maxWidth={"xl"}>
-            <FormBuilder />
-        </Container>
-    </Container>
+    <SectionWrapper 
+        justify='center'
+        innerWidth='xl' 
+        outerWidth={false} 
+        title={<SectionWrapper.Title variant="h1">Create Now</SectionWrapper.Title>}
+        subtitle1={ 
+            <SectionWrapper.Subtitle>
+                Create your dream interior space with AI-driven designs in any style: minimalistic, modern, baroque & more — tailored to your vision.
+            </SectionWrapper.Subtitle>
+        }
+        subtitle2={
+            <SectionWrapper.Subtitle>
+                Transform your space with AI-driven designs in any style: minimalistic, modern, baroque & more — tailored to your vision.
+            </SectionWrapper.Subtitle>
+        }
+    >
+        <PulsatingIconTitleWrapper />
+        <AIBuilder />
+    </SectionWrapper>
   );
 };
 

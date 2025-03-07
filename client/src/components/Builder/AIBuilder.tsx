@@ -17,7 +17,7 @@ import { DynamicSelectProps } from "../UtilityComponents.tsx/DynamicSelect";
 
 type OnchangeType = DynamicSelectProps['onChange'];
 
-const FormBuilder = () => {
+const AIBuilder = () => {
   const [preview, setPreview] = useState<string | null>(null);
   
   const [stateBuilder, setStateBuilder] = useState({
@@ -52,7 +52,7 @@ const FormBuilder = () => {
   };
 
   return (
-    <Grid spacing={3} container justifyContent="center" textAlign={"left"} sx={{ margin: "5rem 0" }}>
+    <Grid spacing={3} container justifyContent="center" textAlign={"left"} sx={{ margin: "2.5rem 0" }}>
       <Grid size={{ xs: 12, md: 6, lg: 6, xl: 8 }}>
         <Paper sx={{ padding: 3, backgroundColor: "#191B19", color: "#fff", borderRadius: 2 }}>
           <img
@@ -105,4 +105,4 @@ const FormBuilder = () => {
   );
 };
 
-export default FormBuilder;
+export default AIBuilder;

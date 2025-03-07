@@ -1,7 +1,7 @@
 import Typography from '@mui/material/Typography';
 import { Container } from "@mui/material";
 import ProfileDashboard from './components/User/DashboardProfile';
-import DashboardBuilder from './components/Builder/DashboardBuilder';
+import AIBuilder from '../Builder/AIBuilder';
 
 function DashboardContent({ pathname }: { pathname: string }) {
     const renderTitle = () => {
@@ -25,7 +25,7 @@ function DashboardContent({ pathname }: { pathname: string }) {
           return <ProfileDashboard />;
 
           case '/builder':
-            return <DashboardBuilder />;
+            return <AIBuilder />;
         default:
           return null;
       }
