@@ -8,14 +8,14 @@ const PulsatingIconTitle = ({
         selected,
     }: { title: string, animationDelay?: number, icon: React.ReactNode, selected: boolean }) => {
     
-    console.log(selected);
     return (
         <Box 
             display={'inline-flex'}
             padding={2} 
             borderRadius={2}
             sx={{
-                ...(selected ? { border: '5px solid #191B19', 
+                ...(selected ? { 
+                    border: '5px solid #191B19', 
                     borderStyle: 'ridge', 
                     backgroundColor: '#191B19',
                     opacity: '.9' 
@@ -45,6 +45,7 @@ const PulsatingIconTitle = ({
                     justifyContent: 'center',
                     position: 'relative',
                     fontSize: '1.25rem',
+                    zIndex: 1
                 }}
             >
                 <Box

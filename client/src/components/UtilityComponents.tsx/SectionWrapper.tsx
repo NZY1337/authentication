@@ -11,7 +11,8 @@ interface SectionWrapperInterface {
     title?: React.ReactNode,
     subtitle1?: React.ReactNode,
     subtitle2?: React.ReactNode,
-    justify?: 'start' | 'center' | 'flex-end'
+    justify?: 'start' | 'center' | 'flex-end',
+    sx?: object
 }
 
 interface TitleProps {
@@ -34,7 +35,7 @@ const Title = ({ children, variant }: TitleProps) => {
 
 const Subtitle = ({ children, variant }: SubtitleProps) => {
     return (
-        <Typography variant={variant} textAlign={"center"} sx={{ mb: 3, borderRadius: '8px' }}>
+        <Typography variant={variant} textAlign={"left"} sx={{ mb: 3, borderRadius: '8px' }}>
             {children}
         </Typography>
     );
@@ -48,9 +49,10 @@ const SectionWrapper = ({
     subtitle1,
     subtitle2,
     justify = 'start',
+    sx
 }: SectionWrapperInterface) => {
     return (
-        <Container maxWidth={outerWidth} sx={{ p: '6rem 0rem', textAlign: 'right' }}>
+        <Container maxWidth={outerWidth} sx={{ p: '6rem 0rem', ...sx }}>
             <Container maxWidth={innerWidth}>
                 <Grid container justifyContent={justify} spacing={3}>
                     {title && <Grid size={{ xs: 12, md: 12, lg: 12 }}>

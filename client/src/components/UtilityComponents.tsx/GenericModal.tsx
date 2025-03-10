@@ -11,17 +11,17 @@ interface GenericModalProps {
 
 const GenericModal = ({ children, open, onClose, onSubmit }: GenericModalProps) => {
     return (
-        <Dialog open={open ?? false} 
+        <Dialog 
+            open={open ?? false} 
             onClose={onClose}
             PaperProps={{ sx: { backgroundImage: 'none', minWidth: '600px' },
-                component: 'form',
-                onSubmit: async (event: React.FormEvent<HTMLFormElement>) => {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    if (onSubmit) {
-                        await onSubmit();
-                    }
-                },
+            component: 'form',
+            onSubmit: async (event: React.FormEvent<HTMLFormElement>) => {
+                event.preventDefault();
+                event.stopPropagation();
+                if (onSubmit) {
+                    await onSubmit();
+                }},
             }}>
                 {children}
         </Dialog>

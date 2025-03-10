@@ -7,6 +7,8 @@
 # text effects like wordpress
 https://react-type-animation.netlify.app/options
 
+# react compare
+npm install react-compare-image
 
 # WSWYG
 https://tiptap.dev/

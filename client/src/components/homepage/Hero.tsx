@@ -49,7 +49,7 @@ const Hero = () => {
 
                 <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-start', gap: 2 }}>
                     <Button variant='contained'>Get Started Now</Button>
-                    <Button sx={{color: 'orange'}} variant='text'>Request a Demo <ArrowRight /></Button>
+                    <Button sx={{color: 'orange'}} variant='outlined'>Request a Demo <ArrowRight /></Button>
                 </Box>
             </Box>
         </Container>

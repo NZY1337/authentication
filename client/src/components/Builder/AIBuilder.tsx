@@ -14,7 +14,6 @@ import DynamicSelect from "../UtilityComponents.tsx/DynamicSelect";
 import FileUpload from "../UtilityComponents.tsx/FileUpload";
 import { DynamicSelectProps } from "../UtilityComponents.tsx/DynamicSelect";
 
-
 type OnchangeType = DynamicSelectProps['onChange'];
 
 const AIBuilder = () => {
@@ -29,7 +28,6 @@ const AIBuilder = () => {
     customInstructions: "",
     useCustomInstructions: false,
   });
-
 
   const handleChange: OnchangeType = (event) => {
     const { name, value } = event.target;
@@ -54,7 +52,7 @@ const AIBuilder = () => {
   return (
     <Grid spacing={3} container justifyContent="center" textAlign={"left"} sx={{ margin: "2.5rem 0" }}>
       <Grid size={{ xs: 12, md: 6, lg: 6, xl: 8 }}>
-        <Paper sx={{ padding: 3, backgroundColor: "#191B19", color: "#fff", borderRadius: 2 }}>
+        <Paper sx={{ padding: 3, color: "#fff", borderRadius: 2 }}>
           <img
             src="https://images.pexels.com/photos/161758/governor-s-mansion-montgomery-alabama-grand-staircase-161758.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
             alt="AI"
@@ -64,7 +62,7 @@ const AIBuilder = () => {
       </Grid>
 
       <Grid size={{ xs: 12, md: 6, lg: 4, xl: 4 }}>
-        <Paper sx={{ padding: 3, backgroundColor: "#191B19", color: "#fff", borderRadius: 2 }}>
+        <Paper sx={{ padding: 3, color: "#fff", borderRadius: 2 }}>
           <Stack spacing={3} component="form" onSubmit={handleSubmit}>
             <Typography variant="h6">1. Upload Photo</Typography>
 

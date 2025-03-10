@@ -156,7 +156,7 @@ export default function Register() {
                 </FormControl>
                 
                 {loading && <CircularProgress size={20} color="primary" />}
-                            
+                
                 {error && <Typography component='p' fontSize={"small"} sx={{color: 'error.main'}}>{error}</Typography>}
             </Box>
 
