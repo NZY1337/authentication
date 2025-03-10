@@ -73,11 +73,9 @@ export function useAuth() {
     setLoading(false);                    
   }, []);
 
-
   const getUser = useCallback(async () => {
     setLoading(true);
     setUserLoading(true);
-
     const { resData, error } = await fetchData<null, GetUserResponse>({
       url: "/auth/user",
       method: "GET",
@@ -113,8 +111,9 @@ export function useAuth() {
     setLoading(false);
   };
 
+  
   useEffect(() => {
-      getUser();
+    getUser();
   }, []);
 
   return { user, error, loading, open, userLoading, handleClose, handleOpen, loginUser, getUser, setUser, setError, registerUser, logoutUser };

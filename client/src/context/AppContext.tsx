@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { createContext, useContext, ReactNode, SetStateAction, useEffect, useRef } from 'react';
+import React, { createContext, useContext, ReactNode, SetStateAction, useEffect, useRef, useMemo } from 'react';
 import { NavigateFunction } from 'react-router-dom';
 import { useAuth } from '../services/authentication/useAuth';
 import useSession from '../services/session/useSession';
@@ -66,8 +66,13 @@ interface AppProviderProps {
 
 export const AppProvider: React.FC<AppProviderProps> = ({ children }: AppProviderProps) => {
     const { user, error, loading, open, userLoading, loginUser, registerUser, getUser, logoutUser, setError, setUser, handleOpen, handleClose } = useAuth();
-    useSession({ handleOpen, logoutUser, user });
 
+    // we use user.id because we want to memoize the user object and session should run on login and logout - not when we update the entire
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const memoizedUser = useMemo(() => user, [user?.id]);
+
+    useSession({ handleOpen, logoutUser, user: memoizedUser });
+    
     const value = React.useMemo(() => ({
         user,
         error,
@@ -82,7 +87,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }: AppProvide
         setUser,
         handleOpen,
         handleClose,
-        }), [user, error, loading, open, userLoading ,loginUser, logoutUser, getUser, registerUser, setError, setUser, handleOpen, handleClose]
+        }), [user, error, loading, open, userLoading, loginUser, logoutUser, getUser, registerUser, setError, setUser, handleOpen, handleClose]
     );
 
     return (

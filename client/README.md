@@ -5,8 +5,10 @@
 <!-- https://swiperjs.com/demos#navigation -->
 
 # text effects like wordpress
-https://www.npmjs.com/package/react-typed 
+https://react-type-animation.netlify.app/options
 
+# react compare
+npm install react-compare-image
 
 # WSWYG
 https://tiptap.dev/

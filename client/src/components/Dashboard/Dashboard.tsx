@@ -4,19 +4,20 @@ import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../../context/AppContext';
 import { DASHBOARD_NAVIGATION } from '../../helpers/constants';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
-import { AppProvider, type Session } from '@toolpad/core/AppProvider';
+import { AppProvider, type Session, } from '@toolpad/core/AppProvider';
 import DashboardContent from './DashboardContent';
 import DashboardTitle from './DashboardTitle';
 import DashboardFooter from './DashboardFooter';
 import dashboardTheme from './themeContext';
+import { PageContainer } from '@toolpad/core/PageContainer';
 
 // https://mui.com/toolpad/core/react-dashboard-layout/?srsltid=AfmBOor80vsN0FvRmE_pISB6sVHhcnei4hFfLYkYDZxyqLlXsgsDKE7c :: DOCUMENTATION
 // https://mui.com/store/previews/devias-kit/ :: example
 
-
-export default function DashboardLayoutAccount() {
-  const { user, logoutUser  } = useAppContext();
+export default function Dashboard() {
+  const { user, logoutUser } = useAppContext();
   const navigate = useNavigate();
+  const router = useDemoRouter('/builder');
 
   const authentication = useMemo(() => {
     return {
@@ -28,8 +29,6 @@ export default function DashboardLayoutAccount() {
       },
     };
   }, [logoutUser, navigate]);
-
-  const router = useDemoRouter('/dashboard');
   
   return (
     <AppProvider
@@ -48,8 +47,10 @@ export default function DashboardLayoutAccount() {
         branding={{
             title: 'Auth Dashboard',
         }}>
-        <DashboardLayout  slots={{ sidebarFooter: DashboardFooter, appTitle: DashboardTitle }}>
-            <DashboardContent pathname={router.pathname} />
+        <DashboardLayout slots={{ sidebarFooter: DashboardFooter, appTitle: DashboardTitle }}>
+            <PageContainer pathname={router.pathname} maxWidth={false} >
+                <DashboardContent pathname={router.pathname} router={router} />
+            </PageContainer>
         </DashboardLayout>
     </AppProvider>
   );

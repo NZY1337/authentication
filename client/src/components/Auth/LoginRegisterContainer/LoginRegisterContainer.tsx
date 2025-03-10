@@ -4,7 +4,7 @@ import Navigation from '../../Navigation';
 import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../../../context/AppContext';
 import Content from '../LoginRegisterContent/Content';
-import CardModel from '../../Ux/Card/Card';
+import CardModel from '../../UtilityComponents.tsx/Card';
 
 export default function LoginRegisterContainer({ children }: { children: React.ReactNode }) {
     const { user } = useAppContext();

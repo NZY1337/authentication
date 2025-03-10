@@ -73,21 +73,22 @@ export const sendEmailNotification = async ({
 */
 
 export const generateToken = (userId: string): TokenResponse => {
-  const token = jwt.sign({ userId }, JWT_SECRET, { expiresIn: "1m" });
-  const refreshToken = jwt.sign({ userId }, JWT_SECRET, { expiresIn: "10m" });
+  const token = jwt.sign({ userId }, JWT_SECRET, { expiresIn: "15m" });
+  const refreshToken = jwt.sign({ userId }, JWT_SECRET, { expiresIn: "1d" });
     
   const options: CookieOptions = {
     httpOnly: true, // Prevent client-side access to the cookie
     secure: process.env.NODE_ENV === "production", // Use secure cookies in production
     // maxAge: 1 * 24 * 60 * 60 * 1000, // 1 day
-    maxAge: 1 * 60 * 1000, // 1 minute
+    maxAge: 15 * 60 * 1000, // 15 minute
   };
 
   const refreshOptions: CookieOptions = {
     httpOnly: true, // Prevent client-side access to the cookie
     secure: process.env.NODE_ENV === "production", // Use secure cookies in production
-    // maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-    maxAge: 10 * 60 * 1000, // 10 minute
+    // maxAge: 15 * 60 * 1000, // 10 minute
+    maxAge: 1 * 24 * 60 * 60 * 1000, // 1 day
+    
   };
 
   return { token, refreshToken, options, refreshOptions };

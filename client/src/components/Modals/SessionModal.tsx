@@ -4,7 +4,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { useAppContext } from '../../context/AppContext';
-import GenericModal from './GenericModal';
+import GenericModal from '../UtilityComponents.tsx/GenericModal';
 
 const SessionModal = () => {
     const { open, handleClose } = useAppContext();
