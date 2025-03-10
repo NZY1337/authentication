@@ -1,4 +1,4 @@
-import SectionWrapper from '../UtilityComponents.tsx/SectionWrapper';
+import SectionWrapper from '../UtilityComponents/SectionWrapper';
 import {
     Grid2 as Grid,
     Typography,

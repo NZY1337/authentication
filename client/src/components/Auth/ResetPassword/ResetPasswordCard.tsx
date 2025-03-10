@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 import { CircularProgress } from '@mui/material';
 import IconButton from '@mui/material/IconButton'
 import InputAdornment from '@mui/material/InputAdornment'
-import CardModel from '../../UtilityComponents.tsx/Card';
+import CardModel from '../../UtilityComponents/Card';
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { Link as RouterLink} from 'react-router-dom';
 

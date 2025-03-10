@@ -1,6 +1,6 @@
 import AIBuilder from './AIBuilder';
-import SectionWrapper from '../UtilityComponents.tsx/SectionWrapper';
-import PulsatingIconTitleWrapper from '../UtilityComponents.tsx/PulsatingIconTitleWrapper/PulsatingIconTItleWrapper';
+import SectionWrapper from '../UtilityComponents/SectionWrapper';
+import PulsatingIconTitleWrapper from '../UtilityComponents/PulsatingIconTitleWrapper/PulsatingIconTItleWrapper';
 
 const Builder = () => {
   return (
@@ -23,7 +23,7 @@ const Builder = () => {
             </SectionWrapper.Subtitle>
         }>
         <PulsatingIconTitleWrapper /> 
-        <AIBuilder />
+        <AIBuilder isHomepage={true} />
     </SectionWrapper>
   );                
 };

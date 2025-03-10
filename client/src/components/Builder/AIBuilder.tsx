@@ -4,21 +4,24 @@ import {
   Stack,
   Button,
   TextField,
-  Typography,
   Checkbox,
   FormControlLabel,
   Paper,
 } from "@mui/material";
 import { builderAiIntervention, builderHouseAngle, builderModeStyle, builderModeOptions,  builderNumberOfDesigns } from "../../helpers/constants";
-import DynamicSelect from "../UtilityComponents.tsx/DynamicSelect";
-import FileUpload from "../UtilityComponents.tsx/FileUpload";
-import { DynamicSelectProps } from "../UtilityComponents.tsx/DynamicSelect";
+import DynamicSelect from "../UtilityComponents/DynamicSelect";
+import FileUpload from "../UtilityComponents/FileUpload";
+import { DynamicSelectProps } from "../UtilityComponents/DynamicSelect";
 
 type OnchangeType = DynamicSelectProps['onChange'];
 
-const AIBuilder = () => {
-  const [preview, setPreview] = useState<string | null>(null);
-  
+interface AIBuilderProps {
+  isHomepage?: boolean;
+  preview?: string | null;
+  setPreview?: React.Dispatch<React.SetStateAction<string | null>>;
+}
+
+const AIBuilder = ({ isHomepage = false, preview, setPreview }: AIBuilderProps) => {
   const [stateBuilder, setStateBuilder] = useState({
     houseAngle: "side of house",
     mode: "Beautiful Redesign",
@@ -49,29 +52,37 @@ const AIBuilder = () => {
     event.preventDefault();
   };
 
+  const order = isHomepage ? 0 : 1;
+
   return (
     <Grid spacing={3} container justifyContent="center" textAlign={"left"} sx={{ margin: "2.5rem 0" }}>
-      <Grid size={{ xs: 12, md: 6, lg: 6, xl: 8 }}>
-        <Paper sx={{ padding: 3, color: "#fff", borderRadius: 2 }}>
-          <img
-            src="https://images.pexels.com/photos/161758/governor-s-mansion-montgomery-alabama-grand-staircase-161758.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-            alt="AI"
-            style={{ width: "100%", height: "100%" }}
-          />
-        </Paper>
-      </Grid>
+        <Grid order={order} size={{ xs: 12, md: 6, lg: 6, xl: 8 }}>
+            <Paper sx={{ padding: 3, color: "#fff", borderRadius: 2 }}>
+                {preview ? 
+                    <img
+                        src={preview}
+                        alt="AI"
+                        style={{ width: "100%", height: "100%" }}
+                    /> :
+
+                    <img
+                        src="https://images.pexels.com/photos/161758/governor-s-mansion-montgomery-alabama-grand-staircase-161758.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                        alt="AI"
+                        style={{ width: "100%", height: "100%" }}
+                    />
+                }
+            </Paper>
+        </Grid>
 
       <Grid size={{ xs: 12, md: 6, lg: 4, xl: 4 }}>
         <Paper sx={{ padding: 3, color: "#fff", borderRadius: 2 }}>
           <Stack spacing={3} component="form" onSubmit={handleSubmit}>
-            <Typography variant="h6">1. Upload Photo</Typography>
 
-            <FileUpload preview={preview} setPreview={setPreview} />
+            {isHomepage && <>
+                <FileUpload preview={preview} setPreview={setPreview} />
+            </>}
               
-            <Typography variant="h6">2. Design</Typography>
-
             <DynamicSelect label="House Angle" id="builder-house-angle" name="houseAngle" value={stateBuilder.houseAngle} options={builderHouseAngle} onChange={handleChange} />
-
             <DynamicSelect label="Mode" id="builder-mode" name="mode" value={stateBuilder.mode} options={builderModeOptions} onChange={handleChange} />
             <DynamicSelect label="Style" id="builder-style" name="style" value={stateBuilder.style} options={builderModeStyle} onChange={handleChange} />
             <DynamicSelect label="Number of Designs" id="builder-design-number" name="numberOfDesigns" value={stateBuilder.numberOfDesigns} options={builderNumberOfDesigns} onChange={handleChange} />

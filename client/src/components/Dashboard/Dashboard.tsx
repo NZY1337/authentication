@@ -47,8 +47,18 @@ export default function Dashboard() {
         branding={{
             title: 'Auth Dashboard',
         }}>
-        <DashboardLayout slots={{ sidebarFooter: DashboardFooter, appTitle: DashboardTitle }}>
-            <PageContainer pathname={router.pathname} maxWidth={false} >
+        <DashboardLayout 
+        sx={{
+            background: `linear-gradient(
+              rgba(0, 0, 0, 0.2),
+              rgba(0, 0, 0, 0.9)
+            ), url("https://images.pexels.com/photos/1260727/pexels-photo-1260727.jpeg")`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+          }}
+        slots={{ sidebarFooter: DashboardFooter, appTitle: DashboardTitle }}>
+            <PageContainer pathname={router.pathname}>
                 <DashboardContent pathname={router.pathname} router={router} />
             </PageContainer>
         </DashboardLayout>
