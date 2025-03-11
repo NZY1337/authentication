@@ -29,9 +29,9 @@ const RENDER_EXTERIOR_STRUCTURES_LABEL = "Render Exterior Structures";
 const ROTATION = [90, 180, 270, 360];
 
 const solutions = [
-    { label: VIRTUAL_STAGING_LABEL, icon: <SofaIcon />, selected: true },
+    { label: VIRTUAL_STAGING_LABEL, icon: <SofaIcon /> },
     { label: REDESIGN_FURNISHED_ROOMS_LABEL, icon: <ChairIcon /> },
-    { label: EMPTY_YOUR_SPACE_LABEL, icon: <DeleteIcon /> },
+    { label: EMPTY_YOUR_SPACE_LABEL, icon: <DeleteIcon />, selected: true },
     { label: LANDSCAPING_LABEL, icon: <ParkIcon /> },
     { label: RENDER_EXTERIOR_STRUCTURES_LABEL, icon: <HomeIcon /> },
 ];
@@ -48,6 +48,11 @@ const DASHBOARD_NAVIGATION: Navigation = [
                 icon: <DashboardIcon />,
             },
             {
+                segment: 'empty-your-space',
+                title: EMPTY_YOUR_SPACE_LABEL,
+                icon: <DescriptionOutlined />,
+            },
+            {
                 segment: 'virtual-staging',
                 title: VIRTUAL_STAGING_LABEL,
                 icon: <DescriptionOutlined />,
@@ -57,11 +62,7 @@ const DASHBOARD_NAVIGATION: Navigation = [
                 title: REDESIGN_FURNISHED_ROOMS_LABEL,
                 icon: <DescriptionOutlined />,
             },
-            {
-                segment: 'empty-your-space',
-                title: EMPTY_YOUR_SPACE_LABEL,
-                icon: <DescriptionOutlined />,
-            },
+            
             {
                 segment: 'landscaping',
                 title: LANDSCAPING_LABEL,
@@ -146,5 +147,6 @@ export {
     builderNumberOfDesigns,
     goodPhotosData,
     badPhotosData,
-    solutions
+    solutions,
+    EMPTY_YOUR_SPACE_LABEL
 };

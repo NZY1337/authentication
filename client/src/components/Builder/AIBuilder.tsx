@@ -77,11 +77,8 @@ const AIBuilder = ({ isHomepage = false, preview, setPreview }: AIBuilderProps) 
       <Grid size={{ xs: 12, md: 6, lg: 4, xl: 4 }}>
         <Paper sx={{ padding: 3, color: "#fff", borderRadius: 2 }}>
           <Stack spacing={3} component="form" onSubmit={handleSubmit}>
+            {isHomepage && <FileUpload preview={preview} setPreview={setPreview} />}
 
-            {isHomepage && <>
-                <FileUpload preview={preview} setPreview={setPreview} />
-            </>}
-              
             <DynamicSelect label="House Angle" id="builder-house-angle" name="houseAngle" value={stateBuilder.houseAngle} options={builderHouseAngle} onChange={handleChange} />
             <DynamicSelect label="Mode" id="builder-mode" name="mode" value={stateBuilder.mode} options={builderModeOptions} onChange={handleChange} />
             <DynamicSelect label="Style" id="builder-style" name="style" value={stateBuilder.style} options={builderModeStyle} onChange={handleChange} />
@@ -90,7 +87,7 @@ const AIBuilder = ({ isHomepage = false, preview, setPreview }: AIBuilderProps) 
 
             <FormControlLabel
               control={<Checkbox checked={stateBuilder.useCustomInstructions} onChange={handleCheckboxChange} color="primary" />}
-              label="Custom AI instructions" />
+              label="Custom AI instructions"/>
 
             {stateBuilder.useCustomInstructions && (
               <TextField

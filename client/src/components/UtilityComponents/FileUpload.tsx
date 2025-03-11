@@ -17,6 +17,7 @@ const FileUpload = ({ preview, setPreview }: FileUploadProps) => {
   const notifications = useNotifications();
   
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault();
     const file = event.target.files?.[0];
 
     if (file) {
