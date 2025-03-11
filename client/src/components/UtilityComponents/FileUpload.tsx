@@ -7,11 +7,14 @@ import { Rotate90DegreesCcw } from "@mui/icons-material";
 import { ROTATION } from "../../helpers/constants";
 import { BuilderOverviewProps } from "../Dashboard/components/Builder/BuilderOverview";
 
+import { useNotifications } from '@toolpad/core/useNotifications';
+
 type FileUploadProps = Pick<BuilderOverviewProps, 'preview' | 'setPreview'>
 
 const FileUpload = ({ preview, setPreview }: FileUploadProps) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [rotation, setRotation] = useState(ROTATION);
+  const notifications = useNotifications();
   
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -19,7 +22,10 @@ const FileUpload = ({ preview, setPreview }: FileUploadProps) => {
     if (file) {
       // Validate file type
       if (!["image/png", "image/jpeg", "image/jpg"].includes(file.type)) {
-        alert("Only PNG, JPEG, and JPG files are allowed.");
+        notifications.show('Only PNG, JPEG, and JPG files are allowed!', {
+            severity: 'error',
+            autoHideDuration: 3000,
+          });
         return;
       }
 

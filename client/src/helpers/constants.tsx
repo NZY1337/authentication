@@ -72,7 +72,7 @@ const DASHBOARD_NAVIGATION: Navigation = [
                 title: RENDER_EXTERIOR_STRUCTURES_LABEL,
                 icon: <DescriptionOutlined />,
             },
-          ],
+        ],
     },
     {
         segment: 'orders',

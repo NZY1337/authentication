@@ -5,6 +5,7 @@ import { useAppContext } from '../../context/AppContext';
 import { DASHBOARD_NAVIGATION } from '../../helpers/constants';
 import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 import { AppProvider, type Session, } from '@toolpad/core/AppProvider';
+import { NotificationsProvider } from '@toolpad/core/useNotifications';
 import DashboardContent from './DashboardContent';
 import DashboardTitle from './DashboardTitle';
 import DashboardFooter from './DashboardFooter';
@@ -51,24 +52,32 @@ export default function Dashboard() {
             title: 'Auth Dashboard',
         }}
         >
-        <DashboardLayout 
-            sx={{
-                background: `linear-gradient(rgba(0, 0, 0, 0.2),  rgba(0, 0, 0, 0.9)), url("https://images.pexels.com/photos/1260727/pexels-photo-1260727.jpeg")`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                backgroundRepeat: 'no-repeat',
-                '.css-1xraqll-MuiList-root li:not(:first-child)': preview
-                ? {}
-                : {
-                    color: 'gray',
-                    pointerEvents: 'none',
-                  }
+        <NotificationsProvider 
+            slotProps={{
+                snackbar: {
+                  anchorOrigin: { vertical: 'bottom', horizontal: 'right' },
+                },
             }}
-            slots={{ sidebarFooter: DashboardFooter, appTitle: DashboardTitle }}>
-                <PageContainer pathname={router.pathname}>
-                    <DashboardContent router={router} preview={preview} setPreview={setPreview}/>
-                </PageContainer>
-        </DashboardLayout>
+        >
+            <DashboardLayout 
+                sx={{
+                    background: `linear-gradient(rgba(0, 0, 0, 0.2),  rgba(0, 0, 0, 0.9)), url("https://images.pexels.com/photos/1260727/pexels-photo-1260727.jpeg")`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    backgroundRepeat: 'no-repeat',
+                    '.css-1xraqll-MuiList-root li:not(:first-child)': preview
+                    ? {}
+                    : {
+                        color: 'gray',
+                        pointerEvents: 'none',
+                    }
+                }}
+                slots={{ sidebarFooter: DashboardFooter, appTitle: DashboardTitle }}>
+                    <PageContainer pathname={router.pathname}>
+                        <DashboardContent router={router} preview={preview} setPreview={setPreview}/>
+                    </PageContainer>
+            </DashboardLayout>
+        </NotificationsProvider>
     </AppProvider>
   );
 }
