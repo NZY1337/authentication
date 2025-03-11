@@ -14,10 +14,10 @@ export interface BuilderOverviewProps {
     router: Router;
     setSelectedSolution: React.Dispatch<React.SetStateAction<string>>;
     selectedSolution: string;
-  }
+}
 
 const BuilderOverview = ({ preview, setPreview, router, selectedSolution, setSelectedSolution }: BuilderOverviewProps) => {
-    const [openPhotoGuid, setOpenPhotoGuide] = useState<boolean>(false);
+    const [openPhotoGuide, setOpenPhotoGuide] = useState<boolean>(false);
     let selectedNavItem: NavigationItem | undefined;
     
     if ('children' in DASHBOARD_NAVIGATION[0]) {
@@ -52,7 +52,7 @@ const BuilderOverview = ({ preview, setPreview, router, selectedSolution, setSel
                 </Grid>
             </Grid>
 
-            <PhotoGuideModalBuilder open={openPhotoGuid} handleClose={() => setOpenPhotoGuide(false)}>
+            <PhotoGuideModalBuilder open={openPhotoGuide} handleClose={() => setOpenPhotoGuide(false)}>
                 <PhotoGuidelines /> 
             </PhotoGuideModalBuilder>
         </>

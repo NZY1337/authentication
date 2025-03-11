@@ -55,24 +55,24 @@ const AIBuilder = ({ isHomepage = false, preview, setPreview }: AIBuilderProps) 
   const order = isHomepage ? 0 : 1;
 
   return (
-    <Grid spacing={3} container justifyContent="center" textAlign={"left"} sx={{ margin: "2.5rem 0" }}>
-        <Grid order={order} size={{ xs: 12, md: 6, lg: 6, xl: 8 }}>
-            <Paper sx={{ padding: 3, color: "#fff", borderRadius: 2 }}>
-                {preview ? 
-                    <img
-                        src={preview}
-                        alt="AI"
-                        style={{ width: "100%", height: "100%" }}
-                    /> :
+    <Grid spacing={3} container justifyContent="center" textAlign={"left"} >
+      <Grid order={order} size={{ xs: 12, md: 6, lg: 6, xl: 8 }}>
+        <Paper sx={{ padding: 3, color: "#fff", borderRadius: 2 }}>
+            {preview ? 
+                <img
+                    src={preview}
+                    alt="AI"
+                    style={{ width: "100%", height: "100%", maxHeight: "590px", objectFit: 'contain' }}
+                /> :
 
-                    <img
-                        src="https://images.pexels.com/photos/161758/governor-s-mansion-montgomery-alabama-grand-staircase-161758.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-                        alt="AI"
-                        style={{ width: "100%", height: "100%" }}
-                    />
-                }
-            </Paper>
-        </Grid>
+                <img
+                    src="https://images.pexels.com/photos/161758/governor-s-mansion-montgomery-alabama-grand-staircase-161758.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
+                    alt="AI"
+                    style={{ width: "100%", height: "100%", objectFit: 'contain' }}
+                />
+            }
+        </Paper>
+      </Grid>
 
       <Grid size={{ xs: 12, md: 6, lg: 4, xl: 4 }}>
         <Paper sx={{ padding: 3, color: "#fff", borderRadius: 2 }}>

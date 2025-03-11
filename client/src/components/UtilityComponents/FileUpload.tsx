@@ -4,9 +4,14 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Rotate90DegreesCcw } from "@mui/icons-material";
 
-const FileUpload = ({ preview, setPreview }) => {
+import { ROTATION } from "../../helpers/constants";
+import { BuilderOverviewProps } from "../Dashboard/components/Builder/BuilderOverview";
+
+type FileUploadProps = Pick<BuilderOverviewProps, 'preview' | 'setPreview'>
+
+const FileUpload = ({ preview, setPreview }: FileUploadProps) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const [rotation, setRotation] = useState([90, 180, 270, 360]);
+  const [rotation, setRotation] = useState(ROTATION);
   
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -27,6 +32,7 @@ const FileUpload = ({ preview, setPreview }) => {
 
   const handleRemoveImage = () => {
     setPreview(null);
+    setRotation(ROTATION);
     if (fileInputRef.current) {
       fileInputRef.current.value = ""; // Reset file input
     }
@@ -67,7 +73,7 @@ const FileUpload = ({ preview, setPreview }) => {
           onClick={handleClick}
         >
           <CloudUploadIcon sx={{ fontSize: 40, mb: 1 }} />
-          <Typography variant="body2">Upload an image here</Typography>
+          <Typography variant="body2">Upload an image here to get started & unlock all <b>A.I. features</b>.</Typography>
         </Stack>
       ) : (
         <Stack position="relative" width={"100%"} height={"100%"} overflow={"hidden"}>

@@ -36,7 +36,7 @@ const PulsatingIconTitleWrapper = () => {
     };
 
     return (
-        <Grid container sx={{ mt: 15 }} justifyContent={'center'} p={0}>
+        <Grid container sx={{ mt: 5 }} justifyContent={'center'} p={0}>
             {activeIcon.map((iconData) => (
                 <Grid
                     p={0}

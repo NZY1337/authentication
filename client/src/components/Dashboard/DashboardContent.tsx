@@ -7,12 +7,17 @@ import { type Router } from '@toolpad/core';
 import { solutions } from '../../helpers/constants';
 import AIBuilder from '../Builder/AIBuilder';
 
-function DashboardContent({ pathname, router }: { pathname: string, router: Router }) {
-    const [preview, setPreview] = useState<string | null>(null);
+interface DashboardContentProps {
+    router: Router;
+    preview: string | null;
+    setPreview: React.Dispatch<React.SetStateAction<string | null>>;
+  }
+
+function DashboardContent({ router, preview, setPreview }: DashboardContentProps) {
     const [selectedSolution, setSelectedSolution] = useState(solutions[0].label);
 
     const renderContent = () => {
-      switch (pathname) {
+      switch (router.pathname) {
         case '/profile':
           return <ProfileDashboard  />;
 

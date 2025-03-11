@@ -19,13 +19,14 @@ import ChairIcon from "@mui/icons-material/Chair";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ParkIcon from "@mui/icons-material/Park";
 import HomeIcon from "@mui/icons-material/Home";
-import { LockRounded } from '@mui/icons-material';
 
 const VIRTUAL_STAGING_LABEL = "Virtual Staging";
 const REDESIGN_FURNISHED_ROOMS_LABEL = "Redesign Furnished Rooms";
 const EMPTY_YOUR_SPACE_LABEL = "Empty Your Space";
 const LANDSCAPING_LABEL = "Landscaping";
 const RENDER_EXTERIOR_STRUCTURES_LABEL = "Render Exterior Structures";
+
+const ROTATION = [90, 180, 270, 360];
 
 const solutions = [
     { label: VIRTUAL_STAGING_LABEL, icon: <SofaIcon />, selected: true },
@@ -54,7 +55,7 @@ const DASHBOARD_NAVIGATION: Navigation = [
             {
                 segment: 'redesigned-furnished-rooms',
                 title: REDESIGN_FURNISHED_ROOMS_LABEL,
-                icon: <LockRounded />,
+                icon: <DescriptionOutlined />,
             },
             {
                 segment: 'empty-your-space',
@@ -129,7 +130,6 @@ const badPhotosData = [
     }
 ];
 
-
 const builderHouseAngle = ["side of house", "front of house", "back of house"];
 const builderModeOptions = ["Beautiful Redesign", "Minimalist", "Luxury"];
 const builderModeStyle = ["Modern", "Traditional", "Contemporary"];
@@ -138,6 +138,7 @@ const builderAiIntervention = [1, 2, 3, 4];
 
 export {  
     DASHBOARD_NAVIGATION, 
+    ROTATION,
     builderAiIntervention, 
     builderModeOptions, 
     builderHouseAngle, 
