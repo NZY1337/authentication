@@ -7,7 +7,6 @@ import {
 } from "../../context/AppContext";
 import fetchData from "../../utils/fetchData";
 
-
 interface LoginResponse {
   user: UserInterface;
   token: string;
@@ -27,8 +26,8 @@ export function useAuth() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
+  const [userLoading, setUserLoading] = useState<boolean>(true); 
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleOpen = useCallback(() => {
     setOpen(true);
   },[]);
@@ -36,17 +35,6 @@ export function useAuth() {
   const handleClose = useCallback(() => {
     setOpen(false);
   },[]);
-
-  const extendSession = async () => {
-    const { error } = await fetchData<null, null>({
-        url: "/auth/refresh-token",
-        method: "POST",
-    });
-
-    if (error) return setError(error);
-    await getUser();    
-    handleClose();
-  } 
 
   const loginUser = async (data: UserLoginInterface, navigate: NavigateFunction) => {
     setLoading(true);
@@ -80,16 +68,14 @@ export function useAuth() {
     } else {
       setUser(null);
       setError(null);
-      handleClose();
     }
 
     setLoading(false);                    
-  }, [handleClose]);
-
+  }, []);
 
   const getUser = useCallback(async () => {
     setLoading(true);
-
+    setUserLoading(true);
     const { resData, error } = await fetchData<null, GetUserResponse>({
       url: "/auth/user",
       method: "GET",
@@ -100,8 +86,10 @@ export function useAuth() {
     } else if (resData) {
         setUser(resData.user);
     }
+
     setLoading(false);
-  },[]);
+    setUserLoading(false);
+  },[setUser, setError, setLoading]);
 
   const registerUser = async (data: UserRegisterInterface) => {
     setLoading(true);
@@ -123,11 +111,10 @@ export function useAuth() {
     setLoading(false);
   };
 
+  
   useEffect(() => {
-    if (!user) {
-        getUser(); // Initial check
-    }
-}, [user, getUser]); 
+    getUser();
+  }, []);
 
-  return { user, error, loading, open, handleClose, extendSession, loginUser, getUser, setUser, setError, registerUser, logoutUser };
+  return { user, error, loading, open, userLoading, handleClose, handleOpen, loginUser, getUser, setUser, setError, registerUser, logoutUser };
 }

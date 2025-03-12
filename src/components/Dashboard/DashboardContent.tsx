@@ -1,38 +1,80 @@
-import Typography from '@mui/material/Typography';
-import { Container } from "@mui/material";
-import UserDashboard from './components/User/UserDashboard';
+import { useState, useEffect } from 'react';
+import ProfileDashboard from './components/User/DashboardProfile';
+import BuilderOverview from './components/Builder/BuilderOverview';
+import { type Router } from '@toolpad/core';
+import { solutions, EMPTY_YOUR_SPACE_LABEL } from '../../helpers/constants';
+import AIBuilder from '../Builder/AIBuilder';
+import fetchData from '../../utils/fetchData';
 
-function DashboardContent({ pathname }: { pathname: string }) {
-    const renderTitle = () => {
-        switch (pathname) {
-          case '/profile':
-            return 'Profile';
-          case '/dashboard':
-            return 'Dashboard';
-          case '/orders':
-            return 'Orders';
-          case '/reports':
-              return 'Reports';
-          default:
-            return null;
+interface DashboardContentProps {
+    router: Router;
+    preview: string | null;
+    setPreview: React.Dispatch<React.SetStateAction<string | null>>;
+}
+
+function DashboardContent({ router, preview, setPreview }: DashboardContentProps) {
+    const [selectedSolution, setSelectedSolution] = useState(() => {
+        const sol = solutions.find(solution => solution.selected);
+        return sol ? sol.label : EMPTY_YOUR_SPACE_LABEL;
+    });
+
+    const [spaceType, setSpaceType] = useState<object | null>(null);
+
+    useEffect(() => {
+        const getSpaceType = async () => {
+            const { resData, error } = await fetchData<null, { spaceType: object }>({
+                url: '/builder/get-space-type',
+                method: 'GET',
+            });
+    
+            if (error) {
+                return console.error(error);
+            }
+    
+            if (resData) {
+                setSpaceType(resData.spaceType);
+                // console.log(resData)
+            }
         }
-    }
+
+        getSpaceType();
+    },[])
 
     const renderContent = () => {
-      switch (pathname) {
-        case '/profile':
-          return <UserDashboard />;
+      switch (router.pathname) {
+        case '/dashboard/profile':
+          return <ProfileDashboard />;
+
+        case '/dashboard/empty-your-space':
+            return <AIBuilder preview={preview} setPreview={setPreview} spaceType={spaceType} />;
+
+        case '/builder/virtual-staging':
+          return <AIBuilder preview={preview} setPreview={setPreview} />;
+
+        case '/builder/redesigned-furnished-rooms':
+            return <AIBuilder preview={preview} setPreview={setPreview} />;
+
+        case '/dashboard/landscaping':
+            return <AIBuilder preview={preview} setPreview={setPreview} />;
+
+        case '/builder/render-exterior-structures':
+            return <AIBuilder preview={preview} setPreview={setPreview} />;
+
+        case '/dashboard':
+            return <BuilderOverview 
+                    setSelectedSolution={setSelectedSolution} 
+                    selectedSolution={selectedSolution} 
+                    preview={preview} 
+                    setPreview={setPreview} 
+                    router={router} 
+                />;
+
         default:
           return null;
       }
     }
-    
-    return (
-      <Container maxWidth={false} sx={{py: 4}}>
-        <Typography variant="h5" marginBottom={4} gutterBottom>{renderTitle()}</Typography>
-        {renderContent()}
-      </Container>
-    );
+
+    return renderContent()
   }
 
   export default DashboardContent

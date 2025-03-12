@@ -53,11 +53,11 @@ const dashboardTheme = createTheme({
     },
     body1: {
       fontFamily: 'Poppins, serif',
+      fontSize: '.9rem'
     },
     body2: {
       fontFamily: 'Poppins, serif',
       fontWeight: 400,
-      
     },
     caption: {
       fontFamily: 'Poppins, serif',
@@ -66,7 +66,7 @@ const dashboardTheme = createTheme({
     button: {
       fontFamily: 'Poppins, serif',
     }
-  }
+  },
 });
 
 export default dashboardTheme;

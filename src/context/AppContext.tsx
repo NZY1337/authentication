@@ -1,4 +1,5 @@
-import React, { createContext, useContext, ReactNode, SetStateAction, useEffect } from 'react';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import React, { createContext, useContext, ReactNode, SetStateAction, useEffect, useRef, useMemo } from 'react';
 import { NavigateFunction } from 'react-router-dom';
 import { useAuth } from '../services/authentication/useAuth';
 import useSession from '../services/session/useSession';
@@ -18,6 +19,22 @@ export type UserInterface = {
     verified: boolean
 }
 
+export type AppContextType = {
+    error: string | null,
+    user: UserInterface | null,
+    loading: boolean,
+    open: boolean,
+    userLoading: boolean,
+    loginUser: (data: UserLoginInterface, navigate: NavigateFunction) => void,
+    registerUser: (data: UserRegisterInterface) => void,
+    logoutUser: () => void,
+    getUser: () => void,
+    setError: (error: SetStateAction<string | null>) => void
+    setUser: (user: SetStateAction<UserInterface | null>) => void,
+    handleOpen: () => void,
+    handleClose: () => void,
+};
+
 export type UserLoginInterface = Pick<UserInterface, 'email'> & {
     password: string;
 };
@@ -27,61 +44,57 @@ export type UserRegisterInterface = Pick<UserInterface, 'email' | 'name'> & {
     message?: string;
 };
 
-const AppContext = createContext<{ 
-  error: string | null, 
-  user: UserInterface | null, 
-  loading: boolean,
-  open: boolean,    
-  loginUser: (data: UserLoginInterface, navigate: NavigateFunction) => void, 
-  registerUser: (data: UserRegisterInterface) => void,
-  logoutUser: () => void, 
-  getUser: () => void,
-  setError: (error: SetStateAction<string | null>) => void
-  extendSession: () => void, 
-  setUser: (user: SetStateAction<UserInterface | null>) => void
-}>({
-  error: null,
-  user: null,
-  loading: true,
-  open: false,
-  extendSession: () => {},
-  loginUser: () => {},
-  logoutUser: () => {},
-  getUser: () => {},
-  registerUser: () => {},
-  setError: () => {},
-  setUser: () => {}
+const AppContext = createContext<AppContextType>({
+    error: null,
+    user: null,
+    loading: true,
+    open: false,
+    userLoading: false,
+    loginUser: () => { },
+    logoutUser: () => { },
+    getUser: () => { },
+    registerUser: () => { },
+    setError: () => { },
+    setUser: () => { },
+    handleClose: () => { },
+    handleOpen: () => { },
 });
 
 interface AppProviderProps {
-  children: ReactNode;      
-}                       
+    children: ReactNode;
+}
 
+export const AppProvider: React.FC<AppProviderProps> = ({ children }: AppProviderProps) => {
+    const { user, error, loading, open, userLoading, loginUser, registerUser, getUser, logoutUser, setError, setUser, handleOpen, handleClose } = useAuth();
 
-export const AppProvider: React.FC<AppProviderProps> = ({ children } : AppProviderProps) => {
-  const { user, error, loading, open, extendSession, loginUser, registerUser, getUser, logoutUser, setError, setUser } = useAuth();
-  const { getSessionTime } = useSession();
+    // we use user.id because we want to memoize the user object and session should run on login and logout - not when we update the entire
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const memoizedUser = useMemo(() => user, [user?.id]);
 
-  const value = React.useMemo(() => ({ 
-    user,                                   
-    error,          
-    loading,        
-    open,     
-    loginUser,      
-    logoutUser,     
-    getUser,       
-    registerUser,   
-    setError,
-    extendSession,
-    setUser
-    }),[user, error, loading, open, loginUser, logoutUser, getUser, registerUser, setError, extendSession, setUser]
-);
+    useSession({ handleOpen, logoutUser, user: memoizedUser });
+    
+    const value = React.useMemo(() => ({
+        user,
+        error,
+        loading,
+        open,
+        userLoading,
+        loginUser,
+        logoutUser,
+        getUser,
+        registerUser,
+        setError,
+        setUser,
+        handleOpen,
+        handleClose,
+        }), [user, error, loading, open, userLoading, loginUser, logoutUser, getUser, registerUser, setError, setUser, handleOpen, handleClose]
+    );
 
-  return (
-    <AppContext.Provider value={value}>
-      {children}
-    </AppContext.Provider>
-  );
+    return (
+        <AppContext.Provider value={value}>
+            {children}
+        </AppContext.Provider>
+    );
 };
 
 export const useAppContext = () => useContext(AppContext);

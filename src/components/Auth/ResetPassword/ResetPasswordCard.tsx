@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 import { CircularProgress } from '@mui/material';
 import IconButton from '@mui/material/IconButton'
 import InputAdornment from '@mui/material/InputAdornment'
-import CardModel from '../../Ux/Card/Card';
+import CardModel from '../../UtilityComponents/Card';
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { Link as RouterLink} from 'react-router-dom';
 
@@ -80,7 +80,6 @@ export default function SignInCard() {
                     placeholder="••••••"
                     type={`${showPassword.password ? 'text' : 'password'}`}
                     id="password"
-                    autoComplete="password"
                     variant="outlined"
                     value={formValues.password}
                     onChange={handleInputChange}
@@ -108,7 +107,6 @@ export default function SignInCard() {
                         placeholder="••••••"
                         type={`${showPassword.repeatPassword ? 'text' : 'password'}`}
                         id="repeatPassword"
-                        autoComplete="repeat-new-password"
                         variant="outlined"
                         value={formValues.repeatPassword}
                         onChange={handleInputChange}

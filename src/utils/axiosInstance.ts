@@ -1,4 +1,9 @@
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
+
+// Extend AxiosRequestConfig to include `_retry`
+interface AxiosRequestConfigWithRetry extends AxiosRequestConfig {
+    _retry?: boolean;
+  }
 
 const axiosInstance = axios.create({
   baseURL: "http://localhost:3010/api",
@@ -16,35 +21,27 @@ axiosInstance.interceptors.request.use(
 );
 
 axiosInstance.interceptors.response.use(
-  (response) => {
-    return response;
-  },
-  async (error) => {
-    const originalRequest = error.config;
+    (response) => response,
+    async (error) => {
+      const originalRequest = error.config as AxiosRequestConfigWithRetry;
 
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      // Mark the request as a retry to prevent multiple attempts
-      originalRequest._retry = true;
+      if (error.response?.status === 401 && !originalRequest._retry) {
+        originalRequest._retry = true;
+        
+        if (originalRequest.url === "/auth/refresh-token") {
+          return Promise.reject(error);
+        }
 
-      // Avoid infinite loops if the error is on the refresh-token endpoint itself
-      if (originalRequest.url === "/auth/refresh-token") {
-        // You can suppress the log here to prevent unnecessary output
-        return Promise.reject(error); // Reject after refresh fails without logging
+        try {
+          await axiosInstance.post("/auth/refresh-token");
+          return axiosInstance(originalRequest);
+        } catch (refreshError) {
+            return Promise.reject(refreshError);
+        }
       }
 
-      try {
-        await axiosInstance.post("/auth/refresh-token");
-        // Set the new token in the request headers
-        return axiosInstance(originalRequest);
-      } catch (refreshError) {
-        // Optionally log here, but prevent it from going to the console if necessary
-        // console.log("Error refreshing token:", refreshError); // You can remove this line
-        return Promise.reject(refreshError); // Reject the request if token refresh fails
-      }
+        return Promise.reject(error);
     }
-
-    return Promise.reject(error); // Reject original error, will log as usual
-  }
 );
 
 export default axiosInstance;

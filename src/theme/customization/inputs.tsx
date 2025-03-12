@@ -1,5 +1,4 @@
 import { alpha, Theme, Components } from '@mui/material/styles';
-import { outlinedInputClasses } from '@mui/material/OutlinedInput';
 import { svgIconClasses } from '@mui/material/SvgIcon';
 import { toggleButtonGroupClasses } from '@mui/material/ToggleButtonGroup';
 import { toggleButtonClasses } from '@mui/material/ToggleButton';
@@ -275,15 +274,20 @@ export const inputsCustomizations: Components<Theme> = {
                   opacity: 0.7,
                   color: gray[500],
                 },
-                "&:-webkit-autofill": {
+                "&:-webkit-autofill, input:-webkit-autofill": {
                     WebkitBoxShadow: "0 0 0 100px #212121 inset !important",
+                    // WebkitTextFillColor: "red !important",
                     borderRadius: 0,
-                    fontFamily: 'inherit',
-                    // fontSize: '16px'
-                    // WebkitTextFillColor: "inherit !important",
+                    
                 },
             },
+           
             color: theme.palette.grey[400],
+        }),
+        multiline: () => ({
+            "&.MuiInputBase-multiline": {
+                height: "auto",
+            }
         }),
     },
   },
@@ -293,19 +297,17 @@ export const inputsCustomizations: Components<Theme> = {
         padding: 0,
       },
       root: ({ theme }: { theme: Theme }) => ({
-        padding: '8px 12px',
-        color: theme.palette.text.primary,
-        borderRadius: theme.shape.borderRadius,
-        border: `1px solid ${theme.palette.divider}`,
-        backgroundColor: theme.palette.background.default,
-        transition: 'border 120ms ease-in',
-        '&:hover': {
-            borderColor: gray[500],
-        },
-        [`&.${outlinedInputClasses.focused}`]: {
-          outline: `3px solid ${alpha(brand[500], 0.5)}`,
-          borderColor: brand[400],
-        },
+            padding: '8px 12px',
+            color: theme.palette.text.primary,
+            borderRadius: theme.shape.borderRadius,
+            border: `1px solid ${theme.palette.divider}`,
+            transition: 'border 120ms ease-in',
+            '&:hover': {
+                borderColor: gray[500],
+            },
+            '& .MuiInputBase-inputMultiline': {
+                height: '100%!important'
+            },
         variants: [
           {
             props: {
@@ -347,7 +349,7 @@ export const inputsCustomizations: Components<Theme> = {
   },
   MuiFormHelperText: {
     styleOverrides: {
-        root: ({ theme }: { theme: Theme }) => ({
+        root: () => ({
           color: '#fff',
           marginLeft: 0,
         }),
@@ -356,7 +358,7 @@ export const inputsCustomizations: Components<Theme> = {
   MuiTypography: {
     styleOverrides: {   
       root: ({ theme }: { theme: Theme }) => ({
-        color: '#fff',
+        color: theme.palette.grey[100],
         backgroundColor: 'unset',
       }),   
     }

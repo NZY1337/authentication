@@ -3,7 +3,6 @@ import { Divider, Button, Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import GoogleIcon from '@mui/icons-material/Google';
 
-
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
