@@ -17,8 +17,9 @@ export interface BuilderOverviewProps {
     selectedSolution: string;
 }
 
-const BuilderOverview = ({ preview, setPreview, router, selectedSolution, setSelectedSolution }: BuilderOverviewProps) => {
+const BuilderOverview = ({ router, selectedSolution, setSelectedSolution }: BuilderOverviewProps) => {
     const [openPhotoGuide, setOpenPhotoGuide] = useState<boolean>(false);
+    const [preview, setPreview] = useState<string | null>(null);
     let selectedNavItem: NavigationItem | undefined;
 
     if ('children' in DASHBOARD_NAVIGATION[0]) {
@@ -33,10 +34,10 @@ const BuilderOverview = ({ preview, setPreview, router, selectedSolution, setSel
 
     const onHandleNavigate = () => {
         if (selectedNavItem && 'segment' in selectedNavItem) {
-            router.navigate(`/builder/${selectedNavItem.segment}`);
+            router?.navigate(`/dashboard/${selectedNavItem.segment}?id=3213131`);
         }
     }
-    
+     
     const handleCreateMask = async () => {
         if (preview) {
           // Fetch the blob data from the blob URL
@@ -66,7 +67,7 @@ const BuilderOverview = ({ preview, setPreview, router, selectedSolution, setSel
     };
       
     useEffect(() => {
-        return () => setPreview(null)
+        return () => setPreview(null);
     }, [setPreview]);
 
     return (

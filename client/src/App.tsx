@@ -22,8 +22,10 @@ function App() {
                 <Route path="/user/forgot-password" element={<ResetPassword />} />
                 <Route path="/user/register" element={<Register />} />
                 <Route path="/user/login" element={<Login />} />
-                <Route path="/" element={<ProtectedRoute />} >
-                    <Route path="dashboard" element={<Dashboard />} />
+                
+                {/* Protected Routes */}
+                <Route path="/" element={<ProtectedRoute />}>
+                    <Route path="dashboard/*" element={<Dashboard />} />
                 </Route>
                 <Route path="*" element={<NotFoundPage />} /> 
             </Routes>

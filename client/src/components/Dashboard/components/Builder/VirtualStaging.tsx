@@ -3,34 +3,26 @@ import React, { useState } from "react";
 // components
 import { Grid2 as Grid, Typography, } from "@mui/material"; 
 import Stack from "@mui/material/Stack";
-import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import { Link } from "react-router-dom";
-import DynamicSelect from "../UtilityComponents/DynamicSelect";
-import FileUpload from "../UtilityComponents/FileUpload";
-import { DynamicSelectProps } from "../UtilityComponents/DynamicSelect";
+import DynamicSelect, { DynamicSelectProps } from "../../../UtilityComponents/DynamicSelect";
+import CustomButton from "../../../UtilityComponents/CustomButtom";
+
+// icons
 import { Warning } from "@mui/icons-material";
-import { useLocation } from "react-router-dom";
 
 // types
 type OnchangeType = DynamicSelectProps['onChange'];
-import { type  AIBuilderProps } from "../../components/Dashboard/Dashboard"
+import { type VirtualStagingProps } from "../../Dashboard"
 
-const AIBuilder = ({ isHomepage = false, preview, setPreview, spaceTypeOptions, designThemeOptions }: AIBuilderProps) => {
-  const location = useLocation();
-
-  console.log(location.pathname);
-
-  const order = isHomepage ? 0 : 1;
-  const { spaceTypeKeys, spaceTypeValues } = spaceTypeOptions?.interior || { spaceTypeKeys: [], spaceTypeValues: [] };
+const VirtualStaging = ({ designThemeOptions }: VirtualStagingProps) => {
   const { designThemeKeys, designThemeValues } = designThemeOptions?.interior || { designThemeKeys: [], designThemeValues: [] };
  
   const [stateBuilder, setStateBuilder] = useState({
-    interiorSpace: spaceTypeKeys && spaceTypeKeys.length ? spaceTypeKeys[0] : "ST-INT-001",
     designThemes: designThemeKeys && designThemeKeys.length ? designThemeKeys[0] : "DT-INT-001",
     mode: "Beautiful Redesign",
     style: "Modern",
@@ -60,46 +52,15 @@ const AIBuilder = ({ isHomepage = false, preview, setPreview, spaceTypeOptions, 
     event.preventDefault();
   };
 
-  if (!spaceTypeOptions || !designThemeOptions) {
+  if (!designThemeOptions) {
     return <div>Loading...</div>;
   }
 
   return (
     <Grid spacing={3} container justifyContent="center" textAlign={"left"} >
-      <Grid order={order} size={{ xs: 12, md: 6, lg: 6, xl: 8 }}>
-        <Paper sx={{ padding: 3, color: "#fff", borderRadius: 2 }}>
-            {preview ? 
-                <img
-                    src={preview}
-                    alt="AI"
-                    style={{ width: "100%", height: "100%", maxHeight: "590px", objectFit: 'contain' }}
-                /> 
-                :
-                <Box display="flex" alignItems="center" gap={1}>
-                    <Warning color="warning" />
-                    <Typography color="textPrimary">
-                        Go back to <Link to="/dashboard">overview</Link> and upload an image.
-                    </Typography>
-                </Box>
-            }
-        </Paper>
-      </Grid>
-
       <Grid size={{ xs: 12, md: 6, lg: 4, xl: 4 }}>
         <Paper sx={{ padding: 3, color: "#fff", borderRadius: 2 }}>
           <Stack spacing={3} component="form" onSubmit={handleSubmit}>
-            {isHomepage && <FileUpload preview={preview} setPreview={setPreview} />}
-            
-            <DynamicSelect 
-                label="Space Type" 
-                id="interior-space" 
-                name="interiorSpace" 
-                value={stateBuilder.interiorSpace} 
-                keys={spaceTypeKeys} 
-                options={spaceTypeValues} 
-                onChange={handleChange} 
-            />
-            
             <DynamicSelect 
                 label="Design Themes" 
                 id="design-themes" 
@@ -113,7 +74,7 @@ const AIBuilder = ({ isHomepage = false, preview, setPreview, spaceTypeOptions, 
             <FormControlLabel  
                 label="Custom AI instructions"
                 control={<Checkbox checked={stateBuilder.useCustomInstructions} onChange={handleCheckboxChange} color="primary" />}
-             />
+            />
 
             {stateBuilder.useCustomInstructions && (
               <TextField
@@ -127,14 +88,29 @@ const AIBuilder = ({ isHomepage = false, preview, setPreview, spaceTypeOptions, 
               />
             )}
 
-            <Button type="submit" variant="contained" fullWidth>
-              Generate Design
-            </Button>
+            <CustomButton title={"generate design"} />
           </Stack>
+        </Paper>
+      </Grid>
+
+      <Grid size={{ xs: 12, md: 6, lg: 6, xl: 8 }}>
+        <Paper sx={{ padding: 3, color: "#fff", borderRadius: 2 }}>
+                <img
+                    src={'https://images.unsplash.com/photo-1512972972907-6d71529c5e92?q=80&w=3542&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'}
+                    alt="AI"
+                    style={{ width: "100%", height: "100%", maxHeight: "400px", objectFit: 'cover' }}
+                /> 
+                
+                <Box display="flex" alignItems="center" gap={1} mt={2}>
+                    <Warning color="warning" />
+                    <Typography color="textPrimary">
+                        Go back to <Link to="/dashboard">overview</Link> and upload an image.
+                    </Typography>
+                </Box>
         </Paper>
       </Grid>
     </Grid>
   );
 };
 
-export default AIBuilder;
+export default VirtualStaging;

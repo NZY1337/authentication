@@ -19,10 +19,10 @@ const s3 = new S3Client({
 export const builder: { 
     createMask: (req: Request, res: Response) => Promise<void>,
     getSpaceType: (req: Request, res: Response) => Promise<void>
+    getDesignTheme: (req: Request, res: Response) => Promise<void>
 } = {
     createMask: async (req: Request, res: Response) => {
         const file = req.file;
-        console.log(file);
         if (!file) throw new NotFoundException("No file uploaded", ErrorCode.NOT_FOUND);
 
         const fileExtension = file.mimetype.split("/")[1]; 
@@ -44,10 +44,14 @@ export const builder: {
 
         // const mask = await reimagine.createMask(fileUrl);
 
-        res.status(200).json({ fileUrl });
+        res.status(200).json({ fileUrl }); // & mask
     },
     getSpaceType: async(req: Request, res: Response) => {
         const spaceType = await reimagine.getSpaceType();
         res.status(200).json({ spaceType });
+    },
+    getDesignTheme: async(req: Request, res: Response) => {
+        const designThemes = await reimagine.getDesignTheme();
+        res.status(200).json({ designThemes });
     }
 };

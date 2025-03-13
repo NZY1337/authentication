@@ -38,7 +38,7 @@ const solutions = [
 
 const DASHBOARD_NAVIGATION: Navigation = [
     {
-        segment: 'builder',
+        segment: 'dashboard',
         title: 'Builder',
         icon: <DashboardIcon />,
         children: [
@@ -57,38 +57,48 @@ const DASHBOARD_NAVIGATION: Navigation = [
                 title: VIRTUAL_STAGING_LABEL,
                 icon: <DescriptionOutlined />,
             },
-            {
-                segment: 'redesigned-furnished-rooms',
-                title: REDESIGN_FURNISHED_ROOMS_LABEL,
-                icon: <DescriptionOutlined />,
-            },
+            // {
+            //     segment: 'redesigned-furnished-rooms',
+            //     title: REDESIGN_FURNISHED_ROOMS_LABEL,
+            //     icon: <DescriptionOutlined />,
+            // },
             
-            {
-                segment: 'landscaping',
-                title: LANDSCAPING_LABEL,
-                icon: <DescriptionOutlined />,
-            },
-            {
-                segment: 'render-exterior-structures',
-                title: RENDER_EXTERIOR_STRUCTURES_LABEL,
-                icon: <DescriptionOutlined />,
-            },
+            // {
+            //     segment: 'landscaping',
+            //     title: LANDSCAPING_LABEL,
+            //     icon: <DescriptionOutlined />,
+            // },
+            // {
+            //     segment: 'render-exterior-structures',
+            //     title: RENDER_EXTERIOR_STRUCTURES_LABEL,
+            //     icon: <DescriptionOutlined />,
+            // },
         ],
     },
     {
-        segment: 'orders',
+        segment: 'dashboard/orders',
         title: 'Orders',
         icon: <ShoppingCartIcon />,
     },
     {
-        segment: 'reports',
+        segment: 'dashboard/reports',
         title: 'Reports',
         icon: <BarChartIcon />,
     },
     {
-        segment: 'profile',
+        segment: 'dashboard/profile',
         title: 'Profile',
         icon: <UserIcon />,
+    },
+    {
+        segment: 'dashboard/test1',
+        title: 'Test1',
+        icon: <DescriptionOutlined />,
+    },
+    {
+        segment: 'dashboard/test2',
+        title: 'Test2',
+        icon: <DescriptionOutlined />,
     },
 ];
 

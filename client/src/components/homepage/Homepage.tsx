@@ -7,7 +7,7 @@ import  Footer  from "../Footer/Footer";
 const Home = () => {
     return <>
         <Hero />
-        <Builder />
+        {/* <Builder /> */}
         <KeyPoints />
         <DesignVariations />   
         <Footer /> 

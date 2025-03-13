@@ -26,14 +26,21 @@ const FileUpload = ({ preview, setPreview }: FileUploadProps) => {
         notifications.show('Only PNG, JPEG, and JPG files are allowed!', {
             severity: 'error',
             autoHideDuration: 3000,
-          });
+        });
         return;
       }
 
       // Create preview URL
-      const reader = new FileReader();
-      reader.onload = () => setPreview(reader.result as string);
-      reader.readAsDataURL(file);
+    //   const reader = new FileReader();
+    //   reader.onload = () => setPreview(reader.result as string);
+    //   reader.readAsDataURL(file);
+    console.log(URL.createObjectURL(file));
+    setPreview(URL.createObjectURL(file));
+    console.log(file);
+
+    //   const formData = new FormData();
+    //   const file = event.target.files[0];
+    //   formData.append("avatar", file);
     }
   };
 
@@ -80,7 +87,10 @@ const FileUpload = ({ preview, setPreview }: FileUploadProps) => {
           onClick={handleClick}
         >
           <CloudUploadIcon sx={{ fontSize: 40, mb: 1 }} />
-          <Typography variant="body2">Upload an image here to get started & unlock all <b>A.I. features</b>.</Typography>
+          <Typography variant="body2">
+            Upload an image here to get started </Typography>
+            <Typography variant="body2">
+            & unlock all the <b style={{textShadow: "0 0 5px rgba(255, 255, 255, 0.5), 0 0 30px rgba(0, 150, 255, 0.3)",}}>A.I. features</b>.</Typography>
         </Stack>
       ) : (
         <Stack position="relative" width={"100%"} height={"100%"} overflow={"hidden"}>

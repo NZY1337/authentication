@@ -13,17 +13,24 @@ interface StyledCardProps {
 type SolutionSelectorProps = Pick<BuilderOverviewProps, "selectedSolution" | "setSelectedSolution">;
 
 const StyledCard = styled(Card)<StyledCardProps>(({ theme, selected }) => ({
-    borderRadius: 12,
     textAlign: "center",
     padding: theme.spacing(1),
-    border: selected ? `2px solid ${theme.palette.success.main}` : `1px solid ${theme.palette.divider}`,
     backgroundColor: selected ? "0 4px 10px rgba(0, 0, 0, 0.1)" : "none",
-    boxShadow: selected ? "0 4px 10px rgba(0, 0, 0, 0.1)" : "none",
+    boxShadow: selected ? "0 0 5px rgba(255, 255, 255, 0.5), 0 0 30px rgba(0, 150, 255, 0.3)" : "none",
     "&:hover": {
       boxShadow: "0 4px 10px rgba(0, 0, 0, 0.15)",
     },
     height: 156,
     display: "flex",
+    border: selected ? `2px solid ${theme.palette.success.main}` : `1px solid ${theme.palette.divider}`, // Soft white border
+    borderRadius: "12px", // Smooth rounded corners
+    background: "rgba(255, 255, 255, 0.1)", // Semi-transparent background
+    backdropFilter: "blur(10px)", // Glassmorphic blur effect,
+    animation: "glow 2s infinite alternate",
+        "@keyframes glow": {
+          "0%": { boxShadow: "0 0 5px rgba(255, 255, 255, 0.5)" },
+          "100%": { boxShadow: "0 0 5px rgba(52, 50, 7, 0.7)" },
+        },
 }));
 
 const SolutionSelector = ({  selectedSolution, setSelectedSolution}: SolutionSelectorProps) => {
@@ -34,7 +41,7 @@ const SolutionSelector = ({  selectedSolution, setSelectedSolution}: SolutionSel
     <Box sx={{borderRadius: 3 }} mt={3} mb={3}>
       <Grid container spacing={2}>
         {solutions.map((solution) => (
-          <Grid  size={{xs: 12, md: 2.4, sm: 6}} key={solution.label}>
+          <Grid  size={{xs: 6, md: 2.4, sm: 6}} key={solution.label}>
             <StyledCard
               selected={selectedSolution === solution.label}
               onClick={() => setSelectedSolution(solution.label)}

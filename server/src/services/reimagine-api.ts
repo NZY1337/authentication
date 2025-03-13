@@ -49,7 +49,25 @@ const reimagine = {
             return response.data; // 67d044054c439f58e7301e9d - MASK_JOB_ID
         } catch (error) {
             console.error(error);
-            throw new BadRequestException("Error creating mask", 400, null);
+            throw new BadRequestException("Error getting space types", 400, null);
+        }
+    },
+    getDesignTheme: async () => {
+        const config = {
+            headers: { 
+                'api-key': REIMAGINE_HOME_API_KEY_ID, 
+            },
+            method: 'get',
+            maxBodyLength: Infinity,
+            url: 'https://api.reimaginehome.ai/v1/get-design-theme-list',
+        };
+
+        try {
+            const response = await axios(config);
+            return response.data; 
+        } catch (error) {
+            console.error(error);
+            throw new BadRequestException("Error getting design theme types", 400, null);
         }
     }
 }
