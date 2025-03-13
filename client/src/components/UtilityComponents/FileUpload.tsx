@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import React, {useRef, useState } from "react";
 import { Stack, Typography, IconButton } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -9,9 +9,13 @@ import { BuilderOverviewProps } from "../Dashboard/components/Builder/BuilderOve
 
 import { useNotifications } from '@toolpad/core/useNotifications';
 
-type FileUploadProps = Pick<BuilderOverviewProps, 'preview' | 'setPreview'>
+type FileUploadProps = {
+    preview: string | null,
+    setPreview: React.Dispatch<React.SetStateAction<string | null>>,
+    setFile: BuilderOverviewProps['setFile']
+}
 
-const FileUpload = ({ preview, setPreview }: FileUploadProps) => {
+const FileUpload = ({ preview, setPreview, setFile}: FileUploadProps) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [rotation, setRotation] = useState(ROTATION);
   const notifications = useNotifications();
@@ -30,17 +34,8 @@ const FileUpload = ({ preview, setPreview }: FileUploadProps) => {
         return;
       }
 
-      // Create preview URL
-    //   const reader = new FileReader();
-    //   reader.onload = () => setPreview(reader.result as string);
-    //   reader.readAsDataURL(file);
-    console.log(URL.createObjectURL(file));
-    setPreview(URL.createObjectURL(file));
-    console.log(file);
-
-    //   const formData = new FormData();
-    //   const file = event.target.files[0];
-    //   formData.append("avatar", file);
+      setPreview(URL.createObjectURL(file));
+      setFile(file);
     }
   };
 
@@ -69,10 +64,10 @@ const FileUpload = ({ preview, setPreview }: FileUploadProps) => {
   return (
     <Stack spacing={2} alignItems="center" height={"450px"}  
         sx={{
-        border: "1px",
-        borderStyle: "dashed",
+        border: "5px",
+        borderStyle: "double",
         borderColor: "grey.800",
-        padding: 4,
+        padding: 3,
         borderRadius: 2,
         textAlign: "center",
         cursor: "pointer",

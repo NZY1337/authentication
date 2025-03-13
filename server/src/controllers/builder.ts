@@ -39,12 +39,12 @@ export const builder: {
         const command = new PutObjectCommand(params);
         // await s3.send(command);
     
-        // const fileUrl = `https://${AWS_BUCKET_NAME}.s3.${AWS_BUCKET_REGION}.amazonaws.com/${builderPreview}`;
-        const fileUrl = 'https://my-bucket-app-deco.s3.eu-north-1.amazonaws.com/9d7ba3cc-24a5-4cab-819d-057003af00b3-bf6f6ee6-c162-4605-b2a2-10defec77aee.png';
-
+        const fileUrl = `https://${AWS_BUCKET_NAME}.s3.${AWS_BUCKET_REGION}.amazonaws.com/${builderPreview}`;
+        
         // const mask = await reimagine.createMask(fileUrl);
 
-        res.status(200).json({ fileUrl }); // & mask
+        // res.status(200).json({ fileUrl, mask });
+        res.status(200).json({ fileUrl: null, mask: null})
     },
     getSpaceType: async(req: Request, res: Response) => {
         const spaceType = await reimagine.getSpaceType();

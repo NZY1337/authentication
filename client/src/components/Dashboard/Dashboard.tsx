@@ -65,7 +65,7 @@ interface PreviewProps {
     designThemeOptions? : {
         interior: { designThemeKeys: string[] | undefined; designThemeValues: string[] | undefined },
         exterior: { designThemeKeys: string[] | undefined; designThemeValues: string[] | undefined }  
-    }
+    },
 }
 
 export interface AIBuilderProps extends PreviewProps {
@@ -74,15 +74,39 @@ export interface AIBuilderProps extends PreviewProps {
 
 export type EmptySpaceProps = PreviewProps
 export type VirtualStagingProps = PreviewProps
+
+export type MaskState = {
+    mask_url: string;
+    mask_category: string;
+    mask?: {
+      status: string;
+      data: {
+        job_id: null;
+        credits_consumed: number;
+      };
+    };
+  };
  
 export default function Dashboard() {
     const { user, logoutUser } = useAppContext();
     const [spaceType, setSpaceType] = useState<SpaceTypeInterface | null>(null);
     const [designThemes, setDesignThemes] = useState<DesignThemeInterface| null>(null);
+    const [file, setFile] = useState<File | null>(null);
     const navigate = useNavigate();
     const notifications = useNotifications();
+    const [mask, setMask] = useState<MaskState>({
+        mask_url: "",
+        mask_category: "",
+        mask: {
+          status: "",
+          data: {
+            job_id: null,
+            credits_consumed: 0,
+          },
+        },
+    });
 
-    const [selectedSolution, setSelectedSolution] = useState(() => {
+    const [selectedCategory, setSelectedCategory] = useState(() => {
         const sol = solutions.find(solution => solution.selected);
         return sol ? sol.label : EMPTY_YOUR_SPACE_LABEL;
     });
@@ -159,10 +183,23 @@ export default function Dashboard() {
         signIn: () => navigate('/user/login'), signOut: () => logoutUser() 
     }),[logoutUser, navigate]);
 
+    console.log(file);
+
     const renderContent = () => {
         switch (router.pathname) {
             case '/dashboard/profile':
                 return <ProfileDashboard />;
+
+            case '/dashboard':
+                return <BuilderOverview 
+                        setSelectedCategory={setSelectedCategory} 
+                        selectedCategory={selectedCategory} 
+                        router={router}
+                        file={file}
+                        mask={mask}
+                        setFile={setFile} 
+                        setMask={setMask}
+                    />;
     
             case '/dashboard/empty-your-space':
                 return <EmptySpace spaceTypeOptions={spaceTypeOptions} designThemeOptions={designThemeOptions} />
@@ -179,12 +216,7 @@ export default function Dashboard() {
             // case '/dashboard/render-exterior-structures':
             //     return <AIBuilder preview={preview} setPreview={setPreview} />;
     
-            case '/dashboard':
-                return <BuilderOverview 
-                        setSelectedSolution={setSelectedSolution} 
-                        selectedSolution={selectedSolution} 
-                        router={router} 
-                    />;
+            
     
             default:
                 return null;

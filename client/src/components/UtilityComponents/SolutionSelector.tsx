@@ -10,7 +10,7 @@ interface StyledCardProps {
   selected: boolean;
 }
 
-type SolutionSelectorProps = Pick<BuilderOverviewProps, "selectedSolution" | "setSelectedSolution">;
+type SolutionSelectorProps = Pick<BuilderOverviewProps, "selectedSolution" | "setSelectedCategory">;
 
 const StyledCard = styled(Card)<StyledCardProps>(({ theme, selected }) => ({
     textAlign: "center",
@@ -33,7 +33,7 @@ const StyledCard = styled(Card)<StyledCardProps>(({ theme, selected }) => ({
         },
 }));
 
-const SolutionSelector = ({  selectedSolution, setSelectedSolution}: SolutionSelectorProps) => {
+const SolutionSelector = ({  selectedSolution, setSelectedCategory}: SolutionSelectorProps) => {
   const theme = useTheme();
   const isDarkMode = theme.palette.mode === 'dark';
 
@@ -41,10 +41,10 @@ const SolutionSelector = ({  selectedSolution, setSelectedSolution}: SolutionSel
     <Box sx={{borderRadius: 3 }} mt={3} mb={3}>
       <Grid container spacing={2}>
         {solutions.map((solution) => (
-          <Grid  size={{xs: 6, md: 2.4, sm: 6}} key={solution.label}>
+          <Grid  size={{xs: 6, sm:12, md: 4, lg: 2.4}} key={solution.label}>
             <StyledCard
               selected={selectedSolution === solution.label}
-              onClick={() => setSelectedSolution(solution.label)}
+              onClick={() => setSelectedCategory(solution.label)}
             >
               <CardActionArea sx={{ height: '100%', display:'flex', alignItems: 'baseline'}}>
                 <Tooltip title="More info" arrow sx={{ position: "absolute", top: 10, right: 10, fontSize: 16, color: "success.main" }}>

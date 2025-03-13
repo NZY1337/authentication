@@ -19,7 +19,7 @@ import { Warning } from "@mui/icons-material";
 type OnchangeType = DynamicSelectProps['onChange'];
 import { type EmptySpaceProps } from "../../Dashboard"
 
-const EmptySpace = ({  spaceTypeOptions}: EmptySpaceProps) => {
+const EmptySpace = ({  spaceTypeOptions }: EmptySpaceProps) => {
   const { spaceTypeKeys, spaceTypeValues } = spaceTypeOptions?.interior || { spaceTypeKeys: [], spaceTypeValues: [] };
  
   const [stateBuilder, setStateBuilder] = useState({
