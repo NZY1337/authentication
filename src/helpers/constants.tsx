@@ -15,25 +15,29 @@ import badPhoto3 from "../assets/guidelines/badPhoto3.png"
 import badPhoto4 from "../assets/guidelines/badPhoto4.png"
 
 import SofaIcon from "@mui/icons-material/Weekend";
-import ChairIcon from "@mui/icons-material/Chair";
 import DeleteIcon from "@mui/icons-material/Delete";
-import ParkIcon from "@mui/icons-material/Park";
-import HomeIcon from "@mui/icons-material/Home";
 
-const VIRTUAL_STAGING_LABEL = "Virtual Staging";
-const REDESIGN_FURNISHED_ROOMS_LABEL = "Redesign Furnished Rooms";
-const EMPTY_YOUR_SPACE_LABEL = "Empty Your Space";
-const LANDSCAPING_LABEL = "Landscaping";
-const RENDER_EXTERIOR_STRUCTURES_LABEL = "Render Exterior Structures";
+const VIRTUAL_STAGING = {
+    label: "Virtual Staging",
+    segment: "virtual-staging"
+}
+
+const EMPTY_YOUR_SPACE = {
+    label: "Empty Your Space",
+    segment: "empty-your-space"
+}
+
+// const REDESIGN_FURNISHED_ROOMS_LABEL = "Redesign Furnished Rooms";
+// const RENDER_EXTERIOR_STRUCTURES_LABEL = "Render Exterior Structures";
 
 const ROTATION = [90, 180, 270, 360];
 
 const solutions = [
-    { label: VIRTUAL_STAGING_LABEL, icon: <SofaIcon /> },
-    { label: REDESIGN_FURNISHED_ROOMS_LABEL, icon: <ChairIcon /> },
-    { label: EMPTY_YOUR_SPACE_LABEL, icon: <DeleteIcon />, selected: true },
-    { label: LANDSCAPING_LABEL, icon: <ParkIcon /> },
-    { label: RENDER_EXTERIOR_STRUCTURES_LABEL, icon: <HomeIcon /> },
+    { label: EMPTY_YOUR_SPACE.label, segment: EMPTY_YOUR_SPACE.segment, selected: true, icon: <DeleteIcon /> },
+    { label: VIRTUAL_STAGING.label, segment: VIRTUAL_STAGING.segment,  icon: <SofaIcon /> },
+    // { label: REDESIGN_FURNISHED_ROOMS_LABEL, icon: <ChairIcon /> },
+    // { label: LANDSCAPING_LABEL, icon: <ParkIcon /> },
+    // { label: RENDER_EXTERIOR_STRUCTURES_LABEL, icon: <HomeIcon /> },
 ];
 
 const DASHBOARD_NAVIGATION: Navigation = [
@@ -43,34 +47,18 @@ const DASHBOARD_NAVIGATION: Navigation = [
         icon: <DashboardIcon />,
         children: [
             {
-                segment: '',  // 👈 Add an empty segment to allow navigating back to /builder
+                segment: 'overview',  // 👈 Add an empty segment to allow navigating back to /builder
                 title: 'Overview',
                 icon: <DashboardIcon />,
             },
             {
-                segment: 'empty-your-space',
-                title: EMPTY_YOUR_SPACE_LABEL,
+                segment: EMPTY_YOUR_SPACE.segment,
+                title: EMPTY_YOUR_SPACE.label,
                 icon: <DescriptionOutlined />,
             },
             {
-                segment: 'virtual-staging',
-                title: VIRTUAL_STAGING_LABEL,
-                icon: <DescriptionOutlined />,
-            },
-            {
-                segment: 'redesigned-furnished-rooms',
-                title: REDESIGN_FURNISHED_ROOMS_LABEL,
-                icon: <DescriptionOutlined />,
-            },
-            
-            {
-                segment: 'landscaping',
-                title: LANDSCAPING_LABEL,
-                icon: <DescriptionOutlined />,
-            },
-            {
-                segment: 'render-exterior-structures',
-                title: RENDER_EXTERIOR_STRUCTURES_LABEL,
+                segment: VIRTUAL_STAGING.segment,
+                title: VIRTUAL_STAGING.label,
                 icon: <DescriptionOutlined />,
             },
         ],
@@ -158,5 +146,5 @@ export {
     goodPhotosData,
     badPhotosData,
     solutions,
-    EMPTY_YOUR_SPACE_LABEL
+    EMPTY_YOUR_SPACE
 };

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Grid2 as Grid } from "@mui/material"
 import { type Router } from '@toolpad/core/AppProvider';
 import PhotoGuideModalBuilder from "../../../Modals/PhotoGuideModal";
@@ -9,71 +9,91 @@ import { DASHBOARD_NAVIGATION } from "../../../../helpers/constants";
 import { NavigationItem } from "@toolpad/core/AppProvider";
 import fetchData from "../../../../utils/fetchData";
 
+import { MaskState } from "../../Dashboard";
+
 export interface BuilderOverviewProps {
-    preview?: string | null;
-    setPreview?: React.Dispatch<React.SetStateAction<string | null>>;
-    router?: Router;
-    setSelectedSolution?: React.Dispatch<React.SetStateAction<string>>;
-    selectedSolution?: string;
+    router: Router;
+    maskCategory: string;
+    file: File | null,
+    mask: MaskState,
+    setMaskCategory: React.Dispatch<React.SetStateAction<string>>;
+    setMask: React.Dispatch<React.SetStateAction<MaskState>>;
+    setFile: React.Dispatch<React.SetStateAction<File | null>>;
 }
 
-const BuilderOverview = ({ preview, setPreview, router, selectedSolution, setSelectedSolution }: BuilderOverviewProps) => {
+const BuilderOverview = ({ router, file, mask, maskCategory, setMaskCategory, setFile, setMask }: BuilderOverviewProps) => {
     const [openPhotoGuide, setOpenPhotoGuide] = useState<boolean>(false);
+    const [preview, setPreview] = useState<string | null>(null);
+
     let selectedNavItem: NavigationItem | undefined;
+
 
     if ('children' in DASHBOARD_NAVIGATION[0]) {
          selectedNavItem = DASHBOARD_NAVIGATION[0].children?.find(
           (child) => {
             if ('title' in child) {
-              return child.title === selectedSolution
+              return child.title === maskCategory
             }
           }
         );
     }
 
+    console.log('lol');
+
     const onHandleNavigate = () => {
         if (selectedNavItem && 'segment' in selectedNavItem) {
-            router.navigate(`/dashboard/${selectedNavItem.segment}?id=3213131`);
+            router?.navigate(`/dashboard/${selectedNavItem.segment}?maskId=${mask?.mask?.data.job_id}`);
         }
     }
      
     const handleCreateMask = async () => {
-        if (preview) {
-          // Fetch the blob data from the blob URL
-          const response = await fetch(preview);
-          const blobData = await response.blob();
-          // Convert the blob into a File object; the third parameter is the file name.
-          const file = new File([blobData], 'preview.png', { type: blobData.type });
-          
+        if (file) {
           const formData = new FormData();
           formData.append("preview", file);  // Now it's a valid file upload
+          formData.append("maskCategory", maskCategory)
       
-          const { resData, error } = await fetchData({
-            data: formData,
-            url: "/builder/create-mask",
-            method: "POST",
-          });
+        //   const { resData, error } = await fetchData<FormData, { data: MaskState }>({
+        //     data: formData,
+        //     url: "/builder/create-mask",
+        //     method: "POST",
+        //   });
       
-          if (error) {
-            return console.error(error);
-          }
+        //   if (error) {
+        //     return console.error(error);
+        //   }
       
-          if (resData) {
+        //   if (resData) {
+        //     const { data } = resData;
+        //     console.log(data);
+        //     setMask(data);
+        //     onHandleNavigate();
+        //   }
+
+        setTimeout(() => {
             onHandleNavigate();
-            console.log(resData);
-          }
+            setMask({
+                mask_url: '',
+                mask_category: 'kekw',
+                mask: {
+                    status: 'done',
+                    data: {
+                        job_id: '513131sa31',
+                        credits_consumed: 0
+                    }
+                }
+            })
+        }, 2000)
         }
     };
       
     useEffect(() => {
-        return () => setPreview(null)
+        return () => setPreview(null);
     }, [setPreview]);
 
     return (
         <>
-            <FileUpload preview={preview} setPreview={setPreview} />
-          
-            <SolutionSelector selectedSolution={selectedSolution} setSelectedSolution={setSelectedSolution}/>
+            <FileUpload preview={preview} setPreview={setPreview} setFile={setFile} />
+            <SolutionSelector maskCategory={maskCategory} setMaskCategory={setMaskCategory}/>
             
             <Grid container justifyContent={"space-between"} spacing={2}>
                 <Grid size={{ xs: 12, sm: 6 }} >

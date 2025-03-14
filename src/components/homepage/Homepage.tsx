@@ -5,9 +5,10 @@ import DesignVariations from './DesignVariation';
 import  Footer  from "../Footer/Footer";
 
 const Home = () => {
+    console.log('homepage')
     return <>
         <Hero />
-        <Builder />
+        {/* <Builder /> */}
         <KeyPoints />
         <DesignVariations />   
         <Footer /> 

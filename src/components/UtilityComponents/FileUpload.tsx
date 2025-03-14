@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import React, {useRef, useState } from "react";
 import { Stack, Typography, IconButton } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -9,9 +9,13 @@ import { BuilderOverviewProps } from "../Dashboard/components/Builder/BuilderOve
 
 import { useNotifications } from '@toolpad/core/useNotifications';
 
-type FileUploadProps = Pick<BuilderOverviewProps, 'preview' | 'setPreview'>
+type FileUploadProps = {
+    preview: string | null,
+    setPreview: React.Dispatch<React.SetStateAction<string | null>>,
+    setFile: BuilderOverviewProps['setFile']
+}
 
-const FileUpload = ({ preview, setPreview }: FileUploadProps) => {
+const FileUpload = ({ preview, setPreview, setFile}: FileUploadProps) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [rotation, setRotation] = useState(ROTATION);
   const notifications = useNotifications();
@@ -26,14 +30,12 @@ const FileUpload = ({ preview, setPreview }: FileUploadProps) => {
         notifications.show('Only PNG, JPEG, and JPG files are allowed!', {
             severity: 'error',
             autoHideDuration: 3000,
-          });
+        });
         return;
       }
 
-      // Create preview URL
-      const reader = new FileReader();
-      reader.onload = () => setPreview(reader.result as string);
-      reader.readAsDataURL(file);
+      setPreview(URL.createObjectURL(file));
+      setFile(file);
     }
   };
 
@@ -62,10 +64,10 @@ const FileUpload = ({ preview, setPreview }: FileUploadProps) => {
   return (
     <Stack spacing={2} alignItems="center" height={"450px"}  
         sx={{
-        border: "1px",
-        borderStyle: "dashed",
+        border: "5px",
+        borderStyle: "double",
         borderColor: "grey.800",
-        padding: 4,
+        padding: 3,
         borderRadius: 2,
         textAlign: "center",
         cursor: "pointer",
@@ -80,7 +82,10 @@ const FileUpload = ({ preview, setPreview }: FileUploadProps) => {
           onClick={handleClick}
         >
           <CloudUploadIcon sx={{ fontSize: 40, mb: 1 }} />
-          <Typography variant="body2">Upload an image here to get started & unlock all <b>A.I. features</b>.</Typography>
+          <Typography variant="body2">
+            Upload an image here to get started </Typography>
+            <Typography variant="body2">
+            & unlock all the <b style={{textShadow: "0 0 5px rgba(255, 255, 255, 0.5), 0 0 30px rgba(0, 150, 255, 0.3)",}}>A.I. features</b>.</Typography>
         </Stack>
       ) : (
         <Stack position="relative" width={"100%"} height={"100%"} overflow={"hidden"}>

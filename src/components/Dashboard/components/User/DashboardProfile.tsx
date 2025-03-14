@@ -20,7 +20,6 @@ export default function DashboardProfile() {
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [avatar, setAvatar] = useState<string | null>(null);
 
   const onHandleImage = async (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
@@ -28,7 +27,6 @@ export default function DashboardProfile() {
       const formData = new FormData();
       const file = event.target.files[0];
       formData.append("avatar", file);
-      setAvatar(URL.createObjectURL(file));
 
       const { resData, error } = await fetchData<FormData,{ fileUrl: string }>({
         data: formData,
