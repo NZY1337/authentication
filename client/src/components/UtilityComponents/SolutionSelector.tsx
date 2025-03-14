@@ -1,39 +1,14 @@
-import { Card, CardActionArea, CardContent, Typography, Grid2 as Grid, Tooltip, Box } from "@mui/material";
-import { styled } from "@mui/system";
+import { CardActionArea, CardContent, Typography, Grid2 as Grid, Tooltip, Box } from "@mui/material";
 import { solutions } from "../../helpers/constants";
 import InfoIcon from "@mui/icons-material/InfoOutlined";
 import { useTheme } from '@mui/material/styles';
 
 import { BuilderOverviewProps } from "../Dashboard/components/Builder/BuilderOverview";
+import { CustomCard } from "./CustomCard";
 
-interface StyledCardProps {
-  selected: boolean;
-}
+type SolutionSelectorProps = Pick<BuilderOverviewProps, "maskCategory" | "setMaskCategory">;
 
-type SolutionSelectorProps = Pick<BuilderOverviewProps, "selectedSolution" | "setSelectedCategory">;
-
-const StyledCard = styled(Card)<StyledCardProps>(({ theme, selected }) => ({
-    textAlign: "center",
-    padding: theme.spacing(1),
-    backgroundColor: selected ? "0 4px 10px rgba(0, 0, 0, 0.1)" : "none",
-    boxShadow: selected ? "0 0 5px rgba(255, 255, 255, 0.5), 0 0 30px rgba(0, 150, 255, 0.3)" : "none",
-    "&:hover": {
-      boxShadow: "0 4px 10px rgba(0, 0, 0, 0.15)",
-    },
-    height: 156,
-    display: "flex",
-    border: selected ? `2px solid ${theme.palette.success.main}` : `1px solid ${theme.palette.divider}`, // Soft white border
-    borderRadius: "12px", // Smooth rounded corners
-    background: "rgba(255, 255, 255, 0.1)", // Semi-transparent background
-    backdropFilter: "blur(10px)", // Glassmorphic blur effect,
-    animation: "glow 2s infinite alternate",
-        "@keyframes glow": {
-          "0%": { boxShadow: "0 0 5px rgba(255, 255, 255, 0.5)" },
-          "100%": { boxShadow: "0 0 5px rgba(52, 50, 7, 0.7)" },
-        },
-}));
-
-const SolutionSelector = ({  selectedSolution, setSelectedCategory}: SolutionSelectorProps) => {
+const SolutionSelector = ({  maskCategory, setMaskCategory }: SolutionSelectorProps) => {
   const theme = useTheme();
   const isDarkMode = theme.palette.mode === 'dark';
 
@@ -42,9 +17,9 @@ const SolutionSelector = ({  selectedSolution, setSelectedCategory}: SolutionSel
       <Grid container spacing={2}>
         {solutions.map((solution) => (
           <Grid  size={{xs: 6, sm:12, md: 4, lg: 2.4}} key={solution.label}>
-            <StyledCard
-              selected={selectedSolution === solution.label}
-              onClick={() => setSelectedCategory(solution.label)}
+            <CustomCard
+              selected={maskCategory === solution.label}
+              onClick={() => setMaskCategory(solution.label)}
             >
               <CardActionArea sx={{ height: '100%', display:'flex', alignItems: 'baseline'}}>
                 <Tooltip title="More info" arrow sx={{ position: "absolute", top: 10, right: 10, fontSize: 16, color: "success.main" }}>
@@ -70,14 +45,14 @@ const SolutionSelector = ({  selectedSolution, setSelectedCategory}: SolutionSel
                   <Typography
                     sx={{
                       mt: 1,
-                      color: selectedSolution === solution.label ? 'success.main' : "#A0A0A0",
+                      color: maskCategory === solution.label ? 'success.main' : "#A0A0A0",
                     }}
                   >
                     {solution.label}
                   </Typography>
                 </CardContent>
               </CardActionArea>
-            </StyledCard>
+            </CustomCard>
           </Grid>
         ))}
       </Grid>

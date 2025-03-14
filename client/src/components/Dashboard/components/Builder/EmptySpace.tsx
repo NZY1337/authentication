@@ -48,6 +48,8 @@ const EmptySpace = ({  spaceTypeOptions }: EmptySpaceProps) => {
     }));
   };
 
+  console.log('empty space')
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
   };

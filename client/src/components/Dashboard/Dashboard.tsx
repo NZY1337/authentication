@@ -14,7 +14,7 @@ import VirtualStaging from './components/Builder/VirtualStaging';
 
 // utils
 import fetchData from '../../utils/fetchData';
-import { solutions, EMPTY_YOUR_SPACE_LABEL } from '../../helpers/constants';
+import { solutions, EMPTY_YOUR_SPACE } from '../../helpers/constants';
 import ProfileDashboard from './components/User/DashboardProfile';
 import { DASHBOARD_NAVIGATION } from '../../helpers/constants';
 
@@ -81,34 +81,36 @@ export type MaskState = {
     mask?: {
       status: string;
       data: {
-        job_id: null;
+        job_id: string;
         credits_consumed: number;
       };
     };
-  };
+};
  
 export default function Dashboard() {
-    const { user, logoutUser } = useAppContext();
     const [spaceType, setSpaceType] = useState<SpaceTypeInterface | null>(null);
     const [designThemes, setDesignThemes] = useState<DesignThemeInterface| null>(null);
     const [file, setFile] = useState<File | null>(null);
-    const navigate = useNavigate();
-    const notifications = useNotifications();
     const [mask, setMask] = useState<MaskState>({
         mask_url: "",
         mask_category: "",
         mask: {
           status: "",
           data: {
-            job_id: null,
+            job_id: "",
             credits_consumed: 0,
           },
         },
     });
 
-    const [selectedCategory, setSelectedCategory] = useState(() => {
+    // hooks
+    const { user, logoutUser } = useAppContext();
+    const navigate = useNavigate();
+    const notifications = useNotifications();
+
+    const [maskCategory, setMaskCategory] = useState(() => {
         const sol = solutions.find(solution => solution.selected);
-        return sol ? sol.label : EMPTY_YOUR_SPACE_LABEL;
+        return sol ? sol.label : EMPTY_YOUR_SPACE.label;
     });
 
     const spaceTypeOptions = {
@@ -121,6 +123,7 @@ export default function Dashboard() {
             spaceTypeValues: spaceType?.data.exterior_spaces.map(item => Object.values(item)[0])
         }
     }
+   
 
     const designThemeOptions = {
         interior: {
@@ -134,11 +137,16 @@ export default function Dashboard() {
     }
 
     const router: Router = useMemo(() => ({
-        navigate: (path: string | URL) => navigate(path.toString()),
+        navigate: (path: string | URL) => {
+            const newPath = path.toString();
+            if (window.location.pathname !== newPath) { // ✅ Prevents re-navigation if already on the same page
+                navigate(newPath);
+            }
+        },
         pathname: window.location.pathname,
         searchParams: new URLSearchParams(window.location.search),
     }), [navigate]);
-
+    
     useEffect(() => {
         const fetchDataParallel = async () => {
             try {
@@ -177,28 +185,24 @@ export default function Dashboard() {
         };
     
         fetchDataParallel();
-    }, []);
-    
+    }, [notifications]);
+
     const authentication = useMemo(() => ({
         signIn: () => navigate('/user/login'), signOut: () => logoutUser() 
     }),[logoutUser, navigate]);
-
-    console.log(file);
 
     const renderContent = () => {
         switch (router.pathname) {
             case '/dashboard/profile':
                 return <ProfileDashboard />;
 
-            case '/dashboard':
+            case '/dashboard/overview':
                 return <BuilderOverview 
-                        setSelectedCategory={setSelectedCategory} 
-                        selectedCategory={selectedCategory} 
+                        setMaskCategory={setMaskCategory} 
+                        maskCategory={maskCategory} 
                         router={router}
                         file={file}
-                        mask={mask}
                         setFile={setFile} 
-                        setMask={setMask}
                     />;
     
             case '/dashboard/empty-your-space':
@@ -207,28 +211,10 @@ export default function Dashboard() {
             case '/dashboard/virtual-staging':
                 return <VirtualStaging spaceTypeOptions={spaceTypeOptions} designThemeOptions={designThemeOptions} />;
     
-            // case '/dashboard/redesigned-furnished-rooms':
-            //     return <AIBuilder preview={preview} setPreview={setPreview} />;
-    
-            // case '/dashboard/landscaping':
-            //     return <AIBuilder preview={preview} setPreview={setPreview} />;
-    
-            // case '/dashboard/render-exterior-structures':
-            //     return <AIBuilder preview={preview} setPreview={setPreview} />;
-    
-            
-    
             default:
                 return null;
         }
     };
-
-    useEffect(() => {
-        if (router.pathname == '/dashboard/wow' || router.pathname == '/dashboard/casablank') {
-            console.log('wow');
-            router.navigate('/dashboard')
-        }
-    },[router])
 
     return (
         <AppProvider

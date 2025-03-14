@@ -1,6 +1,6 @@
 import { REIMAGINE_HOME_API_KEY_ID, REIMAGINE_HOME_API_KEY_NAME } from "../secrets";
 import { BadRequestException } from "../exceptions/bad-request";
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
 // !! MOVE TO /services folder 
 
@@ -10,6 +10,12 @@ const REIMAGINE_API_CFG = {
       'Content-Type': 'application/json'
     },
 };
+
+interface ApiResponseError {
+    status: string;
+    data: Record<string, unknown>;
+    error_message: string;
+  }
 
 const reimagine = {
     createMask: async (imgUrl: string) => {
@@ -28,10 +34,31 @@ const reimagine = {
 
         try {
             const response = await axios(config);
+            console.log(response.data);
             return response.data; // 67d044054c439f58e7301e9d - MASK_JOB_ID
         } catch (error) {
-            console.error(error);
-            throw new BadRequestException("Error creating mask", 400, null);
+            const err = error as AxiosError<ApiResponseError>;
+            const errorMessage = err.response?.data?.error_message ?? "Something went wrong";
+            throw new BadRequestException(errorMessage, 400, null);
+        }
+    },
+    getMask: async(maskId: string) => {
+        const config = {
+            headers: { 
+                'api-key': REIMAGINE_HOME_API_KEY_ID, 
+            },
+            method: 'get',
+            maxBodyLength: Infinity,
+            url: `https://api.reimaginehome.ai/v1/create_mask/${maskId}`,
+        };
+
+        try {
+            const response = await axios(config);
+            return response.data; 
+        } catch (error) {
+            const err = error as AxiosError<ApiResponseError>;
+            const errorMessage = err.response?.data?.error_message ?? "Something went wrong";
+            throw new BadRequestException(errorMessage, 400, null);
         }
     },
     getSpaceType: async () => {
@@ -46,10 +73,11 @@ const reimagine = {
 
         try {
             const response = await axios(config);
-            return response.data; // 67d044054c439f58e7301e9d - MASK_JOB_ID
+            return response.data; 
         } catch (error) {
-            console.error(error);
-            throw new BadRequestException("Error getting space types", 400, null);
+            const err = error as AxiosError<ApiResponseError>;
+            const errorMessage = err.response?.data?.error_message ?? "Something went wrong";
+            throw new BadRequestException(errorMessage, 400, null);
         }
     },
     getDesignTheme: async () => {
@@ -66,8 +94,9 @@ const reimagine = {
             const response = await axios(config);
             return response.data; 
         } catch (error) {
-            console.error(error);
-            throw new BadRequestException("Error getting design theme types", 400, null);
+            const err = error as AxiosError<ApiResponseError>;
+            const errorMessage = err.response?.data?.error_message ?? "Something went wrong";
+            throw new BadRequestException(errorMessage, 400, null);
         }
     }
 }

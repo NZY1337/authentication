@@ -12,6 +12,9 @@
     }
 }
 
+<!-- FLOOR PLANNIG -->
+https://stackoverflow.com/questions/61603510/how-can-i-draw-the-plan-of-one-floor-of-the-building-using-javascript
+
 <!-- https://react-swipeable-views.com/api/api/ -->
 <!-- https://swiperjs.com/demos#navigation -->
 

@@ -8,6 +8,9 @@ import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 
 import reimagine from "../services/reimagine-api";
 
+import { MaskData } from "../types/mask";
+import { BadRequestException } from "../exceptions/bad-request";
+
 const s3 = new S3Client({
     region: AWS_BUCKET_REGION,
     credentials: {
@@ -18,12 +21,14 @@ const s3 = new S3Client({
 
 export const builder: { 
     createMask: (req: Request, res: Response) => Promise<void>,
-    getSpaceType: (req: Request, res: Response) => Promise<void>
-    getDesignTheme: (req: Request, res: Response) => Promise<void>
+    getSpaceType: (req: Request, res: Response) => Promise<void>,
+    getDesignTheme: (req: Request, res: Response) => Promise<void>,
+    getMask: (req: Request, res: Response) => Promise<void>
 } = {
     createMask: async (req: Request, res: Response) => {
-        const file = req.file;
-        if (!file) throw new NotFoundException("No file uploaded", ErrorCode.NOT_FOUND);
+        const { file, body: { maskCategory } } = req;
+
+        if (!file || !maskCategory) throw new NotFoundException("No file uploaded or mask category provided", ErrorCode.NOT_FOUND);
 
         const fileExtension = file.mimetype.split("/")[1]; 
         const fileName = file.originalname.substring(0, file.originalname.lastIndexOf(".")); // Get file name without extension :: petcare.jpeg -> petcare | petcare.6.png -> petcare.6 etc.
@@ -37,14 +42,62 @@ export const builder: {
         };
         
         const command = new PutObjectCommand(params);
-        // await s3.send(command);
+        await s3.send(command);
     
-        const fileUrl = `https://${AWS_BUCKET_NAME}.s3.${AWS_BUCKET_REGION}.amazonaws.com/${builderPreview}`;
-        
-        // const mask = await reimagine.createMask(fileUrl);
+        const maskUrl = `https://${AWS_BUCKET_NAME}.s3.${AWS_BUCKET_REGION}.amazonaws.com/${builderPreview}`;
 
-        // res.status(200).json({ fileUrl, mask });
-        res.status(200).json({ fileUrl: null, mask: null})
+        const maskDataResponse: MaskData = await reimagine.createMask(maskUrl);
+
+        const { status, data: { job_id: jobId, credits_consumed: creditsConsumed } } = maskDataResponse;
+        
+        console.log({creditsConsumed});
+
+        const mask = await prismaClient.mask.create({ 
+            data: {
+                user: {
+                    connect: { id: req.user?.id }
+                },
+                maskUrl,
+                maskCategory,
+                status,
+                jobId: jobId,
+                creditsConsumed,
+            },
+        })
+
+        const formatDataMask = {
+            mask_url: mask.maskUrl,
+            mask_category: mask.maskCategory,
+            mask: {
+                status: mask.status,
+                data: {
+                    job_id: mask.jobId,
+                    credits_consumed: mask.creditsConsumed
+                }
+            }
+        }
+
+        res.status(200).json({ data: formatDataMask })
+    },
+    getMask: async(req: Request, res: Response) => {
+        const maskId = req.query.maskId as string;
+        // console.log({ query: req.params });
+
+        console.log({maskId});
+
+        if (!maskId) {
+            throw new BadRequestException("No mask id provided", 400, null);
+        }
+
+        const mask = await prismaClient.mask.findFirst({
+            where: {
+                userId: req.user?.id, // ✅ Ensure correct relation key
+                jobId: maskId, // ✅ Ensure maskId is properly typed (string or number)
+            }
+        });
+
+        if (!mask) throw new NotFoundException("Mask not found", ErrorCode.NOT_FOUND);
+        res.status(200).json({ mask });
     },
     getSpaceType: async(req: Request, res: Response) => {
         const spaceType = await reimagine.getSpaceType();
@@ -55,3 +108,11 @@ export const builder: {
         res.status(200).json({ designThemes });
     }
 };
+
+// createMask error
+
+// data: {
+//     status: 'error',
+//     data: {},
+//     error_message: 'Image URL size cannot exceed 2048 * 2048 pixels.'
+// }
