@@ -1,7 +1,12 @@
 import express, { Request, Response } from "express";
 import { prismaClient } from "..";
+import { ErrorCode } from "../exceptions/root";
 import { io } from "../utils/socket";
+import { NotFoundException } from "../exceptions/not-found";
+import { BadRequestException } from "../exceptions/bad-request";
+import { InternalException } from "../exceptions/internal-exception";
 
+import { Mask } from "../types/mask";
 const router = express.Router();
 
 // Webhook received: {
@@ -110,33 +115,36 @@ const router = express.Router();
 //     ]
 //   } 
 
+
+// ! use something else instead of create on mask - maybe the mask with the same id is updated
+// ! and we don't want to create another mask mayers but update
 router.post("/webhook/mask", async (req: Request, res: Response) => {
     try {
-        console.log("Webhook received:", req.body);
-
         const { job_id, masks, job_status } = req.body.data;
 
         if (job_status === "done") {
             const jobMask = await prismaClient.jobMask.findFirst({
-                where: { jobId: job_id }
+                where: { 
+                    jobId: job_id,
+                    userId: req.user?.id
+                },
             });
 
             if (!jobMask) {
-                console.error(`JobMask with job_id ${job_id} not found!`);
-                return res.status(404).json({ error: "JobMask not found" });
+                io.emit("masks_ready", { jobId: null, error: `JobMask with job_id ${job_id} not found!`});
+                throw new NotFoundException("JobMask not found", ErrorCode.NOT_FOUND);
             }
 
-            // ✅ Now insert masks with valid jobMaskId
             for (const mask of masks) {
-                await prismaClient.mask.create({
-                    data: {
-                        name: mask.name,
-                        url: mask.url,
-                        category: mask.category,
-                        areaPercent: mask.area_percent,
-                        jobMaskId: jobMask.id, // ✅ Guaranteed to exist now
-                    }
-                });
+                const maskData: Mask = {
+                    name: mask.name,
+                    url: mask.url,
+                    category: mask.category,
+                    areaPercent: mask.area_percent,
+                    jobMaskId: jobMask.id,
+                };
+            
+                await prismaClient.mask.create({ data: maskData });
             }
 
             io.emit("masks_ready", { jobId: job_id, error: null});
@@ -147,12 +155,12 @@ router.post("/webhook/mask", async (req: Request, res: Response) => {
         if (job_status === "error") {
             console.error("Error in mask processing:", req.body);
             io.emit("masks_ready", { jobId: null, error: "Error in mask processing"});
-            return res.status(500).json({ error: "Mask processing failed" }); //
+            throw new BadRequestException("Error in mask processing", 400, null);
         }
     } catch (error) {
         console.error("Error processing webhook:", error);
         io.emit("masks_ready", { jobId: null, error: "Internal server error" });
-        res.status(500).send("Internal Server Error");
+        throw new InternalException("Internal server error", error, ErrorCode.INTERNAL_EXCEPTION);
     }
 });
 
