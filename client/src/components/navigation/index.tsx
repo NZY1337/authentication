@@ -30,9 +30,8 @@ const Navigation: React.FC = () => {
             <Container>
                 <MenuDrawer />
                 
-                <Toolbar sx={{backgroundColor: '#000', height: '80px', mt: 2, borderRadius: 2 }}>
-                {/* <Toolbar> */}
-                    <Logo />
+                <Toolbar sx={{ height: '80px', mt: 2, borderRadius: 2 }}>
+                    <Logo /> 
                                                                     
                     <Box sx={{ display: { xs: "none", md: "flex" }}}>
                         <RenderLinks />

@@ -6,6 +6,7 @@ export const navigationCustomization: Components<Theme> = {
         root: ({ theme }: { theme: Theme }) => ({
             boxShadow: 'none',  
             backgroundColor: 'transparent',
+            position: 'absolute',   
         }),
       },
   },

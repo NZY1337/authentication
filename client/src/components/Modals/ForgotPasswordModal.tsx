@@ -4,7 +4,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import CircularProgress from '@mui/material/CircularProgress';
-import GenericModal from '../UtilityComponents.tsx/GenericModal';
+import GenericModal from '../UtilityComponents/GenericModal';
 import { Typography } from '@mui/material';
 
 interface ForgotPasswordModalProps {

@@ -1,7 +1,7 @@
 import { MenuItem, Link, MenuList} from '@mui/material';
 import { useAppContext } from '../../context/AppContext';
 import { Link as ReactRouterLink } from 'react-router-dom';
-import SubMenu from '../UtilityComponents.tsx/SubMenu';
+import SubMenu from '../UtilityComponents/SubMenu';
 
 const RenderLinks = () => {
     const { user } = useAppContext();

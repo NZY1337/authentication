@@ -1,4 +1,4 @@
-import SectionWrapper from '../UtilityComponents.tsx/SectionWrapper';
+import SectionWrapper from '../UtilityComponents/SectionWrapper';
 import {
     Grid2 as Grid,
     Typography,
@@ -58,13 +58,13 @@ const KeyPoints = () => {
                     />
         </SectionWrapper.Title>
         }>
-        <Grid container gap={10} justifyContent={"center"}>
+        <Grid container gap={10} justifyContent={"center"} mt={10}>
             <Grid  size={{ xs: 2}}>
                 <Stack alignItems={"center"} textAlign={"center"}  spacing={1}>
                     <Typography variant="subtitle1" color='grey.400'>
                         Family & Friends, Gardners
                     </Typography>
-                    <FilterVintageIcon fontSize='large' color='success' />
+                    <FilterVintageIcon fontSize='large' sx={{color: '#00FF00'}} />
                 </Stack>
             </Grid>
 
@@ -83,7 +83,7 @@ const KeyPoints = () => {
                     <Typography variant="subtitle1" color='grey.400'>
                         Architects, Home & Builders
                     </Typography>
-                    <EngineeringIcon fontSize='large' color="success" />
+                    <EngineeringIcon fontSize='large' sx={{color: '#00FF00'}} />
                 </Stack>
             </Grid>
             
@@ -92,7 +92,7 @@ const KeyPoints = () => {
                     <Typography variant="subtitle1" color='grey.400'>
                         Real Estate Agencies
                     </Typography>
-                    <DomainAddSharpIcon fontSize='large' color="success" />
+                    <DomainAddSharpIcon fontSize='large' sx={{color: '#00FF00'}} />
                 </Stack>
             </Grid>
 

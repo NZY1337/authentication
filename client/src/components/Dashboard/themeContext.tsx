@@ -1,5 +1,6 @@
 import { createTheme } from '@mui/material/styles';
 
+
 const dashboardTheme = createTheme({
   cssVariables: {
     colorSchemeSelector: 'data-toolpad-color-scheme',
@@ -52,6 +53,7 @@ const dashboardTheme = createTheme({
     },
     body1: {
       fontFamily: 'Poppins, serif',
+      fontSize: '.9rem'
     },
     body2: {
       fontFamily: 'Poppins, serif',

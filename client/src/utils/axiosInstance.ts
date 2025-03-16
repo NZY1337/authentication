@@ -6,7 +6,7 @@ interface AxiosRequestConfigWithRetry extends AxiosRequestConfig {
   }
 
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:3010/api",
+  baseURL: "https://a0c6-178-138-194-11.ngrok-free.app/api",
   withCredentials: true, // Ensure cookies are sent with the request
 });
 

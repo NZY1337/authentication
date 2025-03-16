@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes,} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate} from 'react-router-dom';
 import './App.css';
 import Login from './components/Auth/Login/Login';
 import Register from './components/Auth/Register/Register';
@@ -22,8 +22,11 @@ function App() {
                 <Route path="/user/forgot-password" element={<ResetPassword />} />
                 <Route path="/user/register" element={<Register />} />
                 <Route path="/user/login" element={<Login />} />
-                <Route path="/" element={<ProtectedRoute />} >
-                    <Route path="dashboard" element={<Dashboard />} />
+                
+                {/* Protected Routes */}
+                <Route path="/" element={<ProtectedRoute />}>
+                    <Route path="dashboard" element={<Navigate to="/dashboard/overview" />} /> ✅ Redirect
+                    <Route path="dashboard/*" element={<Dashboard />} />
                 </Route>
                 <Route path="*" element={<NotFoundPage />} /> 
             </Routes>

@@ -1,9 +1,8 @@
 import { Request, Response } from "express";
 import { prismaClient } from "..";
 import { ErrorCode } from "../exceptions/root";
-import { PutObjectCommand, } from "@aws-sdk/client-s3";
+import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { AWS_BUCKET_NAME, AWS_BUCKET_REGION, AWS_USER_ACCESS_KEY, AWS_USER_SECRET_ACCESS_KEY } from "../secrets";
-import { S3Client, ObjectCannedACL } from "@aws-sdk/client-s3";
 import { UpdateUserSchemaValidator } from "../validation/users";
 import { NotFoundException } from "../exceptions/not-found";
 
@@ -13,7 +12,7 @@ const s3 = new S3Client({
       accessKeyId: AWS_USER_ACCESS_KEY,
       secretAccessKey: AWS_USER_SECRET_ACCESS_KEY,
     },
-  });
+});
 
 export const getUsers = async (req: Request, res: Response) => {
     const users = await prismaClient.user.findMany();
