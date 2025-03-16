@@ -204,20 +204,23 @@ export const getUser = async (req: Request, res: Response) => {
 export const logout = async (req: Request, res: Response) => {
   res.cookie("token", "logout", {
     httpOnly: true,
+    secure: true,
     expires: new Date(Date.now()),
+    sameSite: 'none'
   });
 
   res.cookie("refreshToken", "logout", {
     httpOnly: true,
+    secure: true,
     expires: new Date(Date.now()),
+    sameSite: 'none'
   });
 
-  res.status(200).send()
+  res.status(200).send({ message: "Logout successful" });
 };
 
 export const refreshToken = async (req: Request, res: Response) => {
   const refreshToken = req.cookies.refreshToken;
-  console.log('refresh ', refreshToken);
 
   if (!refreshToken) {
     throw new UnauthorizedException("Unauthorized", ErrorCode.UNAUTHORIZED);

@@ -25,7 +25,6 @@ import { NotificationsProvider, useNotifications } from '@toolpad/core/useNotifi
 // types
 import { type Router } from '@toolpad/core';
 
-
 //* space types
 interface Space {
     space_type: string;
@@ -124,7 +123,6 @@ export default function Dashboard() {
         }
     }
    
-
     const designThemeOptions = {
         interior: {
             designThemeKeys  : designThemes?.data.interior_themes.map(item => Object.keys(item)[0]),
@@ -185,7 +183,7 @@ export default function Dashboard() {
         };
     
         fetchDataParallel();
-    }, [notifications]);
+    }, []);
 
     const authentication = useMemo(() => ({
         signIn: () => navigate('/user/login'), signOut: () => logoutUser() 

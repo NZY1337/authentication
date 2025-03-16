@@ -4,13 +4,6 @@ import axios, { AxiosError } from 'axios';
 
 // !! MOVE TO /services folder 
 
-const REIMAGINE_API_CFG = {
-    headers: { 
-      'api-key': REIMAGINE_HOME_API_KEY_ID, 
-      'Content-Type': 'application/json'
-    },
-};
-
 interface ApiResponseError {
     status: string;
     data: Record<string, unknown>;
@@ -29,19 +22,20 @@ const reimagine = {
             url: 'https://api.reimaginehome.ai/v1/create_mask',
             data: JSON.stringify({
                 "image_url": imgUrl,
+                "webhook_url": "https://a0c6-178-138-194-11.ngrok-free.app/webhook/mask"
             }),
         };
 
         try {
             const response = await axios(config);
-            console.log(response.data);
-            return response.data; // 67d044054c439f58e7301e9d - MASK_JOB_ID
+            return response.data; 
         } catch (error) {
             const err = error as AxiosError<ApiResponseError>;
             const errorMessage = err.response?.data?.error_message ?? "Something went wrong";
             throw new BadRequestException(errorMessage, 400, null);
         }
     },
+    // this is now obsolete since we have the webhook
     getMask: async(maskId: string) => {
         const config = {
             headers: { 

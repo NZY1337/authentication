@@ -6,6 +6,8 @@ export interface CookieOptions {
   httpOnly: boolean;
   secure: boolean;
   maxAge: number;
+  domain?: string;
+  sameSite?: "strict" | "lax" | "none";
 }
 
 export interface TokenResponse {

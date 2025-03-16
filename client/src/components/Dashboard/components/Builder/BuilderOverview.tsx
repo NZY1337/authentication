@@ -3,17 +3,15 @@ import React, { useState, useEffect } from "react";
 // components
 import PhotoGuideModalBuilder from "../../../Modals/PhotoGuideModal";
 import Button from "@mui/material/Button";
-import Box from "@mui/material/Box";
 import SolutionSelector from "../../../UtilityComponents/SolutionSelector"; 
 import FileUpload from "../../../UtilityComponents/FileUpload";
 import PhotoGuidelines from "../../../UtilityComponents/PhotoGuide";
-import LinearProgress from '@mui/material/LinearProgress';
 
 import { Grid2 as Grid } from "@mui/material"
 
 // hooks
 import { useNotifications } from "@toolpad/core/useNotifications";
-
+import useSocket from "../../../../helpers/hooks/useSocket";
 
 // utils
 import fetchData from "../../../../utils/fetchData";
@@ -38,16 +36,16 @@ const BuilderOverview = ({ router, file, maskCategory, setMaskCategory, setFile 
     const notifications = useNotifications()
     const selectedNavItem = solutions.find(sol => sol.label == maskCategory)?.segment;
     const [loading, setLoading] = useState(false);
-    
+    const { maskStatus } = useSocket();
+
     const handleCreateMask = async () => {
         setLoading(true);
-
         if (file) {
           const formData = new FormData();
           formData.append("preview", file);  // Now it's a valid file upload
           formData.append("maskCategory", maskCategory);
 
-          const { resData, error } = await fetchData<FormData, { data: MaskState }>({
+          const { error } = await fetchData<FormData, { data: MaskState }>({
             data: formData,
             url: "/builder/create-mask",
             method: "POST",
@@ -59,15 +57,25 @@ const BuilderOverview = ({ router, file, maskCategory, setMaskCategory, setFile 
                 autoHideDuration: 4000,
             });
           }
-      
-          if (resData) {
-            const { data } = resData;
-            router?.navigate(`/dashboard/${selectedNavItem}?maskId=${data.mask?.data.job_id}`);
-          }
         }
-
-        setLoading(false);
     };
+
+    useEffect(() => {
+        if (maskStatus) {
+            setLoading(true);
+            if (maskStatus.error) {
+                notifications.show(maskStatus.error, {
+                    severity: 'error',
+                    autoHideDuration: 4000,
+                })
+                setLoading(false);
+            } else if (maskStatus.jobId) {
+                setLoading(false);
+                router?.navigate(`/dashboard/${selectedNavItem}?maskId=${maskStatus.jobId}`);
+                console.log("Masks are ready!");
+            }
+        }
+    }, [maskStatus, notifications, router, selectedNavItem]);
       
     useEffect(() => {
         return () => setPreview(null);

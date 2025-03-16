@@ -50,9 +50,9 @@ export const builder: {
 
         const { status, data: { job_id: jobId, credits_consumed: creditsConsumed } } = maskDataResponse;
         
-        console.log({creditsConsumed});
+        // console.log({creditsConsumed});
 
-        const mask = await prismaClient.mask.create({ 
+        const jobMask = await prismaClient.jobMask.create({ 
             data: {
                 user: {
                     connect: { id: req.user?.id }
@@ -65,31 +65,18 @@ export const builder: {
             },
         })
 
-        const formatDataMask = {
-            mask_url: mask.maskUrl,
-            mask_category: mask.maskCategory,
-            mask: {
-                status: mask.status,
-                data: {
-                    job_id: mask.jobId,
-                    credits_consumed: mask.creditsConsumed
-                }
-            }
-        }
-
-        res.status(200).json({ data: formatDataMask })
+        res.status(200).json({ data: jobMask })
     },
     getMask: async(req: Request, res: Response) => {
         const maskId = req.query.maskId as string;
         // console.log({ query: req.params });
 
-        console.log({maskId});
 
         if (!maskId) {
             throw new BadRequestException("No mask id provided", 400, null);
         }
 
-        const mask = await prismaClient.mask.findFirst({
+        const mask = await prismaClient.jobMask.findFirst({
             where: {
                 userId: req.user?.id, // ✅ Ensure correct relation key
                 jobId: maskId, // ✅ Ensure maskId is properly typed (string or number)
@@ -97,6 +84,7 @@ export const builder: {
         });
 
         if (!mask) throw new NotFoundException("Mask not found", ErrorCode.NOT_FOUND);
+       
         res.status(200).json({ mask });
     },
     getSpaceType: async(req: Request, res: Response) => {

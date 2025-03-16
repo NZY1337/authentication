@@ -11,6 +11,9 @@
         "credits_consumed": 0.5
     }
 }
+https://www.youtube.com/watch?v=ixgxx_um8r8
+
+https://www.cutout.pro/learn/reimagine-home-ai/
 
 <!-- FLOOR PLANNIG -->
 https://stackoverflow.com/questions/61603510/how-can-i-draw-the-plan-of-one-floor-of-the-building-using-javascript

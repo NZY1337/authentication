@@ -1,5 +1,5 @@
 import * as jwt from "jsonwebtoken";
-import { JWT_SECRET, SMTP_PASSWORD } from "../secrets";
+import { JWT_SECRET, JWT_REFRESH_SECRET, SMTP_PASSWORD } from "../secrets";
 import nodemailer from "nodemailer";
 import crypto from "crypto";
 import { BadRequestException } from "../exceptions/bad-request";
@@ -73,27 +73,27 @@ export const sendEmailNotification = async ({
 */
 
 export const generateToken = (userId: string): TokenResponse => {
-  const token = jwt.sign({ userId }, JWT_SECRET, { expiresIn: "15m" });
-  const refreshToken = jwt.sign({ userId }, JWT_SECRET, { expiresIn: "1d" });
+  const token = jwt.sign({ userId }, JWT_SECRET, { expiresIn: 15 * 60 });
+  const refreshToken = jwt.sign({ userId }, JWT_SECRET, { expiresIn: 24 * 60 * 60 });
     
   const options: CookieOptions = {
     httpOnly: true, // Prevent client-side access to the cookie
-    secure: process.env.NODE_ENV === "production", // Use secure cookies in production
-    // maxAge: 1 * 24 * 60 * 60 * 1000, // 1 day
-    maxAge: 15 * 60 * 1000, // 15 minute
+    // secure: process.env.NODE_ENV === "production", // Use secure cookies in production
+    maxAge: 15 * 60 * 1000, // 15 minute,
+    secure: true,
+    sameSite: "none"
   };
 
   const refreshOptions: CookieOptions = {
     httpOnly: true, // Prevent client-side access to the cookie
-    secure: process.env.NODE_ENV === "production", // Use secure cookies in production
-    // maxAge: 15 * 60 * 1000, // 10 minute
-    maxAge: 1 * 24 * 60 * 60 * 1000, // 1 day
-    
+    // secure: process.env.NODE_ENV === "production", // Use secure cookies in production
+    maxAge: 1 * 24 * 60 * 60 * 1000, // 1 day,
+    secure: true,
+    sameSite: "none"
   };
 
   return { token, refreshToken, options, refreshOptions };
 };
-
 
 export const calculateSessionTime = (token: string) => {
   try {
@@ -102,7 +102,6 @@ export const calculateSessionTime = (token: string) => {
       const currentTime = Math.floor(Date.now() / 1000);
       const remainingTime = payload.exp - currentTime;
       const isExpiringSoon = remainingTime <= 60;
-      console.log(remainingTime);
       return { remainingTime, isExpiringSoon };
     }
 

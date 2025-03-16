@@ -17,8 +17,8 @@ export const CustomCard = styled(Card)<{selected: boolean}>(({ theme, selected }
     background: "rgba(255, 255, 255, 0.1)", // Semi-transparent background
     backdropFilter: "blur(10px)", // Glassmorphic blur effect,
     animation: "glow 2s infinite alternate",
-        "@keyframes glow": {
-          "0%": { boxShadow: "0 0 5px rgba(255, 255, 255, 0.5)" },
-          "100%": { boxShadow: "0 0 5px rgba(52, 50, 7, 0.7)" },
-        },
+    "@keyframes glow": {
+        "0%": { boxShadow: "0 0 5px rgba(255, 255, 255, 0.5)" },
+        "100%": { boxShadow: "0 0 5px rgba(52, 50, 7, 0.7)" },
+    },
 }));
