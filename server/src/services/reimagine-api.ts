@@ -32,9 +32,7 @@ const reimagine = {
         } catch (error) {
             const err = error as AxiosError<ApiResponseError>;
             const errorMessage = err.response?.data?.error_message ?? "Something went wrong";
-            const errorCode = err.response?.status ?? 400;
-            console.log(errorCode, 'from reimagine');
-            throw new BadRequestException(errorMessage, errorCode, null);
+            throw new BadRequestException(errorMessage, 500, null);
         }
     },
     // this is now obsolete since we have the webhook

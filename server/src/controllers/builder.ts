@@ -1,24 +1,18 @@
 
 import { Request, Response } from "express";
 import { NotFoundException } from "../exceptions/not-found";
-import { InternalException } from "../exceptions/internal-exception";
 import { ErrorCode } from "../exceptions/root";
 import { prismaClient } from "..";
 import { AWS_BUCKET_NAME, AWS_BUCKET_REGION, AWS_USER_ACCESS_KEY, AWS_USER_SECRET_ACCESS_KEY } from "../secrets";
 import { PutObjectCommand, S3Client, HeadObjectCommand } from "@aws-sdk/client-s3";
-
-import reimagine from "../services/reimagine-api";
-
 import { JobMask } from "../types/mask";
 import { BadRequestException } from "../exceptions/bad-request";
 
-const s3 = new S3Client({
-    region: AWS_BUCKET_REGION,
-    credentials: {
-      accessKeyId: AWS_USER_ACCESS_KEY,
-      secretAccessKey: AWS_USER_SECRET_ACCESS_KEY,
-    },
-});
+import path from "path";
+import reimagine from "../services/reimagine-api";
+import { InternalException } from "../exceptions/internal-exception";
+
+import s3 from "../utils/s3Client";
 
 // ! prevent images to be uploaded to s3 if they are larger than reimagine's create mask endpoint attributes.
 
@@ -34,27 +28,15 @@ export const builder: {
         if (!file || !maskCategory) throw new NotFoundException("No file uploaded or mask category provided", ErrorCode.NOT_FOUND);
     
         const fileExtension = file.mimetype.split("/")[1]; 
-        const fileName = file.originalname.substring(0, file.originalname.lastIndexOf(".")); // Get file name without extension
+        const fileName = path.parse(file.originalname).name;
         const builderPreview = `${fileName}-${req.user?.id}.${fileExtension}`;
     
-        const params = {
-            Bucket: AWS_BUCKET_NAME,
-            Key: `${builderPreview}`,
-            Body: file.buffer,
-            ContentType: file.mimetype,
-        };
-    
         try {
-            const command = new PutObjectCommand(params);
-            await s3.send(command); // ✅ Upload to S3
-    
-            // Validate if the file exists in S3
-            const headParams = { Bucket: AWS_BUCKET_NAME, Key: `${builderPreview}` };
-            await s3.send(new HeadObjectCommand(headParams)); // Throws an error if the object doesn't exist
-    
-            // S3 upload is successful, now generate mask
-            const maskUrl = `https://${AWS_BUCKET_NAME}.s3.${AWS_BUCKET_REGION}.amazonaws.com/${builderPreview}`;
-    
+            // Upload image to S3
+            await s3.setFile(builderPreview, file.buffer, file.mimetype);
+            await s3.validate(builderPreview); 
+            const maskUrl = s3.getFile(builderPreview);
+
             const maskDataResponse: JobMask = await reimagine.createMask(maskUrl);
             const { status, data: { job_id: jobId, credits_consumed: creditsConsumed }} = maskDataResponse;
     
@@ -72,31 +54,44 @@ export const builder: {
                 },
             });
     
-            res.status(200).end()
+            res.status(200).end();
         } catch (error) {
             if (error instanceof BadRequestException) {
                 return res.status(error.errorCode).json({ message: error.message });
             }
 
-            return res.status(500).json({ message: "Internal Server Error wpw" });
+            throw new InternalException("Internal Server Error", error, ErrorCode.INTERNAL_EXCEPTION);
         }
     },
     getMask: async(req: Request, res: Response) => {
         const maskId = req.query.maskId as string;
+
         if (!maskId) {
             throw new BadRequestException("No mask id provided", 400, null);
         }
 
-        const mask = await prismaClient.jobMask.findFirst({
+        const jobMask = await prismaClient.jobMask.findFirst({
             where: {
                 userId: req.user?.id, // ✅ Ensure correct relation key
                 jobId: maskId, // ✅ Ensure maskId is properly typed (string or number)
             }
         });
 
-        if (!mask) throw new NotFoundException("Mask not found", ErrorCode.NOT_FOUND);
-       
-        res.status(200).json({ mask });
+        if (!jobMask) throw new NotFoundException("job_mask not found", ErrorCode.NOT_FOUND);
+
+        const masks = await prismaClient.mask.findMany({
+            where: {
+                jobMaskId: jobMask.id,
+            }
+        });
+
+        const maskData = {
+            masks,
+            maskCategory: jobMask.maskCategory, 
+            maskUrl: jobMask.maskUrl
+        }
+                
+        res.status(200).json({ data: maskData });
     },
     getSpaceType: async(req: Request, res: Response) => {
         const spaceType = await reimagine.getSpaceType();
@@ -108,10 +103,3 @@ export const builder: {
     }
 };
 
-// createMask error
-
-// data: {
-//     status: 'error',
-//     data: {},
-//     error_message: 'Image URL size cannot exceed 2048 * 2048 pixels.'
-// }

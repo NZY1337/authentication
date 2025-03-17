@@ -1,27 +1,31 @@
 import React, { useState } from "react";
 
 // components
-import { Grid2 as Grid, Typography, } from "@mui/material"; 
+import { Grid2 as Grid, } from "@mui/material"; 
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Paper from "@mui/material/Paper";
-import Box from "@mui/material/Box";
-import { Link } from "react-router-dom";
 import DynamicSelect, { DynamicSelectProps } from "../../../UtilityComponents/DynamicSelect";
 import CustomButton from "../../../UtilityComponents/CustomButtom";
+import { type Router } from '@toolpad/core';
+import MaskPreview from "./mask/MaskPreview";
 
-// icons
-import { Warning } from "@mui/icons-material";
+// utils
+import useBuilder from "../../../../services/builder/useBuilder";
+import { mapThemeOptions } from "../../../../utils/utilities";
+
 
 // types
 type OnchangeType = DynamicSelectProps['onChange'];
-import { type VirtualStagingProps } from "../../Dashboard"
 
-const VirtualStaging = ({ designThemeOptions }: VirtualStagingProps) => {
-  const { designThemeKeys, designThemeValues } = designThemeOptions?.interior || { designThemeKeys: [], designThemeValues: [] };
- 
+const VirtualStaging = ({ router }: { router: Router}) => {
+  const { loading, designThemes, maskData } = useBuilder(router);
+  const { designThemeKeys, designThemeValues } = designThemes ? mapThemeOptions(designThemes).interior : {};
+    
+  const maskUrl = maskData?.data.maskUrl;
+  
   const [stateBuilder, setStateBuilder] = useState({
     designThemes: designThemeKeys && designThemeKeys.length ? designThemeKeys[0] : "DT-INT-001",
     mode: "Beautiful Redesign",
@@ -52,7 +56,7 @@ const VirtualStaging = ({ designThemeOptions }: VirtualStagingProps) => {
     event.preventDefault();
   };
 
-  if (!designThemeOptions) {
+  if (loading) {
     return <div>Loading...</div>;
   }
 
@@ -94,20 +98,7 @@ const VirtualStaging = ({ designThemeOptions }: VirtualStagingProps) => {
       </Grid>
 
       <Grid size={{ xs: 12, md: 6, lg: 6, xl: 8 }}>
-        <Paper sx={{ padding: 3, color: "#fff", borderRadius: 2 }}>
-                <img
-                    src={'https://images.unsplash.com/photo-1512972972907-6d71529c5e92?q=80&w=3542&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'}
-                    alt="AI"
-                    style={{ width: "100%", height: "100%", maxHeight: "400px", objectFit: 'cover' }}
-                /> 
-                
-                <Box display="flex" alignItems="center" gap={1} mt={2}>
-                    <Warning color="warning" />
-                    <Typography color="textPrimary">
-                        Go back to <Link to="/dashboard">overview</Link> and upload an image.
-                    </Typography>
-                </Box>
-        </Paper>
+        <MaskPreview maskUrl={maskUrl} />
       </Grid>
     </Grid>
   );

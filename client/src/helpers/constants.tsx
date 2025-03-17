@@ -17,6 +17,8 @@ import badPhoto4 from "../assets/guidelines/badPhoto4.png"
 import SofaIcon from "@mui/icons-material/Weekend";
 import DeleteIcon from "@mui/icons-material/Delete";
 
+
+
 const VIRTUAL_STAGING = {
     label: "Virtual Staging",
     segment: "virtual-staging"
