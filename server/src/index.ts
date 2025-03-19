@@ -1,12 +1,12 @@
 import express, { Express } from "express";
 import { createServer } from "http";
 import { PORT } from "./secrets";
-import rootRouter from "./routes";
 import { PrismaClient } from "@prisma/client";
 import { errorMiddleware } from "./middlewares/errors";
+import { initializeSocket } from "./utils/socket";
+import rootRouter from "./routes";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import { initializeSocket } from "./utils/socket";
 import reimagineWebook from "./webhooks/reimagine";
 
 const app: Express = express();

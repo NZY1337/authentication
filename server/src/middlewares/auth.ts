@@ -5,8 +5,6 @@ import { JWT_SECRET } from "../secrets";
 import * as jwt from "jsonwebtoken";
 import { prismaClient } from "..";
 import { User } from "@prisma/client";
-import { calculateSessionTime } from "../utils";
-import { getSessionTime } from "../controllers/auth";
 
 const authMiddleware = async (
   req: Request,

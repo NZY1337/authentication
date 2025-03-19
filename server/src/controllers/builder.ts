@@ -1,28 +1,39 @@
 
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import { NotFoundException } from "../exceptions/not-found";
 import { ErrorCode } from "../exceptions/root";
 import { prismaClient } from "..";
-import { AWS_BUCKET_NAME, AWS_BUCKET_REGION, AWS_USER_ACCESS_KEY, AWS_USER_SECRET_ACCESS_KEY } from "../secrets";
-import { PutObjectCommand, S3Client, HeadObjectCommand } from "@aws-sdk/client-s3";
 import { JobMask } from "../types/mask";
 import { BadRequestException } from "../exceptions/bad-request";
+import { InternalException } from "../exceptions/internal-exception";
 
 import path from "path";
 import reimagine from "../services/reimagine-api";
-import { InternalException } from "../exceptions/internal-exception";
-
 import s3 from "../utils/s3Client";
+import { commonParams } from "@aws-sdk/client-s3/dist-types/endpoint/EndpointParameters";
 
 // ! prevent images to be uploaded to s3 if they are larger than reimagine's create mask endpoint attributes.
-
 export const builder: { 
-    createMask: (req: Request, res: Response) => Promise<Response | void>,
+    createMask: (req: Request, res: Response, next: NextFunction) => Promise<Response | void>,
     getSpaceType: (req: Request, res: Response) => Promise<void>,
     getDesignTheme: (req: Request, res: Response) => Promise<void>,
     getMask: (req: Request, res: Response) => Promise<void>
 } = {
-    createMask: async (req: Request, res: Response) => {
+
+    /**
+     * Handles mask creation by processing an uploaded image, calling Reimagine API, 
+     * storing the jobMask details in the database and returns the `creditsConsumed`.
+     * 
+     * @description This function handles the process of creating a mask by processing an uploaded image to S3bucket,
+     * storing the job details in the database, and returning the `creditsConsumed`.
+     * 
+     * - the user is charged per this createMask service / 0.5 per request - everytime. Check docs for more.
+     * - we store the informations in the database and later in the webhook we process the real payment
+     * - the masks are processed by the webhook endpoint - this creates only a jobMaskId based on which masks will be fetched if status == "done"
+     * 
+     * @returns The response object with the `creditsConsumed`.
+     */
+    createMask: async (req: Request, res: Response, next: NextFunction) => {
         const { file, body: { maskCategory } } = req;
     
         if (!file || !maskCategory) throw new NotFoundException("No file uploaded or mask category provided", ErrorCode.NOT_FOUND);
@@ -39,7 +50,7 @@ export const builder: {
 
             const maskDataResponse: JobMask = await reimagine.createMask(maskUrl);
             const { status, data: { job_id: jobId, credits_consumed: creditsConsumed }} = maskDataResponse;
-    
+
             // Store the jobMask only if S3 upload and mask creation succeed
             await prismaClient.jobMask.create({ 
                 data: {
@@ -49,12 +60,12 @@ export const builder: {
                     maskUrl,
                     maskCategory,
                     status,
-                    jobId: jobId,
+                    jobId,
                     creditsConsumed,
                 },
             });
-    
-            res.status(200).end();
+            
+            res.status(200).json({ credits: creditsConsumed });
         } catch (error) {
             if (error instanceof BadRequestException) {
                 return res.status(error.errorCode).json({ message: error.message });

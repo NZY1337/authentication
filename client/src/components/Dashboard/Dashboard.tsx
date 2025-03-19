@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from 'react';
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 // components
@@ -12,6 +12,7 @@ import { PageContainer } from '@toolpad/core/PageContainer';
 import EmptySpace from './components/Builder/EmptySpace';
 import VirtualStaging from './components/Builder/VirtualStaging';
 
+
 // utils
 import { solutions, EMPTY_YOUR_SPACE } from '../../helpers/constants';
 import ProfileDashboard from './components/User/DashboardProfile';
@@ -23,7 +24,6 @@ import { NotificationsProvider } from '@toolpad/core/useNotifications';
 
 // types
 import { type Router } from '@toolpad/core';
-
 
 
 export default function Dashboard() {

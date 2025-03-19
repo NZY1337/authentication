@@ -1,10 +1,9 @@
 import { Router } from "express";
 
-import {
-  builder
-} from "../controllers/builder";
+import { builder } from "../controllers/builder";
 import { errorHandler } from "../error-handler";
 import authMiddleware from "../middlewares/auth";
+import paymentMiddleware from "../middlewares/payments";
 import multer, { Multer } from 'multer';
 
 const builderRouter: Router = Router();

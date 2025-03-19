@@ -6,7 +6,7 @@ interface AxiosRequestConfigWithRetry extends AxiosRequestConfig {
   }
 
 const axiosInstance = axios.create({
-  baseURL: "https://a0c6-178-138-194-11.ngrok-free.app/api",
+  baseURL: "https://deployment-sao-plymouth-ecological.trycloudflare.com/api",
   withCredentials: true, // Ensure cookies are sent with the request
 });
 

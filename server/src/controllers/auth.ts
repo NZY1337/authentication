@@ -198,6 +198,7 @@ export const getUser = async (req: Request, res: Response) => {
     
     const userWithoutSensitiveData: UserWithoutSensitiveData = _.omit(user, ["password", "passwordToken", "passwordTokenExpirationDate", "verificationToken"])
 
+    console.log(userWithoutSensitiveData)
     res.status(200).json({ user: userWithoutSensitiveData }); // passed from MIDDLEWARE
 };
 

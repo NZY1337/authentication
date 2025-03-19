@@ -29,6 +29,7 @@ model User {
     passwordTokenExpirationDate DateTime?
     createdAt                   DateTime  @default(now())
     updatedAt                   DateTime  @updatedAt
+    credits                     Decimal   @default(0) @db.Decimal(10, 2)
 
     @@map("users")
     jobMasks JobMask[]

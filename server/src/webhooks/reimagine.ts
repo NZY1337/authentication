@@ -5,8 +5,9 @@ import { io } from "../utils/socket";
 import { NotFoundException } from "../exceptions/not-found";
 import { BadRequestException } from "../exceptions/bad-request";
 import { InternalException } from "../exceptions/internal-exception";
-
+import { Decimal } from "@prisma/client/runtime/library";
 import { Mask } from "../types/mask";
+
 const router = express.Router();
 
 // ! use something else instead of create on mask - maybe the mask with the same id is updated
@@ -21,12 +22,37 @@ router.post("/webhook/mask", async (req: Request, res: Response) => {
                     jobId: job_id,
                     userId: req.user?.id
                 },
+                select: { userId: true, creditsConsumed: true, id: true }
             });
 
             if (!jobMask) {
                 io.emit("masks_ready", { jobId: null, error: `JobMask with job_id ${job_id} not found!`});
                 throw new NotFoundException("JobMask not found", ErrorCode.NOT_FOUND);
             }
+
+            await prismaClient.$transaction(async (tx) => {
+                const existingUser = await tx.user.findUnique({
+                    where: { id: jobMask.userId },
+                    select: { credits: true },
+                });
+
+                if (!existingUser) {
+                    throw new NotFoundException("User not found", ErrorCode.NOT_FOUND);
+                }
+
+                const currentCredits = existingUser.credits.toNumber();
+                const creditsConsumed = jobMask.creditsConsumed.toNumber();
+
+                if (currentCredits < jobMask.creditsConsumed.toNumber()) {
+                    throw new BadRequestException("Insufficient credits", ErrorCode.INSUFFICIENT_CREDITS, null);
+                }
+
+                // ✅ Deduct credits and update user
+                return await tx.user.update({
+                    where: { id: jobMask.userId },
+                    data: { credits: new Decimal(currentCredits - creditsConsumed) },
+                });
+            });
 
             for (const mask of masks) {
                 const maskData: Mask = {

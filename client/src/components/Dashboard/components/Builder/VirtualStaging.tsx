@@ -16,12 +16,11 @@ import MaskPreview from "./mask/MaskPreview";
 import useBuilder from "../../../../services/builder/useBuilder";
 import { mapThemeOptions } from "../../../../utils/utilities";
 
-
 // types
 type OnchangeType = DynamicSelectProps['onChange'];
 
 const VirtualStaging = ({ router }: { router: Router}) => {
-  const { loading, designThemes, maskData } = useBuilder(router);
+  const { loadingMasks, designThemes, maskData } = useBuilder(router);
   const { designThemeKeys, designThemeValues } = designThemes ? mapThemeOptions(designThemes).interior : {};
     
   const maskUrl = maskData?.data.maskUrl;
@@ -56,7 +55,9 @@ const VirtualStaging = ({ router }: { router: Router}) => {
     event.preventDefault();
   };
 
-  if (loading) {
+  const initializingComponent = loadingMasks || !designThemeKeys || !designThemeValues;
+
+  if (initializingComponent) {
     return <div>Loading...</div>;
   }
 

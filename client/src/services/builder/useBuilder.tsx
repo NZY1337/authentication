@@ -11,7 +11,7 @@ import { SpaceTypeInterface, DesignThemeInterface } from "../../utils/utilities"
 
 // hooks
 import { useNotifications } from '@toolpad/core/useNotifications';
-
+import { useAppContext } from "../../context/AppContext";
 
 type MaskData = {
     masks: object[];
@@ -20,16 +20,54 @@ type MaskData = {
 }
 
 const useBuilder = (router: Router) => {
-    const [maskData, setMaskData] = useState<{ data: MaskData } | null>(null);
-    const [loading, setLoading] = useState(false);
     const jobMaskId = router.searchParams.get("maskId");
-    
-    const [spaceTypes, setSpaceTypes] = useState<SpaceTypeInterface | null>(null);
-    const [designThemes, setDesignThemes] = useState<DesignThemeInterface| null>(null);
     const notifications = useNotifications();
 
+    const { setUser } = useAppContext();
+    const [maskData, setMaskData] = useState<{ data: MaskData } | null>(null);
+    const [spaceTypes, setSpaceTypes] = useState<SpaceTypeInterface | null>(null);
+    const [designThemes, setDesignThemes] = useState<DesignThemeInterface| null>(null);
+    const [open, setOpen] = useState(false);
+    const [loadingMasks, setLoadingMasks] = useState(false);
+    const [loadingCreateMask, setLoadingCreateMask] = useState(false);
+
+    const createMask = async (file: File, maskCategory: string): Promise<void> => {
+        setLoadingCreateMask(true);
+        setOpen(true);
+
+        if (file) {
+            const formData = new FormData();
+            formData.append("preview", file);  // Now it's a valid file upload
+            formData.append("maskCategory", maskCategory);
+
+            const { error, resData } = await fetchData<FormData, {credits: number}>({
+                data: formData,
+                url: "/builder/create-mask",
+                method: "POST",
+            });
+        
+            if (error) {
+                setLoadingCreateMask(false);
+                setOpen(false)
+                notifications.show(error, {
+                    severity: 'error',
+                    autoHideDuration: 4000,
+                });
+            }
+
+            if (resData) {
+                console.log(resData);
+                notifications.show(`${resData.credits} credits used`, {
+                    severity: 'warning',
+                    autoHideDuration: 4000,
+                });
+                setUser(prevUser => prevUser ? { ...prevUser, credits: Number(prevUser.credits - resData.credits) } : null);
+            }
+        }
+    };
+
     const fetchMasks = useCallback(async (jobMaskId: string) => {
-        setLoading(true);
+        setLoadingMasks(true);
 
         const { resData, error } = await fetchData<null, { data: MaskData }>({
             url: "/builder/create-mask",  
@@ -44,11 +82,12 @@ const useBuilder = (router: Router) => {
             })
         } else if (resData) {
             setMaskData({ data: resData.data });
+            
             const solution = solutions.find((sol) => sol.label === resData?.data?.maskCategory);
             router.navigate(`/dashboard/${solution?.segment}?maskId=${jobMaskId}`);
         }
 
-        setLoading(false);
+        setLoadingMasks(false);
     },[notifications, router]);
 
       useEffect(() => {
@@ -96,7 +135,7 @@ const useBuilder = (router: Router) => {
         fetchDataParallel();
     }, []);
 
-    return { maskData, loading, spaceTypes, designThemes, fetchMasks, };
+    return { maskData, loadingMasks, spaceTypes, designThemes, open, loadingCreateMask, fetchMasks, createMask, setOpen, setLoadingCreateMask };
 };
 
 export default useBuilder;

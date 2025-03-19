@@ -46,16 +46,7 @@ const KeyPoints = () => {
         innerWidth='lg' 
         outerWidth={false} 
         title={<SectionWrapper.Title variant="h2">
-            Easy & Fast AI Technology for 
-            < br />
-
-            <TypeAnimation sequence={[ 'Interiors', 1500, 'Exteriors', 1500, 'Gardners', 1500, 'Agencies', 1500]}
-                        wrapper="span"
-                        cursor={true}
-                        repeat={Infinity}
-                        speed={40}
-                        style={{ display: 'inline-block', color: 'rgb(255, 165, 0)' }}
-                    />
+            Easy & Fast A.I. Technology
         </SectionWrapper.Title>
         }>
         <Grid container gap={10} justifyContent={"center"} mt={10}>

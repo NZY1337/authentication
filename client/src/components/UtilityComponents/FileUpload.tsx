@@ -70,7 +70,6 @@ const FileUpload = ({ preview, setPreview, setFile}: FileUploadProps) => {
         padding: 3,
         borderRadius: 2,
         textAlign: "center",
-        boxShadow: "0 0 5px rgba(255, 255, 255, 0.5), 0 0 15px rgba(0, 150, 255, 0.3)",
         cursor: "pointer",
         "&:hover": { borderColor: "grey.700" },
       }}>

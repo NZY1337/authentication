@@ -6,6 +6,7 @@ import useSession from '../services/session/useSession';
 
 export type UserInterface = {
     avatar: string;
+    credits: number;
     createdAt: string;
     updatedAt: string;
     defaultBillingAddress: number | null;

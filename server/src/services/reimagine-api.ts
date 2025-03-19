@@ -22,7 +22,7 @@ const reimagine = {
             url: 'https://api.reimaginehome.ai/v1/create_mask',
             data: JSON.stringify({
                 "image_url": imgUrl,
-                "webhook_url": "https://a0c6-178-138-194-11.ngrok-free.app/webhook/mask"
+                "webhook_url": "https://deployment-sao-plymouth-ecological.trycloudflare.com/webhook/mask"
             }),
         };
 

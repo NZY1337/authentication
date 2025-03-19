@@ -15,15 +15,12 @@ import MaskPreview from "./mask/MaskPreview";
 import useBuilder from "../../../../services/builder/useBuilder";
 import { mapSpaceOptions } from "../../../../utils/utilities";
 
-
 // types
-type OnchangeType = DynamicSelectProps['onChange'];
 import { type Router } from '@toolpad/core';
-
-
+type OnchangeType = DynamicSelectProps['onChange'];
 
 const EmptySpace = ({ router }: { router: Router }) => {
-  const { spaceTypes, loading, maskData } = useBuilder(router);
+  const { spaceTypes, loadingMasks, maskData } = useBuilder(router);
   const { spaceTypeKeys, spaceTypeValues } = spaceTypes ? mapSpaceOptions(spaceTypes).interior : {};
 
   const maskUrl = maskData?.data.maskUrl;
@@ -58,7 +55,9 @@ const EmptySpace = ({ router }: { router: Router }) => {
     event.preventDefault();
   };
 
-  if (loading) {
+  const initializingComponent = loadingMasks || !spaceTypeKeys || !spaceTypeValues 
+
+  if (initializingComponent) {
     return <div>Loading...</div>;
   }
 
