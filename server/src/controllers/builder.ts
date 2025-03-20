@@ -6,11 +6,11 @@ import { prismaClient } from "..";
 import { JobMask } from "../types/mask";
 import { BadRequestException } from "../exceptions/bad-request";
 import { InternalException } from "../exceptions/internal-exception";
-
+import { TransactionType, TransactionStatus } from "@prisma/client";
 import path from "path";
 import reimagine from "../services/reimagine-api";
 import s3 from "../utils/s3Client";
-import { commonParams } from "@aws-sdk/client-s3/dist-types/endpoint/EndpointParameters";
+import { Decimal } from "@prisma/client/runtime/library";
 
 // ! prevent images to be uploaded to s3 if they are larger than reimagine's create mask endpoint attributes.
 export const builder: { 
@@ -32,6 +32,9 @@ export const builder: {
      * - the masks are processed by the webhook endpoint - this creates only a jobMaskId based on which masks will be fetched if status == "done"
      * 
      * @returns The response object with the `creditsConsumed`.
+     * 
+     * !! important: if insuficient credit - remove the uploaded image from S3bucket
+     * 
      */
     createMask: async (req: Request, res: Response, next: NextFunction) => {
         const { file, body: { maskCategory } } = req;
@@ -41,30 +44,57 @@ export const builder: {
         const fileExtension = file.mimetype.split("/")[1]; 
         const fileName = path.parse(file.originalname).name;
         const builderPreview = `${fileName}-${req.user?.id}.${fileExtension}`;
-    
+
         try {
+            const user = await prismaClient.user.findFirst({
+                where: { id: req.user?.id },
+                select: { credits: true },
+            });
+
+            const userTotalCredits = user?.credits;
+            
+            if (userTotalCredits && new Decimal(userTotalCredits).lessThan(new Decimal(0.5))) {
+                throw new BadRequestException("Insufficient credits", ErrorCode.INSUFFICIENT_CREDITS, user?.credits);
+            }
+
             // Upload image to S3
             await s3.setFile(builderPreview, file.buffer, file.mimetype);
             await s3.validate(builderPreview); 
             const maskUrl = s3.getFile(builderPreview);
+            // const maskUrl = 'https://my-bucket-app-deco.s3.eu-north-1.amazonaws.com/d738503a-49c9-4b44-9a81-41822e2dd1f6 (1)-bf6f6ee6-c162-4605-b2a2-10defec77aee.png'
 
+            // reimagin call
             const maskDataResponse: JobMask = await reimagine.createMask(maskUrl);
             const { status, data: { job_id: jobId, credits_consumed: creditsConsumed }} = maskDataResponse;
 
             // Store the jobMask only if S3 upload and mask creation succeed
-            await prismaClient.jobMask.create({ 
-                data: {
-                    user: {
-                        connect: { id: req.user?.id }
+            await prismaClient.$transaction(async (tx) => {
+                const jobMask = await tx.jobMask.create({ 
+                    data: {
+                        user: {
+                            connect: { id: req.user?.id }
+                        },
+                        maskUrl,
+                        maskCategory,
+                        status,
+                        jobId,
+                        creditsConsumed,
                     },
-                    maskUrl,
-                    maskCategory,
-                    status,
-                    jobId,
-                    creditsConsumed,
-                },
-            });
+                });
             
+                await tx.paymentTransaction.create({
+                    data: {
+                        user: {
+                            connect: { id: req.user?.id }  
+                        },
+                        referenceId: jobMask.jobId,  // Use the created job ID
+                        transactionType: TransactionType.JOB_MASK,
+                        creditsUsed: new Decimal(creditsConsumed),
+                        status: TransactionStatus.PENDING,
+                    },
+                });
+            });
+
             res.status(200).json({ credits: creditsConsumed });
         } catch (error) {
             if (error instanceof BadRequestException) {

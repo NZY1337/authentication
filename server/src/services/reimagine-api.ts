@@ -1,5 +1,6 @@
-import { REIMAGINE_HOME_API_KEY_ID, REIMAGINE_HOME_API_KEY_NAME } from "../secrets";
+import { REIMAGINE_HOME_API_KEY_ID, FORWARDED_PORT } from "../secrets";
 import { BadRequestException } from "../exceptions/bad-request";
+
 import axios, { AxiosError } from 'axios';
 
 // !! MOVE TO /services folder 
@@ -10,8 +11,11 @@ interface ApiResponseError {
     error_message: string;
 }
 
+
+// if the call throws an error - the webhook will not be registred / called
 const reimagine = {
     createMask: async (imgUrl: string) => {
+        // throw new BadRequestException("Payment Required, Your account balance has been exhausted.", 402, null);
         const config = {
             headers: { 
                 'api-key': REIMAGINE_HOME_API_KEY_ID, 
@@ -22,7 +26,7 @@ const reimagine = {
             url: 'https://api.reimaginehome.ai/v1/create_mask',
             data: JSON.stringify({
                 "image_url": imgUrl,
-                "webhook_url": "https://deployment-sao-plymouth-ecological.trycloudflare.com/webhook/mask"
+                "webhook_url": `${FORWARDED_PORT}/webhook/mask`
             }),
         };
 

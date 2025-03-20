@@ -14,6 +14,10 @@ export interface Mask {
     name: string;
     url: string;
     category: string;
-    areaPercent: number;
+    area_percent: number;
     jobMaskId: string;
+    center: {
+        x: number;
+        y: number;
+    }
 }

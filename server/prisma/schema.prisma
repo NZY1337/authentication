@@ -13,6 +13,19 @@ enum Role {
     USER
 }
 
+enum TransactionType {
+  JOB_MASK
+  CREATE_MASK
+  IMAGE_GENERATION
+  SUBSCRIPTION
+}
+
+enum TransactionStatus {
+  SUCCESS
+  PENDING
+  REFUNDED
+}
+
 model User {
     id                          String    @id @default(uuid())
     name                        String
@@ -33,6 +46,7 @@ model User {
 
     @@map("users")
     jobMasks JobMask[]
+    PaymentTransaction PaymentTransaction[]
 }
 
 model JobMask {
@@ -62,6 +76,21 @@ model Mask {
   category        String 
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
+  center          Json
 
   @@map("mask")
+}
+
+
+model PaymentTransaction {
+  id              String   @id @default(uuid())
+  user            User     @relation(fields: [userId], references: [id])
+  userId          String
+  referenceId     String?  @unique// Can be jobMaskId, createMaskId, etc.
+  transactionType TransactionType 
+  creditsUsed     Decimal
+  status          TransactionStatus   
+  createdAt       DateTime @default(now())
+
+  @@map("payment_transaction")
 }
