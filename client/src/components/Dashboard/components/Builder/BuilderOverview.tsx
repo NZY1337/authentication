@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 // components
 import PhotoGuideModalBuilder from "../../../Modals/PhotoGuideModal";
@@ -6,12 +6,13 @@ import Button from "@mui/material/Button";
 import SolutionSelector from "../../../UtilityComponents/SolutionSelector"; 
 import FileUpload from "../../../UtilityComponents/FileUpload";
 import PhotoGuidelines from "../../../UtilityComponents/PhotoGuide";
-
+import WaitingModal from "../../../Modals/WaitingModal";
 import { Grid2 as Grid } from "@mui/material"
 
 // hooks
 import { useNotifications } from "@toolpad/core/useNotifications";
 import useSocket from "../../../../helpers/hooks/useSocket";
+import useBuilder from "../../../../services/builder/useBuilder";
 
 // utils
 import fetchData from "../../../../utils/fetchData";
@@ -19,7 +20,6 @@ import { solutions } from "../../../../helpers/constants";
 
 // types
 import { type Router } from '@toolpad/core/AppProvider';
-import { type MaskState } from "../../Dashboard";
 import LoadingButton from "../../../UtilityComponents/LoadingButton";
 
 export interface BuilderOverviewProps {
@@ -31,57 +31,45 @@ export interface BuilderOverviewProps {
 }
 
 const BuilderOverview = ({ router, file, maskCategory, setMaskCategory, setFile }: BuilderOverviewProps) => {
-    const [openPhotoGuide, setOpenPhotoGuide] = useState<boolean>(false);
-    const [preview, setPreview] = useState<string | null>(null);
     const notifications = useNotifications()
     const selectedNavItem = solutions.find(sol => sol.label == maskCategory)?.segment;
-    const [loading, setLoading] = useState(false);
+ 
+    const [openPhotoGuide, setOpenPhotoGuide] = useState<boolean>(false);
+    const [preview, setPreview] = useState<string | null>(null);
+   
     const { maskStatus } = useSocket();
+    const { open, loadingCreateMask, setLoadingCreateMask, setOpen, createMask } = useBuilder(router)
 
-    const handleCreateMask = async () => {
-        setLoading(true);
-        if (file) {
-          const formData = new FormData();
-          formData.append("preview", file);  // Now it's a valid file upload
-          formData.append("maskCategory", maskCategory);
+    const handleCreateMask = () => {
+        createMask(file!, maskCategory)
+    }
+   
+    const handleCloseModal = React.useCallback(() => setOpen(false), [setOpen]);
 
-          const { error } = await fetchData<FormData, { data: MaskState }>({
-            data: formData,
-            url: "/builder/create-mask",
-            method: "POST",
-          });
-      
-          if (error) {
-            notifications.show(error, {
-                severity: 'error',
-                autoHideDuration: 4000,
-            });
-          }
-        }
-    };
-
+    // from reimagin webhook -> websocket -> client
     useEffect(() => {
         if (maskStatus) {
-            setLoading(true);
             if (maskStatus.error) {
                 notifications.show(maskStatus.error, {
                     severity: 'error',
                     autoHideDuration: 4000,
                 })
-                setLoading(false);
+                setLoadingCreateMask(false);
+                handleCloseModal();
             } else if (maskStatus.jobId) {
-                setLoading(false);
+                setLoadingCreateMask(false);
+                handleCloseModal()
                 router?.navigate(`/dashboard/${selectedNavItem}?maskId=${maskStatus.jobId}`);
                 console.log("Masks are ready!");
             }
         }
-    }, [maskStatus, notifications, router, selectedNavItem]);
+    }, [handleCloseModal, maskStatus, notifications, router, selectedNavItem, setLoadingCreateMask]);
       
-    useEffect(() => {
-        return () => setPreview(null);
-    }, [setPreview]);
+    // useEffect(() => {
+    //     return () => setPreview(null);
+    // }, [setPreview]);
 
-    const disabled = !preview || loading;
+    const disabled = !preview || loadingCreateMask;
     return (
         <>
             <FileUpload preview={preview} setPreview={setPreview} setFile={setFile} />
@@ -93,13 +81,15 @@ const BuilderOverview = ({ router, file, maskCategory, setMaskCategory, setFile 
                 </Grid>
 
                 <Grid size={{ xs: 12, sm: 6 }} >
-                    <LoadingButton variant={"contained"} color="inherit" loading={loading} text="Upload Image" onClick={handleCreateMask} disabled={disabled} />
+                    <LoadingButton variant={"contained"} color="inherit" loading={loadingCreateMask} text="Upload Image" onClick={handleCreateMask} disabled={disabled} />
                 </Grid>
             </Grid>
 
             <PhotoGuideModalBuilder open={openPhotoGuide} handleClose={() => setOpenPhotoGuide(false)}>
                 <PhotoGuidelines /> 
             </PhotoGuideModalBuilder>
+
+            <WaitingModal open={open} />
         </>
     );
 }

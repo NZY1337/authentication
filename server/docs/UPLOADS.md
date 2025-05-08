@@ -7,3 +7,4 @@
 
 # 1 create an endpoint
 
+# https://www.youtube.com/watch?v=nQdyiK7-VlQ - EC2 AWS INSTANCE

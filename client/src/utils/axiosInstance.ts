@@ -1,4 +1,5 @@
 import axios, { AxiosRequestConfig } from "axios";
+import { FORWARDED_PORT } from "../helpers/constants";
 
 // Extend AxiosRequestConfig to include `_retry`
 interface AxiosRequestConfigWithRetry extends AxiosRequestConfig {
@@ -6,7 +7,7 @@ interface AxiosRequestConfigWithRetry extends AxiosRequestConfig {
   }
 
 const axiosInstance = axios.create({
-  baseURL: "https://a0c6-178-138-194-11.ngrok-free.app/api",
+  baseURL: `${FORWARDED_PORT}/api`,
   withCredentials: true, // Ensure cookies are sent with the request
 });
 

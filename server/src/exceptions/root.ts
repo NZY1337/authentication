@@ -10,6 +10,7 @@ export enum ErrorCode {
   INTERNAL_EXCEPTION = StatusCodes.INTERNAL_SERVER_ERROR,
   UNAUTHORIZED = StatusCodes.UNAUTHORIZED,
   CONFLICT = StatusCodes.CONFLICT,
+  INSUFFICIENT_CREDITS = StatusCodes.PAYMENT_REQUIRED
 }
 
 export class HttpException extends Error {

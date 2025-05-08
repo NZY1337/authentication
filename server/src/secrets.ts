@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 dotenv.config({ path: '.env'});
 
 export const PORT = process.env.PORT!;
+export const FORWARDED_PORT = process.env.FORWARDED_PORT!;
 export const JWT_SECRET = process.env.JWT_SECRET!;
 export const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET!;
 export const SMTP_PASSWORD = process.env.SMTP_PASSWORD!

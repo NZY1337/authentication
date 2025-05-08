@@ -1,5 +1,6 @@
-import { REIMAGINE_HOME_API_KEY_ID, REIMAGINE_HOME_API_KEY_NAME } from "../secrets";
+import { REIMAGINE_HOME_API_KEY_ID, FORWARDED_PORT } from "../secrets";
 import { BadRequestException } from "../exceptions/bad-request";
+
 import axios, { AxiosError } from 'axios';
 
 // !! MOVE TO /services folder 
@@ -8,10 +9,12 @@ interface ApiResponseError {
     status: string;
     data: Record<string, unknown>;
     error_message: string;
-  }
+}
 
+// if the call throws an error - the webhook will not be registred / called
 const reimagine = {
     createMask: async (imgUrl: string) => {
+        // throw new BadRequestException("Payment Required, Your account balance has been exhausted.", 402, null);
         const config = {
             headers: { 
                 'api-key': REIMAGINE_HOME_API_KEY_ID, 
@@ -22,7 +25,7 @@ const reimagine = {
             url: 'https://api.reimaginehome.ai/v1/create_mask',
             data: JSON.stringify({
                 "image_url": imgUrl,
-                "webhook_url": "https://a0c6-178-138-194-11.ngrok-free.app/webhook/mask"
+                "webhook_url": `${FORWARDED_PORT}/webhook/mask`
             }),
         };
 
@@ -32,7 +35,7 @@ const reimagine = {
         } catch (error) {
             const err = error as AxiosError<ApiResponseError>;
             const errorMessage = err.response?.data?.error_message ?? "Something went wrong";
-            throw new BadRequestException(errorMessage, 400, null);
+            throw new BadRequestException(errorMessage, 500, null);
         }
     },
     // this is now obsolete since we have the webhook
@@ -53,6 +56,38 @@ const reimagine = {
             const err = error as AxiosError<ApiResponseError>;
             const errorMessage = err.response?.data?.error_message ?? "Something went wrong";
             throw new BadRequestException(errorMessage, 400, null);
+        }
+    },
+    createImage: async() => {
+        try {
+            const data = JSON.stringify({
+                "image_url": "https://my-bucket-app-deco.s3.eu-north-1.amazonaws.com/living-room-bf6f6ee6-c162-4605-b2a2-10defec77aee.jpeg",
+                "mask_urls": [
+                    "https://cdn.reimaginehome.ai/prod/mask/87f9ad1c-a5b6-469a-9b0a-4150e856ff30_segment.png"
+                ],
+                "space_type": "ST-INT-011",
+                "mask_category": "furnishing",
+                "generation_count": 3,
+                "material_preference": "plain white wall",
+                "additional_prompt": "The room must be EMPTY with ONLY walls, floor, and ceiling visible. NO new furniture, no filling in, no modifications—ONLY removal."
+            });
+            const config = {
+                headers: { 
+                    'api-key': REIMAGINE_HOME_API_KEY_ID, 
+                    'Content-Type': 'application/json'
+                },
+                method: 'post',
+                maxBodyLength: Infinity,
+                url: "https://api.reimaginehome.ai/v1/generate_image",
+                data: data
+            };
+
+            const response = await axios(config);
+            return response.data;
+        } catch (error) {
+            const err = error as AxiosError<ApiResponseError>;
+            const errorMessage = err.response?.data?.error_message ?? "Something went wrong";
+            throw new BadRequestException(errorMessage, 500, null);
         }
     },
     getSpaceType: async () => {
