@@ -33,12 +33,9 @@ function DashboardTitle() {
         <Stack direction="row" alignItems="center" spacing={2}>
             <Typography fontWeight={600} color={'warning'} variant="body1" sx={{cursor: 'pointer'}} onClick={handleClick}>HOME</Typography>
             
-            {
-                user?.credits && 
-                <Tooltip title="credits left">
-                    <Chip sx={{ animation: `${pulseAnimation} 3.5s infinite ease-in-out` }} size="small" label={user?.credits} color="success" icon={<DiamondIcon />} />
-                </Tooltip>
-            }
+            <Tooltip title="credits left">
+                <Chip sx={{ animation: `${pulseAnimation} 3.5s infinite ease-in-out` }} size="small" label={user?.credits || 0} color="success" icon={<DiamondIcon />} />
+            </Tooltip>
         </Stack>
     );
 }

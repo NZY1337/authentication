@@ -40,28 +40,20 @@ const useBuilder = (router: Router) => {
             formData.append("preview", file);  // Now it's a valid file upload
             formData.append("maskCategory", maskCategory);
 
-            const { error, resData } = await fetchData<FormData, {credits: number}>({
+            const { error } = await fetchData<FormData, {credits: number}>({
                 data: formData,
                 url: "/builder/create-mask",
                 method: "POST",
             });
         
             if (error) {
+                console.log(error);
                 setLoadingCreateMask(false);
                 setOpen(false)
                 notifications.show(error, {
                     severity: 'error',
                     autoHideDuration: 4000,
                 });
-            }
-
-            if (resData) {
-                console.log(resData);
-                notifications.show(`${resData.credits} credits used`, {
-                    severity: 'warning',
-                    autoHideDuration: 4000,
-                });
-                setUser(prevUser => prevUser ? { ...prevUser, credits: Number(prevUser.credits - resData.credits) } : null);
             }
         }
     };

@@ -15,6 +15,7 @@ import { Decimal } from "@prisma/client/runtime/library";
 // ! prevent images to be uploaded to s3 if they are larger than reimagine's create mask endpoint attributes.
 export const builder: { 
     createMask: (req: Request, res: Response, next: NextFunction) => Promise<Response | void>,
+    createImage: (req: Request, res: Response) => Promise<Response | void>,
     getSpaceType: (req: Request, res: Response) => Promise<void>,
     getDesignTheme: (req: Request, res: Response) => Promise<void>,
     getMask: (req: Request, res: Response) => Promise<void>
@@ -46,17 +47,6 @@ export const builder: {
         const builderPreview = `${fileName}-${req.user?.id}.${fileExtension}`;
 
         try {
-            const user = await prismaClient.user.findFirst({
-                where: { id: req.user?.id },
-                select: { credits: true },
-            });
-
-            const userTotalCredits = user?.credits;
-            
-            if (userTotalCredits && new Decimal(userTotalCredits).lessThan(new Decimal(0.5))) {
-                throw new BadRequestException("Insufficient credits", ErrorCode.INSUFFICIENT_CREDITS, user?.credits);
-            }
-
             // Upload image to S3
             await s3.setFile(builderPreview, file.buffer, file.mimetype);
             await s3.validate(builderPreview); 
@@ -73,7 +63,7 @@ export const builder: {
                     data: {
                         user: {
                             connect: { id: req.user?.id }
-                        },
+                        }, 
                         maskUrl,
                         maskCategory,
                         status,
@@ -95,8 +85,25 @@ export const builder: {
                 });
             });
 
-            res.status(200).json({ credits: creditsConsumed });
+            res.sendStatus(200);
         } catch (error) {
+            if (error instanceof BadRequestException) {
+                return res.status(error.errorCode).json({ message: error.message });
+            }
+
+            throw new InternalException("Internal Server Error", error, ErrorCode.INTERNAL_EXCEPTION);
+        }
+    },
+    createImage: async(req: Request, res: Response) => {
+        try {
+            const maskDataResponse: JobMask = await reimagine.createImage();
+            console.log(maskDataResponse);
+            const { status, data: { job_id: jobId, credits_consumed: creditsConsumed }} = maskDataResponse;
+
+            res.status(200).json({ status, creditsConsumed });
+            console.log(jobId);
+        } catch(error) {
+            console.log(error);
             if (error instanceof BadRequestException) {
                 return res.status(error.errorCode).json({ message: error.message });
             }

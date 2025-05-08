@@ -17,7 +17,7 @@ import badPhoto4 from "../assets/guidelines/badPhoto4.png"
 import SofaIcon from "@mui/icons-material/Weekend";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-
+const FORWARDED_PORT = 'https://betting-enough-syntax-gb.trycloudflare.com';
 
 const VIRTUAL_STAGING = {
     label: "Virtual Staging",
@@ -148,5 +148,6 @@ export {
     goodPhotosData,
     badPhotosData,
     solutions,
-    EMPTY_YOUR_SPACE
+    EMPTY_YOUR_SPACE,
+    FORWARDED_PORT
 };

@@ -53,10 +53,10 @@ model JobMask {
   id              String   @id @default(uuid())
   user            User     @relation(fields: [userId], references: [id])
   userId          String
+  jobId           String @unique
   maskUrl         String
   maskCategory    String
   status          String
-  jobId           String
   creditsConsumed Decimal
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
@@ -68,8 +68,8 @@ model JobMask {
 
 model Mask {
   id              String   @id @default(uuid())
-  jobMask         JobMask  @relation(fields: [jobMaskId], references: [id])
-  jobMaskId       String
+  jobMask         JobMask  @relation(fields: [jobMaskId], references: [jobId])
+  jobMaskId       String   
   name            String   // New field for object name (e.g., "wall", "rug")
   url             String
   areaPercent     Decimal  // New field for area percentage
